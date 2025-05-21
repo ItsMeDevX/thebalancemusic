@@ -46,7 +46,6 @@
       letter-spacing: 2px;
     }
 
-    /* Logo Styling */
     .logo {
       position: absolute;
       top: 20px;
@@ -111,7 +110,6 @@
       color: #ffffff;
     }
 
-    /* Submit form styles */
     form {
       background: #1c1c1c;
       padding: 2rem;
@@ -227,7 +225,8 @@
       <h2>Submit to The Balance</h2>
       <p>Share your track with our community. We'll review each submission and feature selected ones on the site.</p>
 
-      <form id="musicForm" action="https://formspree.io/f/mnndrekd" method="POST" data-redirect="thankyou.html" novalidate>
+      <!-- ✅ FORM FIXED BELOW -->
+      <form id="musicForm" action="https://formspree.io/f/mnndrekd?redirect=thankyou.html" method="POST" novalidate>
 
         <label>
           Artist Name *
@@ -296,9 +295,8 @@
       });
 
       if (hasErrors) {
-        e.preventDefault(); // prevent submission if invalid
+        e.preventDefault();
       }
-      // if no errors, form submits normally and redirects to thankyou.html
     });
   </script>
 

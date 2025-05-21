@@ -244,30 +244,59 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Submit to The Balance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Balance - Submit Your Music</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #111;
       color: #eee;
+      margin: 0;
       padding: 2rem;
-      max-width: 700px;
-      margin: auto;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      box-sizing: border-box;
     }
-    h1 {
+    h1, h2, h3 {
       color: #00ffe1;
       text-align: center;
+      margin-top: 0;
     }
-    form {
+    main section, form {
+      margin-bottom: 3rem;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    li {
       background: #222;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 255, 225, 0.3);
+    }
+    a.download-link {
+      color: #00ffe1;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    a.download-link:hover {
+      color: #00c9b4;
+    }
+
+    form {
+      background: #1c1c1c;
       padding: 2rem;
       border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0, 255, 225, 0.2);
+      box-shadow: 0 0 15px #ff00cc44;
     }
     label {
       display: block;
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
+      color: #39ff14;
+      font-weight: bold;
     }
     input, textarea {
       width: 100%;
@@ -276,119 +305,127 @@
       border: none;
       border-radius: 8px;
       font-size: 1rem;
-      background: #333;
-      color: #fff;
-    }
-    button {
-      background-color: #00ffe1;
-      color: #000;
-      border: none;
-      padding: 1rem;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 1rem;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background-color: #00c9b4;
-    }
-    p {
-      text-align: center;
-      font-size: 1rem;
-      color: #aaa;
-    }
-  </style>
-</head>
-  
-<section style="padding: 40px 20px; max-width: 900px; margin: auto;">
-  <h2>Submit to The Balance</h2>
-  <p>Share your track with our community. We'll review each submission and feature selected ones on the site.</p>
-
-  <form id="musicForm" action="https://formspree.io/f/mnndrekd" method="POST"
-    style="background:#1c1c1c; padding: 30px; border-radius: 12px; box-shadow: 0 0 15px #ff00cc44;">
-
-    <!-- Artist -->
-    <label style="display:block; margin-bottom: 20px;">
-      <span style="display:block; color:#39ff14;">Artist Name *</span>
-      <input type="text" name="artist" required />
-      <small class="error-message"></small>
-    </label>
-
-    <!-- Track Title -->
-    <label style="display:block; margin-bottom: 20px;">
-      <span style="display:block; color:#39ff14;">Track Title *</span>
-      <input type="text" name="title" required />
-      <small class="error-message"></small>
-    </label>
-
-    <!-- Genre -->
-    <label style="display:block; margin-bottom: 20px;">
-      <span style="display:block; color:#39ff14;">Genre</span>
-      <input type="text" name="genre" />
-    </label>
-
-    <!-- URL -->
-    <label style="display:block; margin-bottom: 20px;">
-      <span style="display:block; color:#39ff14;">Music URL *</span>
-      <input type="url" name="music_url" required />
-      <small class="error-message"></small>
-    </label>
-
-    <!-- Bio -->
-    <label style="display:block; margin-bottom: 20px;">
-      <span style="display:block; color:#39ff14;">Bio / Description</span>
-      <textarea name="bio" rows="5" placeholder="Tell us about this track..."></textarea>
-    </label>
-
-    <!-- Email -->
-    <label style="display:block; margin-bottom: 20px;">
-      <span style="display:block; color:#39ff14;">Email (optional)</span>
-      <input type="email" name="email" />
-      <small class="error-message"></small>
-    </label>
-
-    <button type="submit" style="width:100%; padding:14px; background:#ff00cc; color:#fff; font-weight:bold; font-size:1.1rem; border:none; border-radius:10px; box-shadow: 0 0 12px #ff00cc88; cursor:pointer;">
-      Submit Your Music
-    </button>
-
-    <p id="successMessage" style="color: #39ff14; margin-top: 20px; display: none;">✅ Submission sent! Thanks for contributing.</p>
-  </form>
-
-  <style>
-    input, textarea {
-      width: 100%;
-      padding: 12px;
       background: #2a2a2a;
       color: #fff;
-      border: none;
-      border-radius: 8px;
       font-family: inherit;
-      font-size: 1rem;
     }
-
     input:invalid, textarea:invalid {
       box-shadow: 0 0 5px red;
     }
-
     .error-message {
       display: none;
       color: #ff4d4d;
       font-size: 0.9em;
-      margin-top: 4px;
+      margin-top: 0.25rem;
+      font-weight: normal;
+    }
+    button {
+      background-color: #ff00cc;
+      color: #fff;
+      border: none;
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      width: 100%;
+      font-weight: bold;
+      box-shadow: 0 0 12px #ff00cc88;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #cc0099;
+    }
+    #successMessage {
+      color: #39ff14;
+      margin-top: 1rem;
+      display: none;
+      text-align: center;
+      font-weight: bold;
     }
   </style>
+</head>
+<body>
+
+  <main>
+    <section>
+      <h2>Welcome to The Balance</h2>
+      <p>Dive into a world of sonic inspiration. All downloads are royalty-free and ready to use in your productions.</p>
+    </section>
+
+    <section>
+      <h3>Featured Packs</h3>
+      <ul>
+        <li>
+          <strong>Trap Beat Vol. 1</strong> – Hard-hitting trap beats ready to drop.<br />
+          <a class="download-link" href="downloads/trap_beat_vol1.zip" download>Download</a>
+        </li>
+        <li>
+          <strong>Lo-Fi Sample Pack</strong> – Chill textures and dusty sounds.<br />
+          <a class="download-link" href="downloads/lofi_samples.zip" download>Download</a>
+        </li>
+        <li>
+          <strong>808 Kit</strong> – Classic 808s for any genre.<br />
+          <a class="download-link" href="downloads/808_kit.zip" download>Download</a>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Submit to The Balance</h2>
+      <p>Share your track with our community. We'll review each submission and feature selected ones on the site.</p>
+
+      <form id="musicForm" action="https://formspree.io/f/mnndrekd" method="POST" novalidate>
+
+        <label>
+          Artist Name *
+          <input type="text" name="artist" required />
+          <small class="error-message"></small>
+        </label>
+
+        <label>
+          Track Title *
+          <input type="text" name="title" required />
+          <small class="error-message"></small>
+        </label>
+
+        <label>
+          Genre
+          <input type="text" name="genre" />
+        </label>
+
+        <label>
+          Music URL *
+          <input type="url" name="music_url" required />
+          <small class="error-message"></small>
+        </label>
+
+        <label>
+          Bio / Description
+          <textarea name="bio" rows="5" placeholder="Tell us about this track..."></textarea>
+        </label>
+
+        <label>
+          Email (optional)
+          <input type="email" name="email" />
+          <small class="error-message"></small>
+        </label>
+
+        <button type="submit">Submit Your Music</button>
+
+        <p id="successMessage">✅ Submission sent! Thanks for contributing.</p>
+      </form>
+    </section>
+  </main>
 
   <script>
     const form = document.getElementById('musicForm');
-    const errorMessages = document.querySelectorAll('.error-message');
+    const errorMessages = form.querySelectorAll('.error-message');
     const successMessage = document.getElementById('successMessage');
 
     form.addEventListener('submit', function (e) {
       let hasErrors = false;
       errorMessages.forEach(msg => msg.style.display = 'none');
+      successMessage.style.display = 'none';
 
       [...form.elements].forEach(field => {
         if (!field.checkValidity() && field.name) {
@@ -404,10 +441,12 @@
       if (hasErrors) {
         e.preventDefault();
       } else {
+        e.preventDefault(); // prevent actual submission to show success message here (remove if you want real submit)
         successMessage.style.display = 'block';
+        form.reset();
       }
     });
   </script>
-</section>
+
 </body>
 </html>

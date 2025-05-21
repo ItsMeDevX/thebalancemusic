@@ -317,7 +317,7 @@
       { id: "1EAb2lAeHY94r9v0Vf5_ychPvKNa33OLe", title: "Friday Night In (Official Video)" },
       { id: "1WNPnwP7bhlFSpswdXECSJKSqaq7bmXrG", title: "My Eternity (Official Video)" },
     ];
-
+    
     const videosPerPage = 5;
     let currentPage = 1;
     const videoContainer = document.getElementById('videoContainer');
@@ -372,6 +372,38 @@
     });
 
     renderVideos();
+
+  let currentIndex = 0;
+  const player = document.getElementById('videoPlayer');
+  const title = document.getElementById('videoTitle');
+
+  function getOneDriveLink(fileId) {
+    return `https://onedrive.live.com/download?resid=${fileId}`;
+  }
+
+  function loadVideo(index) {
+    const video = videos[index];
+    if (video) {
+      player.src = getOneDriveLink(video.id);
+      title.textContent = video.title;
+      player.load();
+      player.play();
+    }
+  }
+
+  player.addEventListener('ended', () => {
+    currentIndex++;
+    if (currentIndex < videos.length) {
+      loadVideo(currentIndex);
+    } else {
+      title.textContent = "Playlist finished.";
+    }
+  });
+
+  // Start with the first video
+  loadVideo(currentIndex);
+</script>
+    
   </script>
 </body>
 </html>

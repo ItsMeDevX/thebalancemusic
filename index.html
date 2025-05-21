@@ -170,14 +170,6 @@
       background-color: #cc0099;
     }
 
-    #successMessage {
-      color: #39ff14;
-      margin-top: 1rem;
-      display: none;
-      text-align: center;
-      font-weight: bold;
-    }
-
     footer {
       text-align: center;
       padding: 20px;
@@ -235,7 +227,7 @@
       <h2>Submit to The Balance</h2>
       <p>Share your track with our community. We'll review each submission and feature selected ones on the site.</p>
 
-      <form id="musicForm" action="https://formspree.io/f/mnndrekd" method="POST" novalidate>
+      <form id="musicForm" action="https://formspree.io/f/mnndrekd" method="POST" data-redirect="thankyou.html" novalidate>
 
         <label>
           Artist Name *
@@ -273,7 +265,6 @@
 
         <button type="submit">Submit Your Music</button>
 
-        <p id="successMessage">✅ Submission sent! Thanks for contributing.</p>
       </form>
     </section>
   </main>
@@ -285,7 +276,6 @@
   <script>
     const form = document.getElementById('musicForm');
     const errorMessages = form.querySelectorAll('.error-message');
-    const successMessage = document.getElementById('successMessage');
 
     form.addEventListener('submit', function (e) {
       let hasErrors = false;
@@ -293,7 +283,6 @@
         msg.style.display = 'none';
         msg.textContent = '';
       });
-      successMessage.style.display = 'none';
 
       [...form.elements].forEach(field => {
         if (field.name && !field.checkValidity()) {
@@ -308,8 +297,8 @@
 
       if (hasErrors) {
         e.preventDefault(); // prevent submission if invalid
-      } 
-      // if no errors, do nothing, allow form to submit normally to Formspree
+      }
+      // if no errors, form submits normally and redirects to thankyou.html
     });
   </script>
 

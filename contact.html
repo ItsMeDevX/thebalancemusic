@@ -195,7 +195,14 @@
   </nav>
 
 <form action="https://formspree.io/f/mnndrekd" method="POST" style="display: flex; flex-direction: column; gap: 20px;">
+
+  <!-- Redirect to thank-you page after submission -->
+  <input type="hidden" name="_redirect" value="https://thebalancemusic.com/thankyou.html" />
+
+  <!-- Optional custom subject line -->
   <input type="hidden" name="_subject" value="New Message from The Balance Contact Form">
+
+  <!-- Optional reply-to email (Formspree will send replies here if no user email is provided) -->
   <input type="hidden" name="_replyto" value="browny.kb95@gmail.com">
 
   <label for="name" style="font-weight: bold; color: #00ffff;">Name</label>
@@ -208,6 +215,7 @@
   <textarea id="message" name="message" required style="padding: 12px; min-height: 120px; border-radius: 6px; border: none; background: #222; color: #fff; font-size: 1rem; box-shadow: 0 0 5px #00ffff33; resize: vertical;"></textarea>
 
   <button type="submit" style="background: #ff00cc; color: #fff; border: none; padding: 12px; font-size: 1.1rem; border-radius: 8px; cursor: pointer; transition: background 0.3s ease;">Send Message</button>
+
 </form>
 
 <footer style="text-align: center; padding: 20px; background: #111; color: #888; border-top: 2px solid #ff00cc; box-shadow: 0 -4px 15px #ff00cc33; font-family: 'Orbitron', sans-serif;">

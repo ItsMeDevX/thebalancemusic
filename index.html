@@ -240,57 +240,107 @@
     </section>
   </main>
 
-<h1>Submit to The Balance</h1>
-<p>Are you an artist looking to share your sound? Use the form below to submit your music to <strong>The Balance</strong>. We review each submission and publish selected tracks on our community page to help you get heard.</p>
-<p><em>Make sure to include a streaming link (YouTube, SoundCloud, etc.) and a short bio so we can showcase your work properly.</em></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Submit to The Balance</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: #eee;
+      padding: 2rem;
+      max-width: 700px;
+      margin: auto;
+    }
+    h1 {
+      color: #00ffe1;
+      text-align: center;
+    }
+    form {
+      background: #222;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 255, 225, 0.2);
+    }
+    label {
+      display: block;
+      margin-bottom: 1rem;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.25rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #333;
+      color: #fff;
+    }
+    button {
+      background-color: #00ffe1;
+      color: #000;
+      border: none;
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 1rem;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #00c9b4;
+    }
+    p {
+      text-align: center;
+      font-size: 1rem;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <h1>Submit to The Balance</h1>
+  <p>Share your music with our community. If approved, your track will be featured on our artist page.</p>
 
-<form
-  action="https://formspree.io/f/mnndrekd"
-  method="POST"
->
-  <label>
-    Artist Name:<br>
-    <input type="text" name="artist" required>
-  </label>
-  <br><br>
+  <form action="https://formspree.io/f/mnndrekd" method="POST">
+    <label>
+      Artist Name:
+      <input type="text" name="artist" required />
+    </label>
 
-  <label>
-    Track Title:<br>
-    <input type="text" name="title" required>
-  </label>
-  <br><br>
+    <label>
+      Track Title:
+      <input type="text" name="title" required />
+    </label>
 
-  <label>
-    Genre:<br>
-    <input type="text" name="genre">
-  </label>
-  <br><br>
+    <label>
+      Genre:
+      <input type="text" name="genre" />
+    </label>
 
-  <label>
-    Music URL (SoundCloud, YouTube, etc.):<br>
-    <input type="url" name="music_url" required>
-  </label>
-  <br><br>
+    <label>
+      Music URL (YouTube, SoundCloud, etc.):
+      <input type="url" name="music_url" required />
+    </label>
 
-  <label>
-    Artist Bio / Track Description:<br>
-    <textarea name="bio" rows="5" cols="40" placeholder="Tell us about you and this track..."></textarea>
-  </label>
-  <br><br>
+    <label>
+      Bio / Track Description:
+      <textarea name="bio" rows="5" placeholder="Tell us about the track or yourself..."></textarea>
+    </label>
 
-  <label>
-    Your Email (optional):<br>
-    <input type="email" name="email">
-  </label>
-  <br><br>
+    <label>
+      Email (optional):
+      <input type="email" name="email" />
+    </label>
 
-  <button type="submit">Submit Your Music</button>
-</form>
-
-  
-  <footer>
-    &copy; 2025 The Balance. All rights reserved.
-  </footer>
+    <button type="submit">Submit Your Music</button>
+  </form>
+</body>
+</html>
 
 </body>
 </html>

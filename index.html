@@ -13,6 +13,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+<!-- Age Confirmation Modal -->
+<div id="ageModal" style="
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.95);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  font-family: 'Orbitron', sans-serif;
+  color: #39ff14;
+  padding: 2rem;
+">
+  <div style="background: #1c1c1c; padding: 2rem; border-radius: 12px; text-align: center; box-shadow: 0 0 20px #ff00cc;">
+    <h2 style="margin-top: 0;">Are you 13 or older?</h2>
+    <p>You must be 13+ to use this site.</p>
+    <button id="ageConfirmBtn" style="background:#39ff14; color:#0f0f0f; border:none; padding:0.8rem 1.5rem; border-radius:10px; font-weight:bold; cursor:pointer; margin-top:1rem;">Yes, I am</button>
+  </div>
+</div>
+
+<script>
+  const ageModal = document.getElementById('ageModal');
+  const confirmBtn = document.getElementById('ageConfirmBtn');
+
+  // Show modal only if not previously confirmed
+  if (!localStorage.getItem('ageConfirmed')) {
+    ageModal.style.display = 'flex';
+  }
+
+  confirmBtn.addEventListener('click', () => {
+    localStorage.setItem('ageConfirmed', 'true');
+    ageModal.style.display = 'none';
+  });
+</script>
+
+  
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Balance - Music Sharing</title>

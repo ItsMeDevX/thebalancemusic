@@ -302,45 +302,112 @@
     }
   </style>
 </head>
-<body>
-  <h1>Submit to The Balance</h1>
-  <p>Share your music with our community. If approved, your track will be featured on our artist page.</p>
+  
+<section style="padding: 40px 20px; max-width: 900px; margin: auto;">
+  <h2>Submit to The Balance</h2>
+  <p>Share your track with our community. We'll review each submission and feature selected ones on the site.</p>
 
-  <form action="https://formspree.io/f/mnndrekd" method="POST">
-    <label>
-      Artist Name:
+  <form id="musicForm" action="https://formspree.io/f/mnndrekd" method="POST"
+    style="background:#1c1c1c; padding: 30px; border-radius: 12px; box-shadow: 0 0 15px #ff00cc44;">
+
+    <!-- Artist -->
+    <label style="display:block; margin-bottom: 20px;">
+      <span style="display:block; color:#39ff14;">Artist Name *</span>
       <input type="text" name="artist" required />
+      <small class="error-message"></small>
     </label>
 
-    <label>
-      Track Title:
+    <!-- Track Title -->
+    <label style="display:block; margin-bottom: 20px;">
+      <span style="display:block; color:#39ff14;">Track Title *</span>
       <input type="text" name="title" required />
+      <small class="error-message"></small>
     </label>
 
-    <label>
-      Genre:
+    <!-- Genre -->
+    <label style="display:block; margin-bottom: 20px;">
+      <span style="display:block; color:#39ff14;">Genre</span>
       <input type="text" name="genre" />
     </label>
 
-    <label>
-      Music URL (YouTube, SoundCloud, etc.):
+    <!-- URL -->
+    <label style="display:block; margin-bottom: 20px;">
+      <span style="display:block; color:#39ff14;">Music URL *</span>
       <input type="url" name="music_url" required />
+      <small class="error-message"></small>
     </label>
 
-    <label>
-      Bio / Track Description:
-      <textarea name="bio" rows="5" placeholder="Tell us about the track or yourself..."></textarea>
+    <!-- Bio -->
+    <label style="display:block; margin-bottom: 20px;">
+      <span style="display:block; color:#39ff14;">Bio / Description</span>
+      <textarea name="bio" rows="5" placeholder="Tell us about this track..."></textarea>
     </label>
 
-    <label>
-      Email (optional):
+    <!-- Email -->
+    <label style="display:block; margin-bottom: 20px;">
+      <span style="display:block; color:#39ff14;">Email (optional)</span>
       <input type="email" name="email" />
+      <small class="error-message"></small>
     </label>
 
-    <button type="submit">Submit Your Music</button>
-  </form>
-</body>
-</html>
+    <button type="submit" style="width:100%; padding:14px; background:#ff00cc; color:#fff; font-weight:bold; font-size:1.1rem; border:none; border-radius:10px; box-shadow: 0 0 12px #ff00cc88; cursor:pointer;">
+      Submit Your Music
+    </button>
 
+    <p id="successMessage" style="color: #39ff14; margin-top: 20px; display: none;">✅ Submission sent! Thanks for contributing.</p>
+  </form>
+
+  <style>
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      background: #2a2a2a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    input:invalid, textarea:invalid {
+      box-shadow: 0 0 5px red;
+    }
+
+    .error-message {
+      display: none;
+      color: #ff4d4d;
+      font-size: 0.9em;
+      margin-top: 4px;
+    }
+  </style>
+
+  <script>
+    const form = document.getElementById('musicForm');
+    const errorMessages = document.querySelectorAll('.error-message');
+    const successMessage = document.getElementById('successMessage');
+
+    form.addEventListener('submit', function (e) {
+      let hasErrors = false;
+      errorMessages.forEach(msg => msg.style.display = 'none');
+
+      [...form.elements].forEach(field => {
+        if (!field.checkValidity() && field.name) {
+          const msg = field.parentElement.querySelector('.error-message');
+          if (msg) {
+            msg.textContent = `Please enter a valid ${field.name.replace('_', ' ')}`;
+            msg.style.display = 'block';
+          }
+          hasErrors = true;
+        }
+      });
+
+      if (hasErrors) {
+        e.preventDefault();
+      } else {
+        successMessage.style.display = 'block';
+      }
+    });
+  </script>
+</section>
 </body>
 </html>

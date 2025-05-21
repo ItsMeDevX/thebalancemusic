@@ -221,41 +221,38 @@
       </ul>
     </section>
 
-    <section>
-      <h2>Submit to The Balance</h2>
-      <p>Share your track with our community. We'll review each submission and feature selected ones on the site.</p>
-
-<section id="submit-music" style="margin-top: 3rem; max-width: 500px; margin-left:auto; margin-right:auto; color:#39ff14; font-family: 'Orbitron', sans-serif;">
+   <section id="submit-music" style="margin-top: 3rem; max-width: 500px; margin-left:auto; margin-right:auto; color:#39ff14; font-family: 'Orbitron', sans-serif;">
   <h2>Submit Your Music</h2>
   <form id="musicForm" action="https://formspree.io/f/mnndrekd" method="POST" novalidate>
     <input type="hidden" name="_redirect" value="https://thebalancemusic.com/thankyou.html" />
     
-    <label for="artist">Artist Name *</label><br />
+    <label for="artist">Artist Name *</label>
     <input type="text" id="artist" name="artist" required
-      style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #39ff14; margin-bottom: 10px; background:#0f0f0f; color:#39ff14;" /><br />
+      style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #39ff14; margin-bottom: 10px; background:#0f0f0f; color:#39ff14;" />
     
-    <label for="title">Track Title *</label><br />
+    <label for="title">Track Title *</label>
     <input type="text" id="title" name="title" required
-      style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #39ff14; margin-bottom: 10px; background:#0f0f0f; color:#39ff14;" /><br />
+      style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #39ff14; margin-bottom: 10px; background:#0f0f0f; color:#39ff14;" />
     
-    <label for="genre">Genre</label><br />
+    <label for="genre">Genre</label>
     <input type="text" id="genre" name="genre"
-      style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #39ff14; margin-bottom: 10px; background:#0f0f0f; color:#39ff14;" /><br />
+      style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #39ff14; margin-bottom: 10px; background:#0f0f0f; color:#39ff14;" />
     
-    <label for="music_url">Music URL *</label><br />
+    <label for="music_url">Music URL *</label>
     <input type="url" id="music_url" name="music_url" required
-      style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #39ff14; margin-bottom: 10px; background:#0f0f0f; color:#39ff14;" /><br />
+      style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #39ff14; margin-bottom: 10px; background:#0f0f0f; color:#39ff14;" />
     
-    <label for="bio">Bio / Description</label><br />
+    <label for="bio">Bio / Description</label>
     <textarea id="bio" name="bio" rows="4" placeholder="Tell us about this track..."
-      style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #39ff14; margin-bottom: 10px; background:#0f0f0f; color:#39ff14;"></textarea><br />
+      style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #39ff14; margin-bottom: 10px; background:#0f0f0f; color:#39ff14;"></textarea>
     
-    <label for="email">Email (optional)</label><br />
+    <label for="email">Email (optional)</label>
     <input type="email" id="email" name="email"
-      style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #39ff14; margin-bottom: 10px; background:#0f0f0f; color:#39ff14;" /><br />
+      style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #39ff14; margin-bottom: 10px; background:#0f0f0f; color:#39ff14;" />
     
     <button type="submit" style="background:#39ff14; border:none; padding:0.7rem 1.4rem; color:#0f0f0f; border-radius:8px; cursor:pointer; font-weight: bold;">Submit Your Music</button>
   </form>
+  
   <p id="submitStatus" style="margin-top: 1rem;"></p>
 
   <p style="font-size: 0.85rem; color: #39ff14; margin-top: 1rem;">
@@ -297,7 +294,3 @@
     });
   });
 </script>
-
-
-</body>
-</html>

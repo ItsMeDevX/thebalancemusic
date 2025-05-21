@@ -194,20 +194,30 @@
     <a href="chat.html">Community</a>
   </nav>
 
-<form id="contactForm" action="https://formspree.io/f/mnndrekd" method="POST" style="...">
+<form id="contactForm" action="https://formspree.io/f/mnndrekd" method="POST" style="display: flex; flex-direction: column; gap: 20px;">
+  <!-- Optional custom subject -->
   <input type="hidden" name="_subject" value="New Message from The Balance Contact Form">
+
+  <!-- Optional reply-to fallback email -->
   <input type="hidden" name="_replyto" value="browny.kb95@gmail.com">
 
-  <!-- Form fields... -->
+  <label for="name" style="font-weight: bold; color: #00ffff;">Name</label>
+  <input type="text" id="name" name="name" required style="padding: 12px; border-radius: 6px; border: none; background: #222; color: #fff; font-size: 1rem; box-shadow: 0 0 5px #00ffff33;">
 
-  <button type="submit">Send Message</button>
+  <label for="email" style="font-weight: bold; color: #00ffff;">Email</label>
+  <input type="email" id="email" name="email" required style="padding: 12px; border-radius: 6px; border: none; background: #222; color: #fff; font-size: 1rem; box-shadow: 0 0 5px #00ffff33;">
+
+  <label for="message" style="font-weight: bold; color: #00ffff;">Message</label>
+  <textarea id="message" name="message" required style="padding: 12px; min-height: 120px; border-radius: 6px; border: none; background: #222; color: #fff; font-size: 1rem; box-shadow: 0 0 5px #00ffff33; resize: vertical;"></textarea>
+
+  <button type="submit" style="background: #ff00cc; color: #fff; border: none; padding: 12px; font-size: 1.1rem; border-radius: 8px; cursor: pointer; transition: background 0.3s ease;">Send Message</button>
 </form>
 
 <script>
   const form = document.getElementById('contactForm');
 
   form.addEventListener('submit', async function (e) {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
 
     const formData = new FormData(form);
     const response = await fetch(form.action, {
@@ -219,13 +229,12 @@
     });
 
     if (response.ok) {
-      window.location.href = '/thankyou.html'; // ✅ redirect here
+      window.location.href = 'https://thebalancemusic.com/thankyou.html';
     } else {
-      alert('There was a problem submitting your message.');
+      alert('Sorry, there was an issue sending your message.');
     }
   });
 </script>
-
 
 <footer style="text-align: center; padding: 20px; background: #111; color: #888; border-top: 2px solid #ff00cc; box-shadow: 0 -4px 15px #ff00cc33; font-family: 'Orbitron', sans-serif;">
   &copy; 2025 The Balance. All rights reserved.

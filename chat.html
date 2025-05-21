@@ -194,36 +194,191 @@
   <a href="chat.html">Community</a>
 </nav>
 
- <main>
-    <h2>Latest Submissions</h2>
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Community Submissions - The Balance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: #0f0f0f;
+      color: #f5f5f5;
+      max-width: 960px;
+      margin-inline: auto;
+      padding: 20px;
+    }
+
+    header {
+      background: linear-gradient(90deg, #ff00cc, #3333ff);
+      padding: 30px 40px;
+      color: #fff;
+      text-align: center;
+      box-shadow: 0 0 20px #ff00cc;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 3em;
+      letter-spacing: 2px;
+    }
+
+    nav {
+      background: #1a1a1a;
+      text-align: center;
+      padding: 15px 0;
+      box-shadow: 0 0 10px #00ffff;
+      margin-bottom: 30px;
+    }
+
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: #00ffff;
+      font-weight: bold;
+      font-size: 1.1em;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #ff00cc;
+    }
+
+    h2 {
+      color: #39ff14;
+      border-left: 4px solid #ff00cc;
+      padding-left: 12px;
+      margin-bottom: 20px;
+    }
+
+    .submission {
+      background: #1c1c1c;
+      padding: 20px;
+      margin-bottom: 25px;
+      border-left: 6px solid #00ffff;
+      border-radius: 10px;
+      box-shadow: 0 0 12px #00ffff44;
+    }
+
+    .submission h3 {
+      margin: 0 0 10px;
+      font-size: 1.3em;
+      color: #ff00cc;
+    }
+
+    .submission p {
+      margin: 5px 0;
+      font-size: 0.95em;
+    }
+
+    .submission .meta {
+      color: #ccc;
+    }
+
+    .submission a {
+      color: #39ff14;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .submission a:hover {
+      color: #fff;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 10px;
+      border-radius: 6px;
+    }
+
+    .submit-link {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .submit-link a {
+      background: #39ff14;
+      color: #0f0f0f;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 0 10px #39ff1444;
+      transition: 0.3s ease;
+    }
+
+    .submit-link a:hover {
+      background: #2dbf10;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #111;
+      color: #888;
+      border-top: 2px solid #ff00cc;
+      margin-top: 60px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🎵 Community Submissions</h1>
+    <p>Fresh drops from the Balance community</p>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="instrumentals.html">Instrumentals</a>
+    <a href="samples.html">Samples</a>
+    <a href="soundfx.html">Sound FX</a>
+    <a href="music.html">Music</a>
+    <a href="community.html">Community</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <main>
+    <h2>Latest Tracks</h2>
 
     <div class="submission">
-      <p><strong>Artist:</strong> SynthDream</p>
-      <p><strong>Track:</strong> <a href="https://example.com/track1" target="_blank">Neon Haze</a></p>
-      <p><strong>Genre:</strong> Synthwave</p>
-      <p><strong>Description:</strong> A dreamy retro track perfect for night drives.</p>
+      <h3>Neon Haze</h3>
+      <p class="meta">by <strong>SynthDream</strong> • Genre: Synthwave</p>
+      <p>A dreamy retro track perfect for night drives.</p>
+      <audio controls>
+        <source src="https://example.com/audio/neonhaze.mp3" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
     </div>
 
     <div class="submission">
-      <p><strong>Artist:</strong> BeatRider</p>
-      <p><strong>Track:</strong> <a href="https://example.com/track2" target="_blank">Bass Logic</a></p>
-      <p><strong>Genre:</strong> Trap</p>
-      <p><strong>Description:</strong> Hard-hitting bass and hi-hats for aggressive flows.</p>
+      <h3>Bass Logic</h3>
+      <p class="meta">by <strong>BeatRider</strong> • Genre: Trap</p>
+      <p>Hard-hitting bass and hi-hats for aggressive flows.</p>
+      <audio controls>
+        <source src="https://example.com/audio/basslogic.mp3" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
     </div>
 
     <div class="submission">
-      <p><strong>Artist:</strong> LoFade</p>
-      <p><strong>Track:</strong> <a href="https://example.com/track3" target="_blank">Dusty Loop</a></p>
-      <p><strong>Genre:</strong> Lo-Fi</p>
-      <p><strong>Description:</strong> Chill lo-fi loop with vintage textures.</p>
+      <h3>Dusty Loop</h3>
+      <p class="meta">by <strong>LoFade</strong> • Genre: Lo-Fi</p>
+      <p>Chill lo-fi loop with vintage textures.</p>
+      <audio controls>
+        <source src="https://example.com/audio/dustyloop.mp3" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
     </div>
 
-    <p style="margin-top: 2rem; text-align: center;">
-      <a href="index.html#submit-music" style="color: #00ffff;">Submit your track →</a>
-    </p>
+    <div class="submit-link">
+      <a href="index.html#submit-music">🎤 Submit Your Track</a>
+    </div>
   </main>
-</body>
-</html>
   
 <main style="max-width: 800px; margin: 40px auto; padding: 20px; background: #1e1e1e; border-radius: 12px; box-shadow: 0 0 15px #00ffff55; font-family: 'Orbitron', sans-serif; color: #f0f0f0; text-align: center;">
   <div id="welcomeMessage" style="font-size: 1.5rem; margin-bottom: 20px; color: #39ff14;">

@@ -94,55 +94,9 @@
     cursor: pointer;
     color: white;
     transition: background-color 0.3s ease;
-  }
-  #loginBtn:hover {
-    background-color: #0056b3;
-  }
 </style>
 </head>
 <body>
-
-<header>
-  <div id="nickname" style="display:none;"></div>
-  <button id="loginBtn">Login</button>
-</header>
-
-<!-- Your main page content here -->
-
-<script>
-  const loginBtn = document.getElementById('loginBtn');
-  const nicknameDiv = document.getElementById('nickname');
-
-  function checkLogin() {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser && currentUser.nickname) {
-      nicknameDiv.textContent = currentUser.nickname;
-      nicknameDiv.style.display = 'block';
-      loginBtn.style.display = 'none';
-    } else {
-      nicknameDiv.style.display = 'none';
-      loginBtn.style.display = 'block';
-    }
-  }
-
-  checkLogin();
-
-  loginBtn.addEventListener('click', () => {
-    window.location.href = 'login-register.html';
-  });
-
-  nicknameDiv.addEventListener('click', () => {
-    if (confirm('Logout?')) {
-      localStorage.removeItem('currentUser');
-      checkLogin();
-    }
-  });
-</script>
-
-</body>
-</html>
-
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>The Balance - Sound FX</title>

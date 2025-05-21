@@ -225,81 +225,79 @@
       <h2>Submit to The Balance</h2>
       <p>Share your track with our community. We'll review each submission and feature selected ones on the site.</p>
 
-     <form id="musicForm" action="https://formspree.io/f/mnndrekd" method="POST" novalidate>
-  
-  <!-- Redirect users to thankyou.html on your live site after submission -->
-  <input type="hidden" name="_redirect" value="https://thebalancemusic.com/thankyou.html" />
+<section id="submit-music" style="margin-top: 3rem; max-width: 500px; margin-left:auto; margin-right:auto; color:#39ff14; font-family: 'Orbitron', sans-serif;">
+  <h2>Submit Your Music</h2>
+  <form id="musicForm" action="https://formspree.io/f/mnndrekd" method="POST" novalidate>
+    <input type="hidden" name="_redirect" value="https://thebalancemusic.com/thankyou.html" />
+    
+    <label for="artist">Artist Name *</label><br />
+    <input type="text" id="artist" name="artist" required
+      style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #39ff14; margin-bottom: 10px; background:#0f0f0f; color:#39ff14;" /><br />
+    
+    <label for="title">Track Title *</label><br />
+    <input type="text" id="title" name="title" required
+      style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #39ff14; margin-bottom: 10px; background:#0f0f0f; color:#39ff14;" /><br />
+    
+    <label for="genre">Genre</label><br />
+    <input type="text" id="genre" name="genre"
+      style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #39ff14; margin-bottom: 10px; background:#0f0f0f; color:#39ff14;" /><br />
+    
+    <label for="music_url">Music URL *</label><br />
+    <input type="url" id="music_url" name="music_url" required
+      style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #39ff14; margin-bottom: 10px; background:#0f0f0f; color:#39ff14;" /><br />
+    
+    <label for="bio">Bio / Description</label><br />
+    <textarea id="bio" name="bio" rows="4" placeholder="Tell us about this track..."
+      style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #39ff14; margin-bottom: 10px; background:#0f0f0f; color:#39ff14;"></textarea><br />
+    
+    <label for="email">Email (optional)</label><br />
+    <input type="email" id="email" name="email"
+      style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #39ff14; margin-bottom: 10px; background:#0f0f0f; color:#39ff14;" /><br />
+    
+    <button type="submit" style="background:#39ff14; border:none; padding:0.7rem 1.4rem; color:#0f0f0f; border-radius:8px; cursor:pointer; font-weight: bold;">Submit Your Music</button>
+  </form>
+  <p id="submitStatus" style="margin-top: 1rem;"></p>
 
-  <label>
-    Artist Name *
-    <input type="text" name="artist" required />
-    <small class="error-message"></small>
-  </label>
+  <p style="font-size: 0.85rem; color: #39ff14; margin-top: 1rem;">
+    <a href="/submission-terms.html" target="_blank" rel="noopener" style="color: #39ff14;">View submission terms</a>
+  </p>
+</section>
 
-  <label>
-    Track Title *
-    <input type="text" name="title" required />
-    <small class="error-message"></small>
-  </label>
+<script>
+  const form = document.getElementById('musicForm');
+  const status = document.getElementById('submitStatus');
 
-  <label>
-    Genre
-    <input type="text" name="genre" />
-  </label>
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
 
-  <label>
-    Music URL *
-    <input type="url" name="music_url" required />
-    <small class="error-message"></small>
-  </label>
+    const formData = new FormData(form);
 
-  <label>
-    Bio / Description
-    <textarea name="bio" rows="5" placeholder="Tell us about this track..."></textarea>
-  </label>
-
-  <label>
-    Email (optional)
-    <input type="email" name="email" />
-    <small class="error-message"></small>
-  </label>
-
-  <button type="submit">Submit Your Music</button>
-      </form>
-    </section>
-  </main>
-
-  <footer>
-    &copy; 2025 The Balance. All rights reserved.
-  </footer>
-
-  <script>
-    const form = document.getElementById('musicForm');
-    const errorMessages = form.querySelectorAll('.error-message');
-
-    form.addEventListener('submit', function (e) {
-      let hasErrors = false;
-      errorMessages.forEach(msg => {
-        msg.style.display = 'none';
-        msg.textContent = '';
-      });
-
-      [...form.elements].forEach(field => {
-        if (field.name && !field.checkValidity()) {
-          const msg = field.parentElement.querySelector('.error-message');
-          if (msg) {
-            msg.textContent = `Please enter a valid ${field.name.replace('_', ' ')}`;
-            msg.style.display = 'block';
-          }
-          hasErrors = true;
-        }
-      });
-
-      if (hasErrors) {
-        e.preventDefault();
+    fetch(form.action, {
+      method: form.method,
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
       }
+    }).then(response => {
+      if (response.ok) {
+        window.location.href = 'https://thebalancemusic.com/thankyou.html';
+      } else {
+        response.json().then(data => {
+          if (data.errors) {
+            status.textContent = data.errors.map(error => error.message).join(', ');
+          } else {
+            status.textContent = 'There was a problem submitting your form.';
+          }
+          status.style.color = '#ff4d4d'; // error color
+        });
+      }
+    }).catch(() => {
+      status.textContent = 'Oops! Something went wrong.';
+      status.style.color = '#ff4d4d';
     });
-  </script>
+  });
+</script>
+
 
 </body>
 </html>

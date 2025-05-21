@@ -289,11 +289,14 @@
 
     form.addEventListener('submit', function (e) {
       let hasErrors = false;
-      errorMessages.forEach(msg => msg.style.display = 'none');
+      errorMessages.forEach(msg => {
+        msg.style.display = 'none';
+        msg.textContent = '';
+      });
       successMessage.style.display = 'none';
 
       [...form.elements].forEach(field => {
-        if (!field.checkValidity() && field.name) {
+        if (field.name && !field.checkValidity()) {
           const msg = field.parentElement.querySelector('.error-message');
           if (msg) {
             msg.textContent = `Please enter a valid ${field.name.replace('_', ' ')}`;
@@ -304,12 +307,9 @@
       });
 
       if (hasErrors) {
-        e.preventDefault();
-      } else {
-        e.preventDefault(); // prevent actual submission for demo
-        successMessage.style.display = 'block';
-        form.reset();
-      }
+        e.preventDefault(); // prevent submission if invalid
+      } 
+      // if no errors, do nothing, allow form to submit normally to Formspree
     });
   </script>
 

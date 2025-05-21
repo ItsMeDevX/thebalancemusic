@@ -270,6 +270,56 @@
   }
 </style>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Video Gallery</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .video-item {
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+    iframe {
+      width: 100%;
+      height: 200px;
+    }
+    .title {
+      margin-top: 5px;
+      font-weight: bold;
+    }
+    #videoPlayer {
+      width: 100%;
+      max-width: 640px;
+      height: 360px;
+      margin-bottom: 10px;
+    }
+    #controls {
+      margin-top: 10px;
+    }
+    button {
+      padding: 8px 16px;
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2 id="videoTitle">Now Playing</h2>
+  <video id="videoPlayer" controls></video>
+
+  <div id="videoContainer"></div>
+  
+  <div id="controls">
+    <button id="prevBtn">Previous</button>
+    <button id="nextBtn">Next</button>
+  </div>
+
   <script>
     const videos = [
       { id: "1HbWFoojGLoxKDhZsBOK1pMydVT5OIJDU", title: "Boom Boom (Official Video)" },
@@ -317,21 +367,48 @@
       { id: "1EAb2lAeHY94r9v0Vf5_ychPvKNa33OLe", title: "Friday Night In (Official Video)" },
       { id: "1WNPnwP7bhlFSpswdXECSJKSqaq7bmXrG", title: "My Eternity (Official Video)" },
     ];
-    
+
     const videosPerPage = 5;
     let currentPage = 1;
+    let currentIndex = 0;
+
     const videoContainer = document.getElementById('videoContainer');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
+    const player = document.getElementById('videoPlayer');
+    const title = document.getElementById('videoTitle');
+
+    function getOneDriveLink(fileId) {
+      return `https://onedrive.live.com/download?resid=${fileId}`;
+    }
+
+    function loadVideo(index) {
+      const video = videos[index];
+      if (video) {
+        player.src = getOneDriveLink(video.id);
+        title.textContent = video.title;
+        player.load();
+        player.play();
+        currentIndex = index;
+      }
+    }
+
+    player.addEventListener('ended', () => {
+      if (currentIndex + 1 < videos.length) {
+        loadVideo(currentIndex + 1);
+      } else {
+        title.textContent = "Playlist finished.";
+      }
+    });
 
     function renderVideos() {
       videoContainer.innerHTML = '';
 
       const startIndex = (currentPage - 1) * videosPerPage;
-      const endIndex = startIndex + videosPerPage;
+      const endIndex = Math.min(startIndex + videosPerPage, videos.length);
       const currentVideos = videos.slice(startIndex, endIndex);
 
-      currentVideos.forEach(video => {
+      currentVideos.forEach((video, i) => {
         const videoDiv = document.createElement('div');
         videoDiv.className = 'video-item';
 
@@ -341,12 +418,16 @@
         iframe.frameBorder = 0;
         iframe.allow = "autoplay";
 
-        const title = document.createElement('div');
-        title.className = 'title';
-        title.textContent = video.title;
+        const videoTitle = document.createElement('div');
+        videoTitle.className = 'title';
+        videoTitle.textContent = video.title;
 
         videoDiv.appendChild(iframe);
-        videoDiv.appendChild(title);
+        videoDiv.appendChild(videoTitle);
+
+        videoDiv.addEventListener('click', () => {
+          loadVideo(startIndex + i);
+        });
 
         videoContainer.appendChild(videoDiv);
       });
@@ -372,38 +453,7 @@
     });
 
     renderVideos();
-
-  let currentIndex = 0;
-  const player = document.getElementById('videoPlayer');
-  const title = document.getElementById('videoTitle');
-
-  function getOneDriveLink(fileId) {
-    return `https://onedrive.live.com/download?resid=${fileId}`;
-  }
-
-  function loadVideo(index) {
-    const video = videos[index];
-    if (video) {
-      player.src = getOneDriveLink(video.id);
-      title.textContent = video.title;
-      player.load();
-      player.play();
-    }
-  }
-
-  player.addEventListener('ended', () => {
-    currentIndex++;
-    if (currentIndex < videos.length) {
-      loadVideo(currentIndex);
-    } else {
-      title.textContent = "Playlist finished.";
-    }
-  });
-
-  // Start with the first video
-  loadVideo(currentIndex);
-</script>
-    
+    loadVideo(currentIndex);
   </script>
 </body>
 </html>

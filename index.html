@@ -225,45 +225,46 @@
       <h2>Submit to The Balance</h2>
       <p>Share your track with our community. We'll review each submission and feature selected ones on the site.</p>
 
-      <!-- ✅ FORM FIXED BELOW -->
-      <form id="musicForm" action="https://formspree.io/f/mnndrekd?redirect=thankyou.html" method="POST" novalidate>
+     <form id="musicForm" action="https://formspree.io/f/mnndrekd" method="POST" novalidate>
+  
+  <!-- Redirect users to thankyou.html on your live site after submission -->
+  <input type="hidden" name="_redirect" value="https://thebalancemusic.com/thankyou.html" />
 
-        <label>
-          Artist Name *
-          <input type="text" name="artist" required />
-          <small class="error-message"></small>
-        </label>
+  <label>
+    Artist Name *
+    <input type="text" name="artist" required />
+    <small class="error-message"></small>
+  </label>
 
-        <label>
-          Track Title *
-          <input type="text" name="title" required />
-          <small class="error-message"></small>
-        </label>
+  <label>
+    Track Title *
+    <input type="text" name="title" required />
+    <small class="error-message"></small>
+  </label>
 
-        <label>
-          Genre
-          <input type="text" name="genre" />
-        </label>
+  <label>
+    Genre
+    <input type="text" name="genre" />
+  </label>
 
-        <label>
-          Music URL *
-          <input type="url" name="music_url" required />
-          <small class="error-message"></small>
-        </label>
+  <label>
+    Music URL *
+    <input type="url" name="music_url" required />
+    <small class="error-message"></small>
+  </label>
 
-        <label>
-          Bio / Description
-          <textarea name="bio" rows="5" placeholder="Tell us about this track..."></textarea>
-        </label>
+  <label>
+    Bio / Description
+    <textarea name="bio" rows="5" placeholder="Tell us about this track..."></textarea>
+  </label>
 
-        <label>
-          Email (optional)
-          <input type="email" name="email" />
-          <small class="error-message"></small>
-        </label>
+  <label>
+    Email (optional)
+    <input type="email" name="email" />
+    <small class="error-message"></small>
+  </label>
 
-        <button type="submit">Submit Your Music</button>
-
+  <button type="submit">Submit Your Music</button>
       </form>
     </section>
   </main>

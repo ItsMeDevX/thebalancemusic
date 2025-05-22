@@ -270,11 +270,8 @@
     line-height: 1.5;
   }
 
-  /* Featured song container */
+  /* Featured song container without image */
   .submission {
-    display: grid;
-    grid-template-columns: 140px 1fr;
-    gap: 20px;
     background: linear-gradient(135deg, #1c1c1c, #262626);
     border: 3px solid #ff00cc;
     border-radius: 12px;
@@ -286,13 +283,7 @@
       inset 0 0 10px #ff00cc55;
     font-family: 'Orbitron', sans-serif;
     color: #bfbfbf;
-  }
-
-  .submission img {
-    width: 140px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px #ff00ccaa;
-    object-fit: cover;
+    display: block;
   }
 
   .submission h3 {
@@ -323,12 +314,12 @@
   }
 
   .submission iframe {
-    grid-column: 1 / -1;
     width: 100%;
     height: 166px;
     border: none;
     box-shadow: 0 0 15px #ff00ccaa;
     border-radius: 10px;
+    margin-top: 20px;
   }
 </style>
 
@@ -342,20 +333,17 @@
 </p>
 
 <div class="submission">
-  <img src="https://i1.sndcdn.com/artworks-000631179493-k63vp7-t500x500.jpg" alt="SCREAM MACHINE album art" />
-  <div>
-    <h3>SCREAM MACHINE</h3>
-    <p class="meta">by <strong>AC1KENZO</strong> • Genre: Hard Techno</p>
-    <p class="description">
-      Relentless industrial techno with razor-sharp kicks and dystopian energy. Built for peak-time chaos.
-    </p>
-    <ul>
-      <li>Relentless industrial techno</li>
-      <li>Razor-sharp kicks</li>
-      <li>Dystopian energy</li>
-      <li>Built for peak-time chaos</li>
-    </ul>
-  </div>
+  <h3>SCREAM MACHINE</h3>
+  <p class="meta">by <strong>AC1KENZO</strong> • Genre: Hard Techno</p>
+  <p class="description">
+    Relentless industrial techno with razor-sharp kicks and dystopian energy. Built for peak-time chaos.
+  </p>
+  <ul>
+    <li>Relentless industrial techno</li>
+    <li>Razor-sharp kicks</li>
+    <li>Dystopian energy</li>
+    <li>Built for peak-time chaos</li>
+  </ul>
   <iframe 
     scrolling="no" 
     allow="autoplay" 

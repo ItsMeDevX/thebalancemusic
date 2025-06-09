@@ -56,7 +56,7 @@
 </script>
   
 
-  <!-- Auth Bar -->
+<!-- Auth Bar -->
 <div id="auth-bar" style="
   position: absolute;
   top: 20px;
@@ -131,7 +131,7 @@
   const authBar = document.getElementById('auth-bar');
 
   function toggleDropdown(dropdown) {
-    dropdown.style.display = (dropdown.style.display === 'flex') ? 'none' : 'flex';
+    dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
   }
 
   async function renderAuthBar() {
@@ -140,17 +140,20 @@
 
     if (session?.user) {
       // Logged in — show Dashboard + user info + dropdown with logout
+
       const dashboardBtn = document.createElement('button');
       dashboardBtn.textContent = 'Dashboard';
-      dashboardBtn.style.backgroundColor = '#ff69b4';
-      dashboardBtn.style.color = '#1e1b2e';
-      dashboardBtn.style.border = 'none';
-      dashboardBtn.style.padding = '0.5rem 1rem';
-      dashboardBtn.style.fontWeight = 'bold';
-      dashboardBtn.style.fontSize = '0.9rem';
-      dashboardBtn.style.borderRadius = '8px';
-      dashboardBtn.style.cursor = 'pointer';
-      dashboardBtn.style.transition = 'background-color 0.2s';
+      Object.assign(dashboardBtn.style, {
+        backgroundColor: '#ff69b4',
+        color: '#1e1b2e',
+        border: 'none',
+        padding: '0.5rem 1rem',
+        fontWeight: 'bold',
+        fontSize: '0.9rem',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        transition: 'background-color 0.2s',
+      });
       dashboardBtn.addEventListener('mouseover', () => dashboardBtn.style.backgroundColor = '#ff8edb');
       dashboardBtn.addEventListener('mouseout', () => dashboardBtn.style.backgroundColor = '#ff69b4');
       dashboardBtn.addEventListener('click', () => {
@@ -158,9 +161,10 @@
       });
       authBar.appendChild(dashboardBtn);
 
-      const { user_metadata } = session.user;
-      const name = user_metadata.full_name || 'GitHub User';
-      const avatar = user_metadata.avatar_url || '';
+      // Safely get user metadata
+      const userMetadata = session.user.user_metadata || {};
+      const name = userMetadata.full_name || 'GitHub User';
+      const avatar = userMetadata.avatar_url || null;
 
       const userInfo = document.createElement('div');
       userInfo.id = 'user-info';
@@ -202,17 +206,20 @@
 
     } else {
       // Logged out — show Community + Login with GitHub
+
       const communityBtn = document.createElement('button');
       communityBtn.textContent = 'Community';
-      communityBtn.style.backgroundColor = '#ff69b4';
-      communityBtn.style.color = '#1e1b2e';
-      communityBtn.style.border = 'none';
-      communityBtn.style.padding = '0.5rem 1rem';
-      communityBtn.style.fontWeight = 'bold';
-      communityBtn.style.fontSize = '0.9rem';
-      communityBtn.style.borderRadius = '8px';
-      communityBtn.style.cursor = 'pointer';
-      communityBtn.style.transition = 'background-color 0.2s';
+      Object.assign(communityBtn.style, {
+        backgroundColor: '#ff69b4',
+        color: '#1e1b2e',
+        border: 'none',
+        padding: '0.5rem 1rem',
+        fontWeight: 'bold',
+        fontSize: '0.9rem',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        transition: 'background-color 0.2s',
+      });
       communityBtn.addEventListener('mouseover', () => communityBtn.style.backgroundColor = '#ff8edb');
       communityBtn.addEventListener('mouseout', () => communityBtn.style.backgroundColor = '#ff69b4');
       communityBtn.addEventListener('click', () => {
@@ -222,15 +229,17 @@
 
       const loginBtn = document.createElement('button');
       loginBtn.textContent = 'Login with GitHub';
-      loginBtn.style.backgroundColor = '#ff69b4';
-      loginBtn.style.color = '#1e1b2e';
-      loginBtn.style.border = 'none';
-      loginBtn.style.padding = '0.5rem 1rem';
-      loginBtn.style.fontWeight = 'bold';
-      loginBtn.style.fontSize = '0.9rem';
-      loginBtn.style.borderRadius = '8px';
-      loginBtn.style.cursor = 'pointer';
-      loginBtn.style.transition = 'background-color 0.2s';
+      Object.assign(loginBtn.style, {
+        backgroundColor: '#ff69b4',
+        color: '#1e1b2e',
+        border: 'none',
+        padding: '0.5rem 1rem',
+        fontWeight: 'bold',
+        fontSize: '0.9rem',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        transition: 'background-color 0.2s',
+      });
       loginBtn.addEventListener('mouseover', () => loginBtn.style.backgroundColor = '#ff8edb');
       loginBtn.addEventListener('mouseout', () => loginBtn.style.backgroundColor = '#ff69b4');
       loginBtn.addEventListener('click', async () => {
@@ -245,7 +254,6 @@
 
   renderAuthBar();
 </script>
-
   
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />

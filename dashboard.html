@@ -391,9 +391,7 @@
   <h2>Submit Your Music</h2>
 
   <form id="musicForm">
-    <label for="artist">Artist</label>
-    <input id="artist" name="artist" type="text" required placeholder="Artist name" />
-
+    <!-- Removed artist input because artist is set automatically -->
     <label for="title">Title</label>
     <input id="title" name="title" type="text" required placeholder="Song title" />
 
@@ -438,7 +436,6 @@
     const form = document.getElementById('musicForm');
     const status = document.getElementById('submitStatus');
     const musicTableBody = document.querySelector('#musicTable tbody');
-    const musicForm = document.getElementById('musicForm');
     const dashboardSection = document.getElementById('music-dashboard');
 
     function escapeHTML(str) {
@@ -447,11 +444,11 @@
       ));
     }
 
-    async function loadSubmissions(userId) {
+    async function loadSubmissions(artistName) {
       const { data, error } = await supabase
         .from('music_submissions')
         .select('*')
-        .eq('user_id', userId)
+        .eq('artist', artistName)
         .order('created_at', { ascending: false });
 
       if (error) {
@@ -482,7 +479,7 @@
         btn.addEventListener('click', async () => {
           const id = btn.getAttribute('data-id');
           const { error } = await supabase.from('music_submissions').delete().eq('id', id);
-          if (!error) loadSubmissions(userId);
+          if (!error) loadSubmissions(artistName);
           else alert('Delete failed.');
         });
       });
@@ -492,34 +489,33 @@
       const { data: { session } } = await supabase.auth.getSession();
 
       if (!session || !session.user) {
-        musicForm.style.display = 'none';
+        form.style.display = 'none';
         dashboardSection.style.display = 'none';
         const authNotice = document.createElement('p');
         authNotice.textContent = 'Please log in to submit music and view your submissions.';
         authNotice.style.color = '#ff4d4d';
         authNotice.style.fontWeight = 'bold';
         authNotice.style.margin = '2rem 0';
-        musicForm.parentElement.insertBefore(authNotice, musicForm);
+        form.parentElement.insertBefore(authNotice, form);
         return;
       }
 
-      // Show form and dashboard
-      musicForm.style.display = '';
+      form.style.display = '';
       dashboardSection.style.display = '';
 
-      const userId = session.user.id;
+      const userMeta = session.user.user_metadata || {};
+      // Try to get GitHub username, fallback to email
+      const artistName = userMeta.username || userMeta.login || session.user.email;
 
-      // Attach submit handler
       form.addEventListener('submit', async e => {
         e.preventDefault();
         const formData = new FormData(form);
         const submission = {
-          artist: formData.get('artist').trim(),
+          artist: artistName,
           title: formData.get('title').trim(),
           genre: formData.get('genre').trim(),
           music_url: formData.get('music_url').trim(),
           bio: formData.get('bio').trim(),
-          user_id: userId  // attach user ID to submission
         };
 
         const { error } = await supabase.from('music_submissions').insert([submission]);
@@ -531,11 +527,11 @@
           form.reset();
           status.textContent = 'Submission successful!';
           status.style.color = '#39ff14';
-          loadSubmissions(userId);
+          loadSubmissions(artistName);
         }
       });
 
-      loadSubmissions(userId);
+      loadSubmissions(artistName);
     }
 
     document.getElementById('homeBtn').addEventListener('click', () => {

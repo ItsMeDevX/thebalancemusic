@@ -56,101 +56,132 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Auth Bar Example</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Auth Bar Fixed Top Center with Centered Content</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
-</head>
-<body style="margin:0;">
+  <style>
+    /* Reset and base */
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background-color: #111;
+      color: #39ff14;
+      overflow-y: hidden; /* prevent vertical scroll */
+    }
 
-<!-- 🔝 Fixed Auth Bar at top center -->
-<div id="auth-bar" style="
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #1a1a1a;
-  border-radius: 0 0 12px 12px;
-  box-shadow: 0 0 12px #ff00cc88;
-  padding: 10px 20px;
-  font-family: 'Orbitron', sans-serif;
-  color: #39ff14;
-  min-height: 60px;
-  user-select: none;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: fit-content;
-  max-width: 90vw;
-">
+    /* Auth bar fixed at top center */
+    #auth-bar {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #1a1a1a;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 0 12px #ff00cc88;
+      padding: 10px 20px;
+      color: #39ff14;
+      min-height: 60px;
+      user-select: none;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: fit-content;
+      max-width: 90vw;
+    }
+
+    /* Container for the rest of the page content */
+    #page-content {
+      max-width: 900px;
+      margin: 80px auto 0; /* margin top to push below the auth bar */
+      padding: 20px;
+      background-color: #222;
+      border-radius: 12px;
+      text-align: center;
+      /* Make sure content height fits so no scroll */
+      height: calc(100vh - 80px);
+      overflow: auto;
+      color: #39ff14;
+    }
+
+    /* Dropdown and button styles */
+    #user-dropdown {
+      position: absolute;
+      top: 70px;
+      left: 0;
+      background-color: #1a1a1a;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px #00ffffcc;
+      min-width: 150px;
+      display: none;
+      flex-direction: column;
+      z-index: 10000;
+    }
+    #user-dropdown button {
+      background: none;
+      border: none;
+      color: #39ff14;
+      padding: 10px 16px;
+      text-align: left;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s, color 0.2s;
+      font-family: 'Orbitron', sans-serif;
+    }
+    #user-dropdown button:hover {
+      background-color: #ff00cc;
+      color: #1a1a1a;
+    }
+    #user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      color: #39ff14;
+      position: relative;
+    }
+    #user-info img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid #ff00cc;
+      object-fit: cover;
+    }
+    #user-info div {
+      font-size: 1rem;
+      font-weight: bold;
+    }
+    button.auth-btn {
+      background-color: #ff00cc;
+      color: #1a1a1a;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+      font-size: 0.9rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      font-family: 'Orbitron', sans-serif;
+    }
+    button.auth-btn:hover {
+      background-color: #cc0099;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Auth Bar fixed top center -->
+<div id="auth-bar">
   <!-- Content injected by JS -->
 </div>
 
-<!-- 🔧 Dropdown + Button Styles -->
-<style>
-  #user-dropdown {
-    position: absolute;
-    top: 70px;
-    left: 0;
-    background-color: #1a1a1a;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px #00ffffcc;
-    min-width: 150px;
-    display: none;
-    flex-direction: column;
-    z-index: 10000;
-  }
-  #user-dropdown button {
-    background: none;
-    border: none;
-    color: #39ff14;
-    padding: 10px 16px;
-    text-align: left;
-    font-weight: bold;
-    font-family: 'Orbitron', sans-serif;
-    cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
-  }
-  #user-dropdown button:hover {
-    background-color: #ff00cc;
-    color: #1a1a1a;
-  }
-  #user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    color: #39ff14;
-    position: relative;
-  }
-  #user-info img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 2px solid #ff00cc;
-    object-fit: cover;
-  }
-  #user-info div {
-    font-size: 1rem;
-    font-weight: bold;
-  }
-  button.auth-btn {
-    background-color: #ff00cc;
-    color: #1a1a1a;
-    border: none;
-    padding: 0.5rem 1rem;
-    font-weight: bold;
-    font-size: 0.9rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  button.auth-btn:hover {
-    background-color: #cc0099;
-  }
-</style>
+<!-- Page content container -->
+<div id="page-content">
+  <!-- Your other page content goes here, centered with max width -->
+  <h1>Welcome to your site!</h1>
+  <p>This content is centered below the fixed auth bar.</p>
+</div>
 
-<!-- 🔐 Supabase Auth Script -->
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 

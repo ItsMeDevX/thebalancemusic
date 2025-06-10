@@ -60,7 +60,7 @@
   <title>Auth Bar Example</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
 </head>
-<body>
+<body style="margin:0;">
 
 <!-- 🔝 Fixed Auth Bar at top center -->
 <div id="auth-bar" style="
@@ -85,13 +85,6 @@
 ">
   <!-- Content injected by JS -->
 </div>
-
-<!-- Add top padding so content is not hidden behind the fixed bar -->
-<main style="padding-top: 80px;">
-  <!-- Your main page content goes here -->
-  <h1>Welcome to the page!</h1>
-  <p>Scroll down to see the fixed auth bar stays at the top center.</p>
-</main>
 
 <!-- 🔧 Dropdown + Button Styles -->
 <style>
@@ -177,7 +170,6 @@
     authBar.innerHTML = '';
 
     if (session?.user) {
-      // Logged in — show Dashboard + user info + dropdown with logout
       const dashboardBtn = document.createElement('button');
       dashboardBtn.textContent = 'Dashboard';
       dashboardBtn.className = 'auth-btn';
@@ -229,7 +221,6 @@
       });
 
     } else {
-      // Logged out — show Community + Login with GitHub
       const communityBtn = document.createElement('button');
       communityBtn.textContent = 'Community';
       communityBtn.className = 'auth-btn';

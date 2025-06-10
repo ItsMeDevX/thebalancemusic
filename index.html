@@ -52,7 +52,17 @@
 </script>
   
 
-<!-- Auth Bar -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auth Bar Example</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- 🔝 Auth Bar at Top -->
 <div id="auth-bar" style="
   position: absolute;
   top: 20px;
@@ -73,6 +83,7 @@
   <!-- Content injected by JS -->
 </div>
 
+<!-- 🔧 Dropdown + Button Styles -->
 <style>
   #user-dropdown {
     position: absolute;
@@ -135,6 +146,7 @@
   }
 </style>
 
+<!-- 🔐 Supabase Auth Script -->
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
@@ -155,7 +167,6 @@
 
     if (session?.user) {
       // Logged in — show Dashboard + user info + dropdown with logout
-
       const dashboardBtn = document.createElement('button');
       dashboardBtn.textContent = 'Dashboard';
       dashboardBtn.className = 'auth-btn';
@@ -164,7 +175,6 @@
       });
       authBar.appendChild(dashboardBtn);
 
-      // Safely get user metadata
       const userMetadata = session.user.user_metadata || {};
       const name = userMetadata.full_name || 'GitHub User';
       const avatar = userMetadata.avatar_url || null;
@@ -209,7 +219,6 @@
 
     } else {
       // Logged out — show Community + Login with GitHub
-
       const communityBtn = document.createElement('button');
       communityBtn.textContent = 'Community';
       communityBtn.className = 'auth-btn';
@@ -233,8 +242,6 @@
 
   renderAuthBar();
 </script>
-  
-
   
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />

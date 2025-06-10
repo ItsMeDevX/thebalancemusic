@@ -537,12 +537,53 @@
   }
 </style>
 
-<script>
-  const videos = [
-    { id: "1HbWFoojGLoxKDhZsBOK1pMydVT5OIJDU", title: "Boom Boom (Official Video)" },
-    { id: "1Ay0hnJQouYcBjjW0fcC0fVG-GqKp6AtU", title: "Nothing Else To Give (Official Video)" },
-    // ... you can keep the rest of the video list unchanged
-  ];
+  <script>
+    const videos = [
+      { id: "1HbWFoojGLoxKDhZsBOK1pMydVT5OIJDU", title: "Boom Boom (Official Video)" },
+      { id: "1Ay0hnJQouYcBjjW0fcC0fVG-GqKp6AtU", title: "Nothing Else To Give (Official Video)" },
+      { id: "1yT-kPKwWHy5o4Y9I1LFjR_NCNa_LQ2Yv", title: "Behind the Door (Official Video)" },
+      { id: "1sXXWSCBo1btoANviXX4gxrKx_K8UFGSc", title: "Just For Kicks (Official Video)" },
+      { id: "1-b8c4r_MIySK-AwQz6N1e4LNCp2LcXJO", title: "It’s All Happening Now (Official Video)" },
+      { id: "13SJyfenLLbMDPWXXmOYJ89bTMOUMEoGu", title: "No Place to Run (Official Video)" },
+      { id: "1ocLC_yCk1ANHumH7LGE3hGlyRdpKJofe", title: "Wolf Pack (Official Video)" },
+      { id: "1tdx_ugWSNQSIqYFEQSBUvH1xXBmJEOmq", title: "The Man With The Dragon Tattoo (Official Video)" },
+      { id: "1onBL8BylaOSp_0YwW6gSwi_uOmAL0OKU", title: "Rise and Fly (Official Video)" },
+      { id: "161wJn6MMeAgoBURcG9lICdKu_gnyESXl", title: "Price of the Play (Official Video)" },
+      { id: "1bOr0czje3la0mcUvZa8gAgiijyrX6YEk", title: "One Life to Live (Official Video)" },
+      { id: "1v2KlPBCPQBt8abOhnsFaVoAOv3FFxzFG", title: "Hard To Give Up (Official Video)" },
+      { id: "1pnMSIlrr-dr5TcFaIeyeNwQudDLNDKe2", title: "Mersey Nights (Official Video)" },
+      { id: "140ggCUYd8t4zFGlnHTyqnLm-MAPRojsk", title: "Play The Track (Official Video)" },
+      { id: "1eK3WYhmaatS4KE4UFUcmN3tukxzh6OT3", title: "Through the Fire (Official Video)" },
+      { id: "1Es6I_Mo8EUIDCEcXGebIVrlfxdOcwEIq", title: "Lost in the Lights (Official Video)" },
+      { id: "1g9Lnqa3N3z0208Iwm71NUQqzygDd32HG", title: "Release Your Energy (Official Video)" },
+      { id: "1oEeYgznLp_cEl8zyK31yo9p5H7hiJfwd", title: "Addicted To You (Official Video)" },
+      { id: "10VzBEzaO78JqYNPjQxburIHj9vFkdwEO", title: "Body to Die For (Official Video)" },
+      { id: "1YiVKydAWzTKLRcQE84sQL_8iL2XzHsIo", title: "Alive Inside (Official Video)" },
+      { id: "1VIkJVJ7E9s24r0UmI-PnhMOgLaO5iYKm", title: "She's a Unit (Official Video)" },
+      { id: "17t5GIbf_3bZ4tQ11O4JWVknrvgY3pH8M", title: "Falling For You (Official Video)" },
+      { id: "1rjiFNKtBimfOR7JzAM53DmI6-C3HFjjk", title: "Heart of a Nightmare (Official Video)" },
+      { id: "1klEiWijhJvVSPB-Qd46ifwWUWMwpprvu", title: "No One Like You (Official Video)" },
+      { id: "1tsZCfOljWUh0sPBALgyRmwVTuDi8Z58Y", title: "Rocket Fuel (Official Video)" },
+      { id: "1GdMJpjgrsCzrk8fAwa3rs9dLnuzulRbF", title: "Fright of Your Life (Official Video)" },
+      { id: "11M5SXovbbT8MG7mJtYTVcYpTRptTVaQi", title: "Til Dawn (Official Video)" },
+      { id: "1TpAOr9Pbx2GGvUbkETcnhb03whvPKzYp", title: "Dark Place (Official Video)" },
+      { id: "1lv79S-tepJ4W86xoKs_yUfae6Ce57kp-", title: "Just Us Two (Official Video)" },
+      { id: "1RUeGlRos0b5wZx1ry_HMoPrvRB9peNjA", title: "Deep Breath (Official Video)" },
+      { id: "1NviNa9rRv5G6u8S-A4WosJi5U5AkhCto", title: "Looking At Me (Official Video)" },
+      { id: "1lwR1wZ5YWcSxKI3uInAy4k4sqFCojnK5", title: "No Back Track (Official Video)" },
+      { id: "1Q-GGDbMRuukA_w7fYp0dt572DaSIFpwc", title: "Power Cut (Official Video)" },
+      { id: "1tLftc_tAjLK4DpurFC3VByif0e7_kqfX", title: "Smile (Official Video)" },
+      { id: "17RkvghgcST6GlzuCxBk5xckoXVI7K3g8", title: "No Way Out (Official Video)" },
+      { id: "1xXn3M7le5TbfKFM8aMtieM9F1P9sdENp", title: "Roads Untraveled (Official Video)" },
+      { id: "1qZ6sJcxTFqIBQsL72WDRpedFGpCodVZ0", title: "Real Life (Official Video)" },
+      { id: "1vleqwaGgBr-TOq_aU1rK0Rcr5sKiWKyD", title: "One More Line (Official Video)" },
+      { id: "1mXiqUz9_84IUxJAeJWzZ4z82TShI-3RF", title: "The Streets (Official Video)" },
+      { id: "1_MapxHLPQV5in7hwXxOA0ktCRnGp1ZGy", title: "Ill Be The Sound (Official Video)" },
+      { id: "1dFdtYEoGjkK3J4dcL0Xve1ATYanI5eMP", title: "Generation (Official Video)" },
+      { id: "1yBMpgkrqMP4R0sQrcU6KOS59c0gdKl58", title: "Crazy (Official Video)" },
+      { id: "1EAb2lAeHY94r9v0Vf5_ychPvKNa33OLe", title: "Friday Night In (Official Video)" },
+      { id: "1WNPnwP7bhlFSpswdXECSJKSqaq7bmXrG", title: "My Eternity (Official Video)" }
+    ];
 
   const mainPlayer = document.getElementById('mainPlayer');
   const title = document.getElementById('videoTitle');

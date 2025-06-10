@@ -495,14 +495,11 @@
     &copy; 2025 The Balance | All rights reserved.
   </footer>
 
- <style>
+  <style>
     body {
       font-family: Arial, sans-serif;
-    }
-
-    #player-container {
       text-align: center;
-      margin: 2em auto;
+      margin: 2em;
     }
 
     #mainPlayer {
@@ -517,20 +514,11 @@
       margin: 0.5em 0;
     }
 
-    #controls {
-      margin-top: 0.5em;
-    }
-
     #controls button {
       font-size: 0.8em;
       padding: 0.3em 0.8em;
       margin: 0 0.3em;
       cursor: pointer;
-    }
-
-    /* Hide the video grid */
-    #videoContainer {
-      display: none;
     }
   </style>
 </head>
@@ -545,14 +533,12 @@
     </div>
   </div>
 
-  <div id="videoContainer"></div>
-
   <script>
     const videos = [
       { id: "1HbWFoojGLoxKDhZsBOK1pMydVT5OIJDU", title: "Boom Boom (Official Video)" },
       { id: "1Ay0hnJQouYcBjjW0fcC0fVG-GqKp6AtU", title: "Nothing Else To Give (Official Video)" },
-      { id: "1yT-kPKwWHy5o4Y9I1LFjR_NCNa_LQ2Yv", title: "Behind the Door (Official Video)" },
-      // ... Add or remove videos as needed ...
+      { id: "1yT-kPKwWHy5o4Y9I1LFjR_NCNa_LQ2Yv", title: "Behind the Door (Official Video)" }
+      // Add more if needed
     ];
 
     const mainPlayer = document.getElementById('mainPlayer');
@@ -564,10 +550,9 @@
     }
 
     function loadVideo(index) {
-      const video = videos[index];
-      if (video) {
-        mainPlayer.src = getPreviewUrl(video.id);
-        title.textContent = video.title;
+      if (videos[index]) {
+        mainPlayer.src = getPreviewUrl(videos[index].id);
+        title.textContent = videos[index].title;
         currentIndex = index;
       }
     }
@@ -582,7 +567,6 @@
 
     loadVideo(currentIndex);
   </script>
-
     
     <section id="contact">
       <h3>Contact Us</h3>

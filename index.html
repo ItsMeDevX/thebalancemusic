@@ -60,7 +60,6 @@
   <title>Fixed Top Center Auth Bar</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
   <style>
-    /* Reset */
     body {
       margin: 0;
       font-family: 'Orbitron', sans-serif;
@@ -89,15 +88,6 @@
       max-width: 90vw;
     }
 
-    /* Page content */
-    #page-content {
-      max-width: 900px;
-      margin: 100px auto 40px; /* top margin to clear auth bar */
-      padding: 0 16px;
-      text-align: center;
-    }
-
-    /* Button styles (you can tweak or keep your original) */
     button.auth-btn {
       background-color: #ff00cc;
       color: #1a1a1a;
@@ -119,13 +109,6 @@
 
 <div id="auth-bar">
   <!-- Auth bar content inserted by JS -->
-</div>
-
-<div id="page-content">
-  <h1>Your main content here</h1>
-  <p>This is centered page content below the fixed auth bar.</p>
-  <p>Scroll down to see the auth bar stays fixed.</p>
-  <div style="height: 1500px;"></div> <!-- Just to test scroll -->
 </div>
 
 <script type="module">

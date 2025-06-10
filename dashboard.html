@@ -546,243 +546,168 @@
   </style>
 </head>
 <body>
-  <header>
+ <header>
     <h1>The Balance Music</h1>
   </header>
 
-  <section id="submit-music">
-    <h2>Submit Your Music</h2>
-    <form id="musicForm" novalidate>
-      <label for="artist">Artist Name *</label>
-      <input type="text" id="artist" name="artist" required autocomplete="off" />
-
-      <label for="title">Track Title *</label>
-      <input type="text" id="title" name="title" required autocomplete="off" />
-
-      <label for="genre">Genre</label>
-      <input type="text" id="genre" name="genre" autocomplete="off" />
-
-      <label for="music_url">Music URL *</label>
-      <input type="url" id="music_url" name="music_url" required placeholder="e.g. https://soundcloud.com/yourtrack" autocomplete="off" />
-
-      <label for="bio">Bio / Description</label>
-      <textarea id="bio" name="bio" rows="4" placeholder="Tell us about this track..."></textarea>
-
-      <button type="submit">Submit Your Music</button>
-    </form>
-    <p id="submitStatus" aria-live="polite" role="status"></p>
+  <section id="navigation-buttons">
+    <button id="homeBtn" type="button">Home</button>
+    <button id="termsBtn" type="button">Submission Terms</button>
   </section>
 
-  <section id="music-dashboard" aria-live="polite" role="region" aria-label="Manage Submitted Tracks">
-    <h2>Manage Submitted Tracks</h2>
-    <table id="tracksTable" aria-label="Submitted music tracks">
+  <h2>Submit Your Music</h2>
+
+  <form id="musicForm">
+    <label for="artist">Artist</label>
+    <input id="artist" name="artist" type="text" required placeholder="Artist name" />
+
+    <label for="title">Title</label>
+    <input id="title" name="title" type="text" required placeholder="Song title" />
+
+    <label for="genre">Genre</label>
+    <input id="genre" name="genre" type="text" required placeholder="Music genre" />
+
+    <label for="music_url">Music URL</label>
+    <input id="music_url" name="music_url" type="url" required placeholder="URL to your music" />
+
+    <label for="bio">Bio</label>
+    <textarea id="bio" name="bio" rows="4" placeholder="A brief bio about the artist or track"></textarea>
+
+    <button type="submit">Submit</button>
+    <div id="submitStatus" role="status" aria-live="polite"></div>
+  </form>
+
+  <section id="music-dashboard">
+    <h2>Manage Your Submissions</h2>
+    <table id="musicTable" aria-label="Music submissions table">
       <thead>
         <tr>
           <th>Artist</th>
           <th>Title</th>
           <th>Genre</th>
           <th>Music URL</th>
-          <th>Bio / Description</th>
+          <th>Bio</th>
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- Tracks will load here -->
-      </tbody>
+      <tbody></tbody>
     </table>
-    <p id="dashboardStatus"></p>
   </section>
 
-  <footer>
-    <p>© 2025 The Balance Music</p>
-  </footer>
+  <script>
+    // 🔑 Replace with your Supabase project details
+    const supabaseUrl = 'https://your-project-id.supabase.co';
+    const supabaseKey = 'your-public-anon-key';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    document.getElementById('homeBtn').addEventListener('click', () => {
+      window.location.href = '/';
+    });
 
-    // Replace with your Supabase project credentials:
-    const supabaseUrl = 'https://your-project.supabase.co';
-    const supabaseKey = 'your-anon-key';
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    document.getElementById('termsBtn').addEventListener('click', () => {
+      alert('Submission Terms:\n\nPlease submit original music only. By submitting, you agree to our terms and conditions.');
+    });
 
-    // Elements
-    const form = document.getElementById('musicForm');
+    const musicForm = document.getElementById('musicForm');
     const submitStatus = document.getElementById('submitStatus');
+    const musicTableBody = document.querySelector('#musicTable tbody');
 
-    const tableBody = document.querySelector('#tracksTable tbody');
-    const dashboardStatus = document.getElementById('dashboardStatus');
+    let submissions = [];
 
-    // Helper escape for safety
-    function escapeHtml(text) {
-      if (!text) return '';
-      return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    async function loadSubmissions() {
+      const { data, error } = await supabase
+        .from('music_submissions')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error loading submissions:', error);
+        musicTableBody.innerHTML = `<tr><td colspan="6" style="color:red; text-align:center;">Error loading data</td></tr>`;
+        return;
+      }
+
+      submissions = data;
+      renderTable();
     }
 
-    // Submit new track
-    form.addEventListener('submit', async (e) => {
+    function renderTable() {
+      musicTableBody.innerHTML = '';
+
+      if (submissions.length === 0) {
+        musicTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#888;">No submissions yet.</td></tr>';
+        return;
+      }
+
+      submissions.forEach((entry, index) => {
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+          <td>${entry.artist}</td>
+          <td>${entry.title}</td>
+          <td>${entry.genre}</td>
+          <td><a href="${entry.music_url}" target="_blank" rel="noopener noreferrer">Listen</a></td>
+          <td>${entry.bio || ''}</td>
+          <td>
+            <button class="deleteBtn" data-id="${entry.id}">Delete</button>
+          </td>
+        `;
+
+        musicTableBody.appendChild(tr);
+      });
+
+      document.querySelectorAll('.deleteBtn').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const id = e.target.getAttribute('data-id');
+          const { error } = await supabase
+            .from('music_submissions')
+            .delete()
+            .eq('id', id);
+
+          if (!error) {
+            submissions = submissions.filter(item => item.id != id);
+            renderTable();
+          } else {
+            alert('Error deleting entry');
+          }
+        });
+      });
+    }
+
+    musicForm.addEventListener('submit', async e => {
       e.preventDefault();
-      submitStatus.textContent = '';
-      submitStatus.style.color = '#d1f01d';
+      const formData = new FormData(musicForm);
+      const newSubmission = {
+        artist: formData.get('artist').trim(),
+        title: formData.get('title').trim(),
+        genre: formData.get('genre').trim(),
+        music_url: formData.get('music_url').trim(),
+        bio: formData.get('bio').trim(),
+      };
 
-      const artist = form.artist.value.trim();
-      const title = form.title.value.trim();
-      const genre = form.genre.value.trim();
-      const music_url = form.music_url.value.trim();
-      const bio = form.bio.value.trim();
-
-      if (!artist || !title || !music_url) {
+      if (!newSubmission.artist || !newSubmission.title || !newSubmission.genre || !newSubmission.music_url) {
         submitStatus.textContent = 'Please fill in all required fields.';
         submitStatus.style.color = '#ff4d4d';
         return;
       }
 
-      // Insert to Supabase
       const { error } = await supabase
         .from('music_submissions')
-        .insert([{ artist, title, genre, music_url, bio }]);
+        .insert([newSubmission]);
 
       if (error) {
-        submitStatus.textContent = 'Failed to submit: ' + error.message;
+        console.error('Insert error:', error);
+        submitStatus.textContent = 'Error submitting. Try again.';
         submitStatus.style.color = '#ff4d4d';
       } else {
-        submitStatus.textContent = 'Submitted successfully!';
-        submitStatus.style.color = '#d1f01d';
-        form.reset();
-        fetchTracks(); // Refresh dashboard after new submission
+        musicForm.reset();
+        submitStatus.textContent = 'Submission successful!';
+        submitStatus.style.color = '#39ff14';
+        loadSubmissions();
       }
     });
 
-    // Fetch all tracks for dashboard
-    async function fetchTracks() {
-      dashboardStatus.textContent = 'Loading tracks...';
-      dashboardStatus.style.color = '#d1f01d';
-      const { data, error } = await supabase
-        .from('music_submissions')
-        .select('*')
-        .order('id', { ascending: false });
-
-      if (error) {
-        dashboardStatus.textContent = 'Error loading tracks: ' + error.message;
-        dashboardStatus.style.color = '#ff4d4d';
-        tableBody.innerHTML = '';
-        return;
-      }
-
-      dashboardStatus.textContent = '';
-      renderTracks(data);
-    }
-
-    // Render rows with editable inputs
-    function renderTracks(tracks) {
-      tableBody.innerHTML = '';
-      if (tracks.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#7a7a7a;">No tracks submitted yet.</td></tr>';
-        return;
-      }
-
-      tracks.forEach(track => {
-        const tr = document.createElement('tr');
-        tr.dataset.id = track.id;
-
-        tr.innerHTML = `
-          <td><input type="text" name="artist" value="${escapeHtml(track.artist)}" autocomplete="off" /></td>
-          <td><input type="text" name="title" value="${escapeHtml(track.title)}" autocomplete="off" /></td>
-          <td><input type="text" name="genre" value="${escapeHtml(track.genre)}" autocomplete="off" /></td>
-          <td><input type="url" name="music_url" value="${escapeHtml(track.music_url)}" autocomplete="off" /></td>
-          <td><textarea name="bio">${escapeHtml(track.bio)}</textarea></td>
-          <td>
-            <button class="saveBtn" type="button">Save</button>
-            <button class="deleteBtn" type="button">Delete</button>
-          </td>
-        `;
-        tableBody.appendChild(tr);
-      });
-
-      // Attach event listeners to buttons
-      tableBody.querySelectorAll('.saveBtn').forEach(btn => {
-        btn.addEventListener('click', onSaveClick);
-      });
-      tableBody.querySelectorAll('.deleteBtn').forEach(btn => {
-        btn.addEventListener('click', onDeleteClick);
-      });
-    }
-
-    // Save updated track data
-    async function onSaveClick(e) {
-      const tr = e.target.closest('tr');
-      const id = tr.dataset.id;
-
-      const updatedData = {
-        artist: tr.querySelector('input[name="artist"]').value.trim(),
-        title: tr.querySelector('input[name="title"]').value.trim(),
-        genre: tr.querySelector('input[name="genre"]').value.trim(),
-        music_url: tr.querySelector('input[name="music_url"]').value.trim(),
-        bio: tr.querySelector('textarea[name="bio"]').value.trim(),
-      };
-
-      if (!updatedData.artist || !updatedData.title || !updatedData.music_url) {
-        dashboardStatus.textContent = 'Artist, Title, and Music URL are required!';
-        dashboardStatus.style.color = '#ff4d4d';
-        return;
-      }
-
-      dashboardStatus.textContent = 'Saving changes...';
-      dashboardStatus.style.color = '#d1f01d';
-
-      const { error } = await supabase
-        .from('music_submissions')
-        .update(updatedData)
-        .eq('id', id);
-
-      if (error) {
-        dashboardStatus.textContent = 'Failed to save: ' + error.message;
-        dashboardStatus.style.color = '#ff4d4d';
-      } else {
-        dashboardStatus.textContent = 'Changes saved.';
-        dashboardStatus.style.color = '#d1f01d';
-        // Refresh table for best sync (optional)
-        fetchTracks();
-      }
-    }
-
-    // Delete track
-    async function onDeleteClick(e) {
-      if (!confirm('Are you sure you want to delete this track?')) return;
-
-      const tr = e.target.closest('tr');
-      const id = tr.dataset.id;
-
-      dashboardStatus.textContent = 'Deleting...';
-      dashboardStatus.style.color = '#d1f01d';
-
-      const { error } = await supabase
-        .from('music_submissions')
-        .delete()
-        .eq('id', id);
-
-      if (error) {
-        dashboardStatus.textContent = 'Failed to delete: ' + error.message;
-        dashboardStatus.style.color = '#ff4d4d';
-      } else {
-        dashboardStatus.textContent = 'Track deleted.';
-        dashboardStatus.style.color = '#d1f01d';
-        fetchTracks();
-      }
-    }
-
-    // Initialize dashboard on load
-    fetchTracks();
+    // Initial load
+    loadSubmissions();
   </script>
-
-  <section id="navigation-buttons" style="margin-bottom: 30px; text-align: center;">
-  <button id="homeBtn" type="button">Home</button>
-  <button id="termsBtn" type="button">Submission Terms</button>
-</section>
-
 </body>
 </html>

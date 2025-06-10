@@ -251,10 +251,7 @@
 </body>
 </html>
   
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
+ <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Balance - Music Sharing</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
@@ -421,136 +418,56 @@
   </style>
 </head>
 <body>
+
   <header>
     <h1>The Balance</h1>
-    <img src="logo.png" alt="Logo" class="logo" />
+    <img src="TheBalanceLogo.png" alt="The Balance Logo" class="logo" />
+    <p>Contact</p>
   </header>
 
   <nav>
-    <a href="#">Home</a>
-    <a href="#">Submit Music</a>
-    <a href="#">Discover</a>
-    <a href="#">Contact</a>
+    <a href="index.html">Home</a>
+    <a href="instrumentals.html">Instrumentals</a>
+    <a href="samples.html">Samples</a>
+    <a href="soundfx.html">Sound FX</a>
+    <a href="music.html">Music</a>
+    <a href="contact.html">Contact</a>
+    <a href="Community.html">Community</a>
   </nav>
+   <section class="hero">
+    <h2>Where Independent Music Meets Opportunity</h2>
+    <p>The Balance Music is a digital platform dedicated to showcasing underground, unsigned, and independent musical talent from around the world. Whether you're a producer, vocalist, or band—your sound belongs here.</p>
+  </section>
 
-  <main>
-    <section>
-      <h2>Submit Your Music</h2>
-      <form id="musicForm">
-        <label>
-          Artist Name
-          <input type="text" name="artist" required />
-        </label>
-        <label>
-          Song Title
-          <input type="text" name="title" required />
-        </label>
-        <label>
-          Genre
-          <input type="text" name="genre" required />
-        </label>
-        <label>
-          Music URL
-          <input type="url" name="music_url" required />
-        </label>
-        <label>
-          Bio
-          <textarea name="bio" rows="4" placeholder="Tell us about this track or artist..."></textarea>
-        </label>
-        <button type="submit">Submit</button>
-        <div id="submitStatus" class="error-message"></div>
-      </form>
-    </section>
+  <section class="section" id="about">
+    <h3>Our Mission</h3>
+    <p>At The Balance Music, we believe in music without borders—genre, location, or label shouldn't limit creativity. Our goal is to discover, share, and elevate undiscovered artists by providing a space that prioritizes quality, originality, and authenticity. We’re not just a platform—we're a movement for balance in the music industry.</p>
+  </section>
 
-    <section>
-      <h2>Recent Submissions</h2>
-      <ul id="submissionList">
-        <!-- Dynamic content will go here -->
-      </ul>
-    </section>
-  </main>
+  <section class="section">
+    <h3>What We Offer</h3>
+    <ul>
+      <li>🟢 Free music submission for independent artists</li>
+      <li>🟢 Fair and unbiased curation—no gatekeeping</li>
+      <li>🟢 Exposure through playlists, blogs, and social media</li>
+      <li>🟢 Community-focused initiatives & collaborations</li>
+    </ul>
+  </section>
+
+  <section class="cta">
+    <a href="/submit.html">Submit Your Music Now</a>
+  </section>
+
+  <section class="section" id="contact">
+    <h3>Contact Us</h3>
+    <p>For submissions, questions, or collaborations, please reach out to us:</p>
+    <p>Email: <a href="mailto:info@thebalancemusic.com" style="color:#39ff14;">info@thebalancemusic.com</a></p>
+    <p>Instagram: <a href="https://instagram.com/thebalancemusic" target="_blank" style="color:#39ff14;">@thebalancemusic</a></p>
+  </section>
 
   <footer>
     &copy; 2025 The Balance Music. All rights reserved.
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const supabase = supabase.createClient(
-      'https://tpqsceyxdpgerjjiydmy.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
-    );
-
-    const form = document.getElementById('musicForm');
-    const status = document.getElementById('submitStatus');
-    const list = document.getElementById('submissionList');
-
-    function escapeHTML(str) {
-      return String(str).replace(/[&<>"']/g, match => (
-        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[match]
-      ));
-    }
-
-    async function loadSubmissions() {
-      const { data, error } = await supabase
-        .from('music_submissions')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        list.innerHTML = `<li style="color:red;">Error loading submissions.</li>`;
-        return;
-      }
-
-      list.innerHTML = '';
-      if (data.length === 0) {
-        list.innerHTML = '<li>No submissions yet.</li>';
-        return;
-      }
-
-      data.forEach(item => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-          <strong>${escapeHTML(item.artist)} - ${escapeHTML(item.title)}</strong><br>
-          <em>${escapeHTML(item.genre)}</em><br>
-          <a class="download-link" href="${escapeHTML(item.music_url)}" target="_blank">Listen</a><br>
-          <small>${escapeHTML(item.bio || '')}</small>
-        `;
-        list.appendChild(li);
-      });
-    }
-
-    form.addEventListener('submit', async e => {
-      e.preventDefault();
-      const formData = new FormData(form);
-      const submission = {
-        artist: formData.get('artist').trim(),
-        title: formData.get('title').trim(),
-        genre: formData.get('genre').trim(),
-        music_url: formData.get('music_url').trim(),
-        bio: formData.get('bio').trim()
-      };
-
-      if (!submission.artist || !submission.title || !submission.genre || !submission.music_url) {
-        status.textContent = 'Please fill out all required fields.';
-        status.style.display = 'block';
-        return;
-      }
-
-      const { error } = await supabase.from('music_submissions').insert([submission]);
-      if (error) {
-        status.textContent = 'Submission failed. Try again.';
-        status.style.display = 'block';
-      } else {
-        form.reset();
-        status.textContent = 'Submission successful!';
-        status.style.display = 'block';
-        status.style.color = '#39ff14';
-        loadSubmissions();
-      }
-    });
-
-    loadSubmissions();
-  </script>
 </body>
 </html>

@@ -471,6 +471,51 @@
       ));
     }
 
+    function getEmbedPlayer(url) {
+      const escapedUrl = escapeHTML(url);
+
+      // YouTube
+      if (/youtube\.com\/watch\?v=|youtu\.be\//.test(url)) {
+        const match = url.match(/(?:v=|\/)([a-zA-Z0-9_-]{11})/);
+        const videoId = match ? match[1] : null;
+        if (videoId) {
+          return `<iframe width="100%" height="166" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+        }
+      }
+
+      // SoundCloud
+      if (/soundcloud\.com/.test(url)) {
+        return `<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+          src="https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%230066cc&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false">
+        </iframe>`;
+      }
+
+      // Spotify
+      if (/open\.spotify\.com\/track\//.test(url)) {
+        const embedUrl = url.replace('/track/', '/embed/track/');
+        return `<iframe style="border-radius:12px" src="${embedUrl}" width="100%" height="80" frameborder="0" allow="encrypted-media"></iframe>`;
+      }
+
+      // Apple Music
+      if (/music\.apple\.com/.test(url)) {
+        return `<iframe allow="autoplay *; encrypted-media *;" frameborder="0" height="150" style="width:100%;max-width:660px;overflow:hidden;background:transparent;" 
+          sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation"
+          src="https://embed.music.apple.com/us/album?url=${encodeURIComponent(url)}">
+        </iframe>`;
+      }
+
+      // Direct .mp3, .wav
+      if (/\.(mp3|wav|ogg)$/i.test(url)) {
+        return `<audio controls preload="none">
+                  <source src="${escapedUrl}" type="audio/mpeg">
+                  Your browser does not support the audio element.
+                </audio>`;
+      }
+
+      // Fallback
+      return `<a href="${escapedUrl}" target="_blank" rel="noopener noreferrer">Listen</a>`;
+    }
+
     async function loadTracks() {
       const { data, error } = await supabase
         .from('music_submissions')
@@ -482,13 +527,13 @@
         return;
       }
 
-      trackList.innerHTML = ''; // Clear old content
+      trackList.innerHTML = '';
       data.forEach(track => {
         const item = document.createElement('li');
         item.innerHTML = `
           <strong>${escapeHTML(track.artist)} - ${escapeHTML(track.title)}</strong><br/>
           <em>Genre:</em> ${escapeHTML(track.genre)}<br/>
-          <a class="download-link" href="${escapeHTML(track.music_url)}" target="_blank" rel="noopener noreferrer">Listen</a>
+          ${getEmbedPlayer(track.music_url)}
         `;
         trackList.appendChild(item);
       });

@@ -57,48 +57,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Auth Bar Fixed Top Center</title>
+  <title>Auth Bar (scrolls with page)</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
   <style>
-    /* Reset margins/paddings */
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      margin: 0; padding: 0; box-sizing: border-box;
     }
-
     body {
       font-family: 'Orbitron', sans-serif;
       background: #000;
       color: #39ff14;
-      overflow-x: hidden; /* prevent horizontal scroll */
+      overflow-x: hidden;
     }
-
-    /* Fixed auth bar top center */
     #auth-bar {
-      position: fixed;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
+      width: 100%;
+      height: 60px;
       background-color: #1a1a1a;
       border-radius: 0 0 12px 12px;
       box-shadow: 0 0 12px #ff00cc88;
       padding: 10px 20px;
-      color: #39ff14;
-      min-height: 60px;
-      user-select: none;
-      z-index: 9999;
       display: flex;
       align-items: center;
       gap: 12px;
-      max-width: 90vw;
-      width: fit-content;
+      user-select: none;
+      position: relative; /* not fixed */
+      z-index: 1000;
     }
-
-    /* Dropdown styling */
     #user-dropdown {
       position: absolute;
-      top: 70px;
+      top: 60px;
       left: 0;
       background-color: #1a1a1a;
       border-radius: 8px;
@@ -117,7 +104,6 @@
       font-weight: bold;
       cursor: pointer;
       transition: background-color 0.2s, color 0.2s;
-      font-family: 'Orbitron', sans-serif;
     }
     #user-dropdown button:hover {
       background-color: #ff00cc;
@@ -152,35 +138,15 @@
       border-radius: 8px;
       cursor: pointer;
       transition: background-color 0.2s;
-      font-family: 'Orbitron', sans-serif;
     }
     button.auth-btn:hover {
       background-color: #cc0099;
-    }
-
-    /* Main page content container */
-    main {
-      max-width: 900px;
-      margin: 80px auto 40px; /* top margin to avoid overlap with fixed bar */
-      padding: 0 20px;
-      color: #39ff14;
-      font-size: 1.2rem;
     }
   </style>
 </head>
 <body>
 
-<!-- Fixed Auth Bar at top center -->
-<div id="auth-bar">
-  <!-- JS injects buttons here -->
-</div>
-
-<!-- Your page content below the fixed bar -->
-<main>
-  <h1>Your Page Content</h1>
-  <p>This content is centered and appears below the fixed auth bar.</p>
-  <p>Add more of your page here...</p>
-</main>
+<div id="auth-bar"></div>
 
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
@@ -201,6 +167,7 @@
     authBar.innerHTML = '';
 
     if (session?.user) {
+      // Dashboard button
       const dashboardBtn = document.createElement('button');
       dashboardBtn.textContent = 'Dashboard';
       dashboardBtn.className = 'auth-btn';
@@ -209,6 +176,7 @@
       });
       authBar.appendChild(dashboardBtn);
 
+      // User info
       const userMetadata = session.user.user_metadata || {};
       const name = userMetadata.full_name || 'GitHub User';
       const avatar = userMetadata.avatar_url || null;
@@ -228,6 +196,7 @@
       userInfo.appendChild(nameDiv);
       authBar.appendChild(userInfo);
 
+      // Dropdown
       const dropdown = document.createElement('div');
       dropdown.id = 'user-dropdown';
       dropdown.style.display = 'none';
@@ -252,6 +221,7 @@
       });
 
     } else {
+      // Logged out buttons
       const communityBtn = document.createElement('button');
       communityBtn.textContent = 'Community';
       communityBtn.className = 'auth-btn';

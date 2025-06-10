@@ -504,8 +504,13 @@
       dashboardSection.style.display = '';
 
       const userMeta = session.user.user_metadata || {};
-      // Try to get GitHub username, fallback to email
-      const artistName = userMeta.username || userMeta.login || session.user.email;
+      // Robust artist name extraction with fallback:
+      const artistName =
+        userMeta.username ||
+        userMeta.login ||
+        userMeta.preferred_username ||
+        session.user.email ||
+        'Unknown Artist';
 
       form.addEventListener('submit', async e => {
         e.preventDefault();

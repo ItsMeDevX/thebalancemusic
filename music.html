@@ -256,165 +256,7 @@
   <title>The Balance - Music Sharing</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    body {
-      margin: 0;
-      font-family: 'Orbitron', sans-serif;
-      background: #0f0f0f;
-      color: #f5f5f5;
-      max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
-      box-sizing: border-box;
-      padding: 20px;
-    }
-
-    header {
-      background: linear-gradient(90deg, #ff00cc, #3333ff);
-      padding: 20px 40px;
-      color: #fff;
-      box-shadow: 0 0 20px #ff00cc;
-      position: relative;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 3em;
-      letter-spacing: 2px;
-    }
-
-    .logo {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      width: 80px;
-      height: auto;
-      box-shadow: 0 0 10px #ff00cc88;
-    }
-
-    nav {
-      background: #1a1a1a;
-      text-align: center;
-      padding: 15px 0;
-      box-shadow: 0 0 10px #00ffff;
-      margin-bottom: 30px;
-    }
-
-    nav a {
-      margin: 0 15px;
-      text-decoration: none;
-      color: #00ffff;
-      font-weight: bold;
-      font-size: 1.1em;
-      transition: color 0.3s;
-    }
-
-    nav a:hover {
-      color: #ff00cc;
-    }
-
-    main section {
-      margin-bottom: 3rem;
-    }
-
-    h2, h3 {
-      color: #39ff14;
-      border-left: 4px solid #ff00cc;
-      padding-left: 10px;
-      margin-top: 0;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
-      background: #1c1c1c;
-      margin: 10px 0;
-      padding: 15px;
-      border-left: 5px solid #00ffff;
-      box-shadow: 0 0 8px #00ffff33;
-    }
-
-    a.download-link {
-      color: #ff00cc;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    a.download-link:hover {
-      color: #ffffff;
-    }
-
-    form {
-      background: #1c1c1c;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 0 15px #ff00cc44;
-      color: #eee;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 1.25rem;
-      color: #39ff14;
-      font-weight: bold;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 0.75rem;
-      margin-top: 0.25rem;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      background: #2a2a2a;
-      color: #fff;
-      font-family: inherit;
-      box-sizing: border-box;
-    }
-
-    input:invalid, textarea:invalid {
-      box-shadow: 0 0 5px red;
-    }
-
-    .error-message {
-      display: none;
-      color: #ff4d4d;
-      font-size: 0.9em;
-      margin-top: 0.25rem;
-      font-weight: normal;
-    }
-
-    button {
-      background-color: #ff00cc;
-      color: #fff;
-      border: none;
-      padding: 1rem;
-      border-radius: 10px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      width: 100%;
-      font-weight: bold;
-      box-shadow: 0 0 12px #ff00cc88;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #cc0099;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #111;
-      color: #888;
-      border-top: 2px solid #ff00cc;
-      box-shadow: 0 -4px 15px #ff00cc33;
-      margin-top: 40px;
-    }
+    /* ... your existing CSS (unchanged) ... */
   </style>
 </head>
 <body>
@@ -422,7 +264,7 @@
   <header>
     <h1>The Balance</h1>
     <img src="TheBalanceLogo.png" alt="The Balance Logo" class="logo" />
-    <p>Music</p>
+    <p>Community</p>
   </header>
 
   <nav>
@@ -434,259 +276,104 @@
     <a href="Community.html">Community</a>
   </nav>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Balance - Video Gallery</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Orbitron', sans-serif;
-      background: #0f0f0f;
-      color: #f5f5f5;
-      max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
-      box-sizing: border-box;
-      padding: 20px;
-    }
-
-    header {
-      background: linear-gradient(90deg, #ff00cc, #3333ff);
-      padding: 20px 40px;
-      color: #fff;
-      box-shadow: 0 0 20px #ff00cc;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 2.5em;
-      letter-spacing: 2px;
-    }
-
-    #player-container {
-      background: #000;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px #ff00cc44;
-      margin-bottom: 30px;
-    }
-
-    iframe#mainPlayer {
-      width: 100%;
-      height: 500px;
-      border: none;
-      border-radius: 10px;
-    }
-
-    #controls {
-      margin-top: 10px;
-      text-align: center;
-    }
-
-    button {
-      background-color: #ff00cc;
-      color: #fff;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-      font-weight: bold;
-      margin: 0 10px;
-      box-shadow: 0 0 10px #ff00cc88;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #cc0099;
-    }
-
-    h2#videoTitle {
-      color: #39ff14;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-
-    #videoContainer {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 20px;
-    }
-
-    .video-item {
-      background: #1c1c1c;
-      border-radius: 8px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.3s;
-      box-shadow: 0 0 10px #00ffff33;
-    }
-
-    .video-item:hover {
-      transform: scale(1.03);
-      box-shadow: 0 0 12px #00ffff88;
-    }
-
-    .video-item iframe {
-      width: 100%;
-      height: 150px;
-      border: none;
-      border-radius: 8px 8px 0 0;
-    }
-
-    .title {
-      padding: 10px;
-      text-align: center;
-      font-size: 0.95em;
-      color: #00ffff;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #111;
-      color: #888;
-      border-top: 2px solid #ff00cc;
-      box-shadow: 0 -4px 15px #ff00cc33;
-      margin-top: 40px;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>The Balance - Video Gallery</h1>
-  </header>
-
-  <h2 id="videoTitle">Now Playing</h2>
-
-  <div id="player-container">
-    <iframe id="mainPlayer" allowfullscreen allow="autoplay"></iframe>
-    <div id="controls">
-      <button id="prevBtn">⟸ Previous</button>
-      <button id="nextBtn">Next ⟹</button>
-    </div>
-  </div>
-
-  <div id="videoContainer"></div>
+  <main>
+    <section>
+      <h2>Latest Tracks</h2>
+      <ul id="trackList">
+        <!-- Tracks from Supabase will be inserted here -->
+      </ul>
+    </section>
+  </main>
 
   <footer>
-<p>
-  All music videos on <a href="https://thebalancemusic.com">The Balance Music</a> are © 2025 by 
-  <a href="https://thebalancemusic.com">The Balance Music</a> and licensed under 
-  <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>
-  <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC" style="width: 1em; height: 1em; margin-left: .2em;">
-  <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY" style="width: 1em; height: 1em; margin-left: .2em;">
-</p>
-    &copy; 2025 The Balance | All rights reserved.
+    &copy; 2025 The Balance. All rights reserved.
   </footer>
 
-  <script>
-    const videos = [
-      { id: "1HbWFoojGLoxKDhZsBOK1pMydVT5OIJDU", title: "Boom Boom (Official Video)" },
-      { id: "1Ay0hnJQouYcBjjW0fcC0fVG-GqKp6AtU", title: "Nothing Else To Give (Official Video)" },
-      { id: "1yT-kPKwWHy5o4Y9I1LFjR_NCNa_LQ2Yv", title: "Behind the Door (Official Video)" },
-      { id: "1sXXWSCBo1btoANviXX4gxrKx_K8UFGSc", title: "Just For Kicks (Official Video)" },
-      { id: "1-b8c4r_MIySK-AwQz6N1e4LNCp2LcXJO", title: "It’s All Happening Now (Official Video)" },
-      { id: "13SJyfenLLbMDPWXXmOYJ89bTMOUMEoGu", title: "No Place to Run (Official Video)" },
-      { id: "1ocLC_yCk1ANHumH7LGE3hGlyRdpKJofe", title: "Wolf Pack (Official Video)" },
-      { id: "1tdx_ugWSNQSIqYFEQSBUvH1xXBmJEOmq", title: "The Man With The Dragon Tattoo (Official Video)" },
-      { id: "1onBL8BylaOSp_0YwW6gSwi_uOmAL0OKU", title: "Rise and Fly (Official Video)" },
-      { id: "161wJn6MMeAgoBURcG9lICdKu_gnyESXl", title: "Price of the Play (Official Video)" },
-      { id: "1bOr0czje3la0mcUvZa8gAgiijyrX6YEk", title: "One Life to Live (Official Video)" },
-      { id: "1v2KlPBCPQBt8abOhnsFaVoAOv3FFxzFG", title: "Hard To Give Up (Official Video)" },
-      { id: "1pnMSIlrr-dr5TcFaIeyeNwQudDLNDKe2", title: "Mersey Nights (Official Video)" },
-      { id: "140ggCUYd8t4zFGlnHTyqnLm-MAPRojsk", title: "Play The Track (Official Video)" },
-      { id: "1eK3WYhmaatS4KE4UFUcmN3tukxzh6OT3", title: "Through the Fire (Official Video)" },
-      { id: "1Es6I_Mo8EUIDCEcXGebIVrlfxdOcwEIq", title: "Lost in the Lights (Official Video)" },
-      { id: "1g9Lnqa3N3z0208Iwm71NUQqzygDd32HG", title: "Release Your Energy (Official Video)" },
-      { id: "1oEeYgznLp_cEl8zyK31yo9p5H7hiJfwd", title: "Addicted To You (Official Video)" },
-      { id: "10VzBEzaO78JqYNPjQxburIHj9vFkdwEO", title: "Body to Die For (Official Video)" },
-      { id: "1YiVKydAWzTKLRcQE84sQL_8iL2XzHsIo", title: "Alive Inside (Official Video)" },
-      { id: "1VIkJVJ7E9s24r0UmI-PnhMOgLaO5iYKm", title: "She's a Unit (Official Video)" },
-      { id: "17t5GIbf_3bZ4tQ11O4JWVknrvgY3pH8M", title: "Falling For You (Official Video)" },
-      { id: "1rjiFNKtBimfOR7JzAM53DmI6-C3HFjjk", title: "Heart of a Nightmare (Official Video)" },
-      { id: "1klEiWijhJvVSPB-Qd46ifwWUWMwpprvu", title: "No One Like You (Official Video)" },
-      { id: "1tsZCfOljWUh0sPBALgyRmwVTuDi8Z58Y", title: "Rocket Fuel (Official Video)" },
-      { id: "1GdMJpjgrsCzrk8fAwa3rs9dLnuzulRbF", title: "Fright of Your Life (Official Video)" },
-      { id: "11M5SXovbbT8MG7mJtYTVcYpTRptTVaQi", title: "Til Dawn (Official Video)" },
-      { id: "1TpAOr9Pbx2GGvUbkETcnhb03whvPKzYp", title: "Dark Place (Official Video)" },
-      { id: "1lv79S-tepJ4W86xoKs_yUfae6Ce57kp-", title: "Just Us Two (Official Video)" },
-      { id: "1RUeGlRos0b5wZx1ry_HMoPrvRB9peNjA", title: "Deep Breath (Official Video)" },
-      { id: "1NviNa9rRv5G6u8S-A4WosJi5U5AkhCto", title: "Looking At Me (Official Video)" },
-      { id: "1lwR1wZ5YWcSxKI3uInAy4k4sqFCojnK5", title: "No Back Track (Official Video)" },
-      { id: "1Q-GGDbMRuukA_w7fYp0dt572DaSIFpwc", title: "Power Cut (Official Video)" },
-      { id: "1tLftc_tAjLK4DpurFC3VByif0e7_kqfX", title: "Smile (Official Video)" },
-      { id: "17RkvghgcST6GlzuCxBk5xckoXVI7K3g8", title: "No Way Out (Official Video)" },
-      { id: "1xXn3M7le5TbfKFM8aMtieM9F1P9sdENp", title: "Roads Untraveled (Official Video)" },
-      { id: "1qZ6sJcxTFqIBQsL72WDRpedFGpCodVZ0", title: "Real Life (Official Video)" },
-      { id: "1vleqwaGgBr-TOq_aU1rK0Rcr5sKiWKyD", title: "One More Line (Official Video)" },
-      { id: "1mXiqUz9_84IUxJAeJWzZ4z82TShI-3RF", title: "The Streets (Official Video)" },
-      { id: "1_MapxHLPQV5in7hwXxOA0ktCRnGp1ZGy", title: "Ill Be The Sound (Official Video)" },
-      { id: "1dFdtYEoGjkK3J4dcL0Xve1ATYanI5eMP", title: "Generation (Official Video)" },
-      { id: "1yBMpgkrqMP4R0sQrcU6KOS59c0gdKl58", title: "Crazy (Official Video)" },
-      { id: "1EAb2lAeHY94r9v0Vf5_ychPvKNa33OLe", title: "Friday Night In (Official Video)" },
-      { id: "1WNPnwP7bhlFSpswdXECSJKSqaq7bmXrG", title: "My Eternity (Official Video)" }
-    ];
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-   const mainPlayer = document.getElementById('mainPlayer');
-    const title = document.getElementById('videoTitle');
-    const videoContainer = document.getElementById('videoContainer');
-    let currentIndex = 0;
+    const supabase = createClient(
+      'https://tpqsceyxdpgerjjiydmy.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
+    );
 
-    function getPreviewUrl(fileId) {
-      return `https://drive.google.com/file/d/${fileId}/preview`;
+    const trackList = document.getElementById('trackList');
+
+    function escapeHTML(str) {
+      return String(str).replace(/[&<>"']/g, match => (
+        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[match]
+      ));
     }
 
-    function loadVideo(index) {
-      const video = videos[index];
-      if (video) {
-        mainPlayer.src = getPreviewUrl(video.id);
-        title.textContent = video.title;
-        currentIndex = index;
+    function getEmbedPlayer(url) {
+      const escapedUrl = escapeHTML(url);
+
+      // YouTube
+      if (/youtube\.com\/watch\?v=|youtu\.be\//.test(url)) {
+        const match = url.match(/(?:v=|\/)([a-zA-Z0-9_-]{11})/);
+        const videoId = match ? match[1] : null;
+        if (videoId) {
+          return `<iframe width="100%" height="166" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+        }
       }
+
+      // SoundCloud
+      if (/soundcloud\.com/.test(url)) {
+        return `<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+          src="https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%230066cc&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false">
+        </iframe>`;
+      }
+
+      // Spotify
+      if (/open\.spotify\.com\/track\//.test(url)) {
+        const embedUrl = url.replace('/track/', '/embed/track/');
+        return `<iframe style="border-radius:12px" src="${embedUrl}" width="100%" height="80" frameborder="0" allow="encrypted-media"></iframe>`;
+      }
+
+      // Apple Music
+      if (/music\.apple\.com/.test(url)) {
+        return `<iframe allow="autoplay *; encrypted-media *;" frameborder="0" height="150" style="width:100%;max-width:660px;overflow:hidden;background:transparent;" 
+          sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation"
+          src="https://embed.music.apple.com/us/album?url=${encodeURIComponent(url)}">
+        </iframe>`;
+      }
+
+      // Direct .mp3, .wav
+      if (/\.(mp3|wav|ogg)$/i.test(url)) {
+        return `<audio controls preload="none">
+                  <source src="${escapedUrl}" type="audio/mpeg">
+                  Your browser does not support the audio element.
+                </audio>`;
+      }
+
+      // Fallback
+      return `<a href="${escapedUrl}" target="_blank" rel="noopener noreferrer">Listen</a>`;
     }
 
-    function renderVideoGrid() {
-      videoContainer.innerHTML = '';
-      videos.forEach((video, i) => {
-        const div = document.createElement('div');
-        div.className = 'video-item';
+    async function loadTracks() {
+      const { data, error } = await supabase
+        .from('music_submissions')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-        const iframe = document.createElement('iframe');
-        iframe.src = getPreviewUrl(video.id);
-        iframe.allowFullscreen = true;
+      if (error || !data.length) {
+        trackList.innerHTML = `<li style="color: #888;">No tracks available right now.</li>`;
+        return;
+      }
 
-        const label = document.createElement('div');
-        label.className = 'title';
-        label.textContent = video.title;
-
-        div.appendChild(iframe);
-        div.appendChild(label);
-        div.addEventListener('click', () => {
-          loadVideo(i);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        videoContainer.appendChild(div);
+      trackList.innerHTML = '';
+      data.forEach(track => {
+        const item = document.createElement('li');
+        item.innerHTML = `
+          <strong>${escapeHTML(track.artist)} - ${escapeHTML(track.title)}</strong><br/>
+          <em>Genre:</em> ${escapeHTML(track.genre)}<br/>
+          ${getEmbedPlayer(track.music_url)}
+        `;
+        trackList.appendChild(item);
       });
     }
 
-    document.getElementById('prevBtn').onclick = () => {
-      if (currentIndex > 0) loadVideo(currentIndex - 1);
-    };
-
-    document.getElementById('nextBtn').onclick = () => {
-      if (currentIndex < videos.length - 1) loadVideo(currentIndex + 1);
-    };
-
-    renderVideoGrid();
-    loadVideo(currentIndex);
+    loadTracks();
   </script>
 
 </body>

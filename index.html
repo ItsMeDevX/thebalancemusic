@@ -58,30 +58,40 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Auth Bar Example</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-<!-- 🔝 Auth Bar at Top -->
+<!-- 🔝 Fixed Auth Bar at top center -->
 <div id="auth-bar" style="
-  position: absolute;
-  top: 20px;
-  left: 20px;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
   background-color: #1a1a1a;
-  border-radius: 12px;
+  border-radius: 0 0 12px 12px;
   box-shadow: 0 0 12px #ff00cc88;
-  padding: 10px 16px;
+  padding: 10px 20px;
   font-family: 'Orbitron', sans-serif;
   color: #39ff14;
   min-height: 60px;
   user-select: none;
-  z-index: 1000;
+  z-index: 9999;
   display: flex;
   align-items: center;
   gap: 12px;
+  width: fit-content;
+  max-width: 90vw;
 ">
   <!-- Content injected by JS -->
 </div>
+
+<!-- Add top padding so content is not hidden behind the fixed bar -->
+<main style="padding-top: 80px;">
+  <!-- Your main page content goes here -->
+  <h1>Welcome to the page!</h1>
+  <p>Scroll down to see the fixed auth bar stays at the top center.</p>
+</main>
 
 <!-- 🔧 Dropdown + Button Styles -->
 <style>
@@ -95,7 +105,7 @@
     min-width: 150px;
     display: none;
     flex-direction: column;
-    z-index: 1000;
+    z-index: 10000;
   }
   #user-dropdown button {
     background: none;
@@ -118,6 +128,7 @@
     gap: 10px;
     cursor: pointer;
     color: #39ff14;
+    position: relative;
   }
   #user-info img {
     width: 40px;
@@ -242,6 +253,10 @@
 
   renderAuthBar();
 </script>
+
+</body>
+</html>
+
   
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />

@@ -416,6 +416,14 @@
       margin-top: 40px;
     }
   </style>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Balance - Music Sharing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ... your existing CSS (unchanged) ... */
+  </style>
 </head>
 <body>
 
@@ -425,18 +433,69 @@
     <p>Community</p>
   </header>
 
-<nav>
-  <a href="index.html">Home</a>
-  <a href="instrumentals.html">Instrumentals</a>
-  <a href="samples.html">Samples</a>
-  <a href="soundfx.html">Sound FX</a>
-  <a href="music.html">Music</a>
-  <a href="Community.html">Community</a>
-</nav>
-    <h2>Latest Tracks</h2>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="instrumentals.html">Instrumentals</a>
+    <a href="samples.html">Samples</a>
+    <a href="soundfx.html">Sound FX</a>
+    <a href="music.html">Music</a>
+    <a href="Community.html">Community</a>
+  </nav>
 
+  <main>
+    <section>
+      <h2>Latest Tracks</h2>
+      <ul id="trackList">
+        <!-- Tracks from Supabase will be inserted here -->
+      </ul>
+    </section>
+  </main>
 
+  <footer>
+    &copy; 2025 The Balance. All rights reserved.
+  </footer>
 
-<footer style="text-align: center; padding: 20px; background: #111; color: #999; font-family: 'Orbitron', sans-serif; border-top: 2px solid #ff00cc; box-shadow: 0 -4px 15px #ff00cc33;">
-  &copy; 2025 The Balance. All rights reserved.
-</footer>
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    const supabase = createClient(
+      'https://tpqsceyxdpgerjjiydmy.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
+    );
+
+    const trackList = document.getElementById('trackList');
+
+    function escapeHTML(str) {
+      return String(str).replace(/[&<>"']/g, match => (
+        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[match]
+      ));
+    }
+
+    async function loadTracks() {
+      const { data, error } = await supabase
+        .from('music_submissions')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error || !data.length) {
+        trackList.innerHTML = `<li style="color: #888;">No tracks available right now.</li>`;
+        return;
+      }
+
+      trackList.innerHTML = ''; // Clear old content
+      data.forEach(track => {
+        const item = document.createElement('li');
+        item.innerHTML = `
+          <strong>${escapeHTML(track.artist)} - ${escapeHTML(track.title)}</strong><br/>
+          <em>Genre:</em> ${escapeHTML(track.genre)}<br/>
+          <a class="download-link" href="${escapeHTML(track.music_url)}" target="_blank" rel="noopener noreferrer">Listen</a>
+        `;
+        trackList.appendChild(item);
+      });
+    }
+
+    loadTracks();
+  </script>
+
+</body>
+</html>

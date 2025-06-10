@@ -57,19 +57,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Auth Bar Fixed Top Center with Centered Content</title>
+  <title>Fixed Top Center Auth Bar</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
   <style>
-    /* Reset and base */
+    /* Reset */
     body {
       margin: 0;
       font-family: 'Orbitron', sans-serif;
       background-color: #111;
       color: #39ff14;
-      overflow-y: hidden; /* prevent vertical scroll */
     }
 
-    /* Auth bar fixed at top center */
+    /* Fixed auth bar */
     #auth-bar {
       position: fixed;
       top: 0;
@@ -78,79 +77,27 @@
       background-color: #1a1a1a;
       border-radius: 0 0 12px 12px;
       box-shadow: 0 0 12px #ff00cc88;
-      padding: 10px 20px;
+      padding: 12px 24px;
       color: #39ff14;
       min-height: 60px;
       user-select: none;
-      z-index: 9999;
+      z-index: 10000;
       display: flex;
       align-items: center;
-      gap: 12px;
-      width: fit-content;
+      gap: 16px;
+      width: max-content;
       max-width: 90vw;
     }
 
-    /* Container for the rest of the page content */
+    /* Page content */
     #page-content {
       max-width: 900px;
-      margin: 80px auto 0; /* margin top to push below the auth bar */
-      padding: 20px;
-      background-color: #222;
-      border-radius: 12px;
+      margin: 100px auto 40px; /* top margin to clear auth bar */
+      padding: 0 16px;
       text-align: center;
-      /* Make sure content height fits so no scroll */
-      height: calc(100vh - 80px);
-      overflow: auto;
-      color: #39ff14;
     }
 
-    /* Dropdown and button styles */
-    #user-dropdown {
-      position: absolute;
-      top: 70px;
-      left: 0;
-      background-color: #1a1a1a;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px #00ffffcc;
-      min-width: 150px;
-      display: none;
-      flex-direction: column;
-      z-index: 10000;
-    }
-    #user-dropdown button {
-      background: none;
-      border: none;
-      color: #39ff14;
-      padding: 10px 16px;
-      text-align: left;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.2s, color 0.2s;
-      font-family: 'Orbitron', sans-serif;
-    }
-    #user-dropdown button:hover {
-      background-color: #ff00cc;
-      color: #1a1a1a;
-    }
-    #user-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      color: #39ff14;
-      position: relative;
-    }
-    #user-info img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 2px solid #ff00cc;
-      object-fit: cover;
-    }
-    #user-info div {
-      font-size: 1rem;
-      font-weight: bold;
-    }
+    /* Button styles (you can tweak or keep your original) */
     button.auth-btn {
       background-color: #ff00cc;
       color: #1a1a1a;
@@ -170,16 +117,15 @@
 </head>
 <body>
 
-<!-- Auth Bar fixed top center -->
 <div id="auth-bar">
-  <!-- Content injected by JS -->
+  <!-- Auth bar content inserted by JS -->
 </div>
 
-<!-- Page content container -->
 <div id="page-content">
-  <!-- Your other page content goes here, centered with max width -->
-  <h1>Welcome to your site!</h1>
-  <p>This content is centered below the fixed auth bar.</p>
+  <h1>Your main content here</h1>
+  <p>This is centered page content below the fixed auth bar.</p>
+  <p>Scroll down to see the auth bar stays fixed.</p>
+  <div style="height: 1500px;"></div> <!-- Just to test scroll -->
 </div>
 
 <script type="module">
@@ -191,10 +137,6 @@
   );
 
   const authBar = document.getElementById('auth-bar');
-
-  function toggleDropdown(dropdown) {
-    dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
-  }
 
   async function renderAuthBar() {
     const { data: { session } } = await supabase.auth.getSession();
@@ -214,42 +156,36 @@
       const avatar = userMetadata.avatar_url || null;
 
       const userInfo = document.createElement('div');
-      userInfo.id = 'user-info';
+      userInfo.style.display = 'flex';
+      userInfo.style.alignItems = 'center';
+      userInfo.style.gap = '10px';
 
       if (avatar) {
         const img = document.createElement('img');
         img.src = avatar;
         img.alt = name;
+        img.style.width = '40px';
+        img.style.height = '40px';
+        img.style.borderRadius = '50%';
+        img.style.border = '2px solid #ff00cc';
+        img.style.objectFit = 'cover';
         userInfo.appendChild(img);
       }
 
       const nameDiv = document.createElement('div');
       nameDiv.innerHTML = `<strong>${name}</strong>`;
       userInfo.appendChild(nameDiv);
-      authBar.appendChild(userInfo);
 
-      const dropdown = document.createElement('div');
-      dropdown.id = 'user-dropdown';
-      dropdown.style.display = 'none';
-      dropdown.style.flexDirection = 'column';
+      authBar.appendChild(userInfo);
 
       const logoutBtn = document.createElement('button');
       logoutBtn.textContent = 'Logout';
-      logoutBtn.onclick = async () => {
+      logoutBtn.className = 'auth-btn';
+      logoutBtn.addEventListener('click', async () => {
         await supabase.auth.signOut();
         window.location.reload();
-      };
-      dropdown.appendChild(logoutBtn);
-
-      authBar.appendChild(dropdown);
-
-      userInfo.addEventListener('click', () => toggleDropdown(dropdown));
-
-      document.addEventListener('click', (e) => {
-        if (!authBar.contains(e.target)) {
-          dropdown.style.display = 'none';
-        }
       });
+      authBar.appendChild(logoutBtn);
 
     } else {
       const communityBtn = document.createElement('button');

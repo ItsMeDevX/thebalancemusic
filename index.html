@@ -251,6 +251,9 @@
 </body>
 </html>
   
+<!DOCTYPE html>
+<html lang="en">
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Balance - Music Sharing</title>
@@ -417,206 +420,137 @@
     }
   </style>
 </head>
-
-  <!DOCTYPE html>
-<html lang="en">
-<head>
-  
 <body>
-
   <header>
     <h1>The Balance</h1>
-    <img src="TheBalanceLogo.png" alt="The Balance Logo" class="logo" />
-    <p>Free instrumentals, samples, and sound effects</p>
+    <img src="logo.png" alt="Logo" class="logo" />
   </header>
 
   <nav>
-    <a href="index.html">Home</a>
-    <a href="instrumentals.html">Instrumentals</a>
-    <a href="samples.html">Samples</a>
-    <a href="soundfx.html">Sound FX</a>
-    <a href="music.html">Music</a>
-    <a href="contact.html">Contact</a>
-    <a href="Community.html">Community</a>
+    <a href="#">Home</a>
+    <a href="#">Submit Music</a>
+    <a href="#">Discover</a>
+    <a href="#">Contact</a>
   </nav>
 
- <main>
-  <section>
-    <h2>Welcome to The Balance</h2>
-    
-<style>
-  /* Intro and headings */
-  .intro-text {
-    font-size: 1.3rem;
-    color: #bfbfbf;
-    margin-bottom: 2rem;
-    line-height: 1.6;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+  <main>
+    <section>
+      <h2>Submit Your Music</h2>
+      <form id="musicForm">
+        <label>
+          Artist Name
+          <input type="text" name="artist" required />
+        </label>
+        <label>
+          Song Title
+          <input type="text" name="title" required />
+        </label>
+        <label>
+          Genre
+          <input type="text" name="genre" required />
+        </label>
+        <label>
+          Music URL
+          <input type="url" name="music_url" required />
+        </label>
+        <label>
+          Bio
+          <textarea name="bio" rows="4" placeholder="Tell us about this track or artist..."></textarea>
+        </label>
+        <button type="submit">Submit</button>
+        <div id="submitStatus" class="error-message"></div>
+      </form>
+    </section>
 
-  h2 {
-    color: #39ff14;
-    border-left: 5px solid #ff00cc;
-    padding-left: 12px;
-    font-weight: 700;
-    font-size: 2rem;
-    max-width: 700px;
-    margin: 2rem auto 1rem auto;
-  }
+    <section>
+      <h2>Recent Submissions</h2>
+      <ul id="submissionList">
+        <!-- Dynamic content will go here -->
+      </ul>
+    </section>
+  </main>
 
-  .featured-intro {
-    color: #ddd;
-    font-size: 1.15rem;
-    max-width: 700px;
-    margin: 0 auto 3rem auto;
-    line-height: 1.5;
-  }
+  <footer>
+    &copy; 2025 The Balance Music. All rights reserved.
+  </footer>
 
-  /* Featured song container without image */
-  .submission {
-    background: linear-gradient(135deg, #1c1c1c, #262626);
-    border: 3px solid #ff00cc;
-    border-radius: 12px;
-    padding: 20px;
-    max-width: 700px;
-    margin: 0 auto 40px auto;
-    box-shadow:
-      0 0 20px #ff00ccaa,
-      inset 0 0 10px #ff00cc55;
-    font-family: 'Orbitron', sans-serif;
-    color: #bfbfbf;
-    display: block;
-  }
-
-  .submission h3 {
-    margin: 0 0 8px 0;
-    color: #39ff14;
-    font-weight: 700;
-    font-size: 1.8rem;
-  }
-
-  .submission .meta {
-    margin: 0 0 12px 0;
-    color: #ff00cc;
-    font-weight: 600;
-    font-size: 1rem;
-  }
-
-  .submission p.description {
-    margin: 0 0 15px 0;
-    line-height: 1.4;
-  }
-
-  .submission ul {
-    margin: 0 0 15px 20px;
-    padding: 0;
-    list-style-type: disc;
-    color: #39ff14;
-    font-size: 1rem;
-  }
-
-  .submission iframe {
-    width: 100%;
-    height: 166px;
-    border: none;
-    box-shadow: 0 0 15px #ff00ccaa;
-    border-radius: 10px;
-    margin-top: 20px;
-  }
-</style>
-
-<div class="intro-text">
-  <p>Dive into a world of sonic inspiration. All downloads are royalty-free and ready to use in your productions.</p>
-</div>
-
-<h2>Weekly Featured Song</h2>
-<p class="featured-intro">
-  Every week, we highlight a track that’s making waves in our community — a sonic powerhouse that pushes boundaries and fuels creativity. This week, prepare to be blown away by:
-</p>
-
-<div class="submission">
-  <h3>SCREAM MACHINE</h3>
-  <p class="meta">by <strong>AC1KENZO</strong> • Genre: Hard Techno</p>
-  <p class="description">
-    Relentless industrial techno with razor-sharp kicks and dystopian energy. Built for peak-time chaos.
-  </p>
-  <ul>
-    <li>Relentless industrial techno</li>
-    <li>Razor-sharp kicks</li>
-    <li>Dystopian energy</li>
-    <li>Built for peak-time chaos</li>
-  </ul>
-  <iframe 
-    scrolling="no" 
-    allow="autoplay" 
-    src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/kenzo21k/scream-machine-ac1kenzo-free-dl&color=%23ff5500&inverse=false&auto_play=false&show_user=true">
-  </iframe>
-</div>
-
-  <section id="submit-music" style="margin-top: 3rem; max-width: 500px; margin-inline:auto; color:#39ff14; font-family: 'Orbitron', sans-serif;">
-    <h2>Submit Your Music</h2>
-    <form id="musicForm" action="https://formspree.io/f/mnndrekd" method="POST" novalidate>
-      <input type="hidden" name="_redirect" value="https://thebalancemusic.com/thankyou.html" />
-      
-      <label for="artist">Artist Name *</label>
-      <input type="text" id="artist" name="artist" required style="width:100%; padding:8px; border-radius:6px; border:1px solid #39ff14; margin-bottom:10px; background:#0f0f0f; color:#39ff14;" />
-      
-      <label for="title">Track Title *</label>
-      <input type="text" id="title" name="title" required style="width:100%; padding:8px; border-radius:6px; border:1px solid #39ff14; margin-bottom:10px; background:#0f0f0f; color:#39ff14;" />
-      
-      <label for="genre">Genre</label>
-      <input type="text" id="genre" name="genre" style="width:100%; padding:8px; border-radius:6px; border:1px solid #39ff14; margin-bottom:10px; background:#0f0f0f; color:#39ff14;" />
-      
-      <label for="music_url">Music URL *</label>
-      <input type="text" id="music_url" name="music_url" required placeholder="e.g. https://soundcloud.com/yourtrack"
-        style="width:100%; padding:8px; border-radius:6px; border:1px solid #39ff14; margin-bottom:10px; background:#0f0f0f; color:#39ff14;" />
-      
-      <label for="bio">Bio / Description</label>
-      <textarea id="bio" name="bio" rows="4" placeholder="Tell us about this track..." style="width:100%; padding:8px; border-radius:6px; border:1px solid #39ff14; margin-bottom:10px; background:#0f0f0f; color:#39ff14;"></textarea>
-      
-      <label for="email">Email (optional)</label>
-      <input type="email" id="email" name="email" style="width:100%; padding:8px; border-radius:6px; border:1px solid #39ff14; margin-bottom:10px; background:#0f0f0f; color:#39ff14;" />
-      
-      <button type="submit" style="background:#39ff14; border:none; padding:0.7rem 1.4rem; color:#0f0f0f; border-radius:8px; cursor:pointer; font-weight:bold;">Submit Your Music</button>
-    </form>
-
-    <p id="submitStatus" style="margin-top: 1rem;"></p>
-
-    <p style="font-size: 0.85rem; color: #39ff14; margin-top: 1rem;">
-      <a href="/submission-terms.html" target="_blank" rel="noopener" style="color: #39ff14;">View submission terms</a>
-    </p>
-  </section>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    const supabase = supabase.createClient(
+      'https://tpqsceyxdpgerjjiydmy.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
+    );
+
     const form = document.getElementById('musicForm');
     const status = document.getElementById('submitStatus');
+    const list = document.getElementById('submissionList');
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+    function escapeHTML(str) {
+      return String(str).replace(/[&<>"']/g, match => (
+        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[match]
+      ));
+    }
 
-      const formData = new FormData(form);
+    async function loadSubmissions() {
+      const { data, error } = await supabase
+        .from('music_submissions')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-      fetch(form.action, {
-        method: form.method,
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
-      }).then(response => {
-        if (response.ok) {
-          window.location.href = form.querySelector('input[name="_redirect"]').value;
-        } else {
-          return response.json().then(data => {
-            status.textContent = data.errors ? data.errors.map(error => error.message).join(', ') : 'There was a problem submitting your form.';
-            status.style.color = '#ff4d4d';
-          });
-        }
-      }).catch(() => {
-        status.textContent = 'Oops! Something went wrong.';
-        status.style.color = '#ff4d4d';
+      if (error) {
+        list.innerHTML = `<li style="color:red;">Error loading submissions.</li>`;
+        return;
+      }
+
+      list.innerHTML = '';
+      if (data.length === 0) {
+        list.innerHTML = '<li>No submissions yet.</li>';
+        return;
+      }
+
+      data.forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <strong>${escapeHTML(item.artist)} - ${escapeHTML(item.title)}</strong><br>
+          <em>${escapeHTML(item.genre)}</em><br>
+          <a class="download-link" href="${escapeHTML(item.music_url)}" target="_blank">Listen</a><br>
+          <small>${escapeHTML(item.bio || '')}</small>
+        `;
+        list.appendChild(li);
       });
+    }
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const submission = {
+        artist: formData.get('artist').trim(),
+        title: formData.get('title').trim(),
+        genre: formData.get('genre').trim(),
+        music_url: formData.get('music_url').trim(),
+        bio: formData.get('bio').trim()
+      };
+
+      if (!submission.artist || !submission.title || !submission.genre || !submission.music_url) {
+        status.textContent = 'Please fill out all required fields.';
+        status.style.display = 'block';
+        return;
+      }
+
+      const { error } = await supabase.from('music_submissions').insert([submission]);
+      if (error) {
+        status.textContent = 'Submission failed. Try again.';
+        status.style.display = 'block';
+      } else {
+        form.reset();
+        status.textContent = 'Submission successful!';
+        status.style.display = 'block';
+        status.style.color = '#39ff14';
+        loadSubmissions();
+      }
     });
+
+    loadSubmissions();
   </script>
-</main>
+</body>
+</html>

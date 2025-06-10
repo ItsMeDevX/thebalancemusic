@@ -438,6 +438,8 @@
     const form = document.getElementById('musicForm');
     const status = document.getElementById('submitStatus');
     const musicTableBody = document.querySelector('#musicTable tbody');
+    const musicForm = document.getElementById('musicForm');
+    const dashboardSection = document.getElementById('music-dashboard');
 
     function escapeHTML(str) {
       return String(str).replace(/[&<>"']/g, match => (
@@ -445,10 +447,11 @@
       ));
     }
 
-    async function loadSubmissions() {
+    async function loadSubmissions(userId) {
       const { data, error } = await supabase
         .from('music_submissions')
         .select('*')
+        .eq('user_id', userId)
         .order('created_at', { ascending: false });
 
       if (error) {
@@ -479,35 +482,61 @@
         btn.addEventListener('click', async () => {
           const id = btn.getAttribute('data-id');
           const { error } = await supabase.from('music_submissions').delete().eq('id', id);
-          if (!error) loadSubmissions();
+          if (!error) loadSubmissions(userId);
           else alert('Delete failed.');
         });
       });
     }
 
-    form.addEventListener('submit', async e => {
-      e.preventDefault();
-      const formData = new FormData(form);
-      const submission = {
-        artist: formData.get('artist').trim(),
-        title: formData.get('title').trim(),
-        genre: formData.get('genre').trim(),
-        music_url: formData.get('music_url').trim(),
-        bio: formData.get('bio').trim(),
-      };
+    async function checkAuthAndInit() {
+      const { data: { session } } = await supabase.auth.getSession();
 
-      const { error } = await supabase.from('music_submissions').insert([submission]);
-
-      if (error) {
-        status.textContent = 'Submission failed. Try again.';
-        status.style.color = '#ff4d4d';
-      } else {
-        form.reset();
-        status.textContent = 'Submission successful!';
-        status.style.color = '#39ff14';
-        loadSubmissions();
+      if (!session || !session.user) {
+        musicForm.style.display = 'none';
+        dashboardSection.style.display = 'none';
+        const authNotice = document.createElement('p');
+        authNotice.textContent = 'Please log in to submit music and view your submissions.';
+        authNotice.style.color = '#ff4d4d';
+        authNotice.style.fontWeight = 'bold';
+        authNotice.style.margin = '2rem 0';
+        musicForm.parentElement.insertBefore(authNotice, musicForm);
+        return;
       }
-    });
+
+      // Show form and dashboard
+      musicForm.style.display = '';
+      dashboardSection.style.display = '';
+
+      const userId = session.user.id;
+
+      // Attach submit handler
+      form.addEventListener('submit', async e => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const submission = {
+          artist: formData.get('artist').trim(),
+          title: formData.get('title').trim(),
+          genre: formData.get('genre').trim(),
+          music_url: formData.get('music_url').trim(),
+          bio: formData.get('bio').trim(),
+          user_id: userId  // attach user ID to submission
+        };
+
+        const { error } = await supabase.from('music_submissions').insert([submission]);
+
+        if (error) {
+          status.textContent = 'Submission failed. Try again.';
+          status.style.color = '#ff4d4d';
+        } else {
+          form.reset();
+          status.textContent = 'Submission successful!';
+          status.style.color = '#39ff14';
+          loadSubmissions(userId);
+        }
+      });
+
+      loadSubmissions(userId);
+    }
 
     document.getElementById('homeBtn').addEventListener('click', () => {
       window.location.href = '/';
@@ -517,7 +546,7 @@
       alert('Submission Terms:\n\nSubmit only original music. By submitting, you agree to our terms.');
     });
 
-    loadSubmissions();
+    checkAuthAndInit();
   </script>
 </body>
 </html>

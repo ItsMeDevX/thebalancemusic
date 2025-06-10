@@ -61,15 +61,18 @@
   position: absolute;
   top: 20px;
   left: 20px;
-  background-color: #2a243b;
+  background-color: #1a1a1a;
   border-radius: 12px;
-  box-shadow: 0 0 12px #00000055;
+  box-shadow: 0 0 12px #ff00cc88;
   padding: 10px 16px;
-  font-family: 'Rubik Mono One', sans-serif;
-  color: #fefefe;
+  font-family: 'Orbitron', sans-serif;
+  color: #39ff14;
   min-height: 60px;
   user-select: none;
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 ">
   <!-- Content injected by JS -->
 </div>
@@ -79,9 +82,9 @@
     position: absolute;
     top: 70px;
     left: 0;
-    background-color: #3b3750;
+    background-color: #1a1a1a;
     border-radius: 8px;
-    box-shadow: 0 4px 12px #00000077;
+    box-shadow: 0 4px 12px #00ffffcc;
     min-width: 150px;
     display: none;
     flex-direction: column;
@@ -90,33 +93,49 @@
   #user-dropdown button {
     background: none;
     border: none;
-    color: #fefefe;
+    color: #39ff14;
     padding: 10px 16px;
     text-align: left;
     font-weight: bold;
-    font-family: 'Rubik Mono One', sans-serif;
+    font-family: 'Orbitron', sans-serif;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, color 0.2s;
   }
   #user-dropdown button:hover {
-    background-color: #ff69b4;
-    color: #1e1b2e;
+    background-color: #ff00cc;
+    color: #1a1a1a;
   }
   #user-info {
     display: flex;
     align-items: center;
     gap: 10px;
     cursor: pointer;
+    color: #39ff14;
   }
   #user-info img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 2px solid #ff69b4;
+    border: 2px solid #ff00cc;
     object-fit: cover;
   }
   #user-info div {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  button.auth-btn {
+    background-color: #ff00cc;
+    color: #1a1a1a;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
     font-size: 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  button.auth-btn:hover {
+    background-color: #cc0099;
   }
 </style>
 
@@ -143,19 +162,7 @@
 
       const dashboardBtn = document.createElement('button');
       dashboardBtn.textContent = 'Dashboard';
-      Object.assign(dashboardBtn.style, {
-        backgroundColor: '#ff69b4',
-        color: '#1e1b2e',
-        border: 'none',
-        padding: '0.5rem 1rem',
-        fontWeight: 'bold',
-        fontSize: '0.9rem',
-        borderRadius: '8px',
-        cursor: 'pointer',
-        transition: 'background-color 0.2s',
-      });
-      dashboardBtn.addEventListener('mouseover', () => dashboardBtn.style.backgroundColor = '#ff8edb');
-      dashboardBtn.addEventListener('mouseout', () => dashboardBtn.style.backgroundColor = '#ff69b4');
+      dashboardBtn.className = 'auth-btn';
       dashboardBtn.addEventListener('click', () => {
         window.location.href = 'dashboard.html';
       });
@@ -209,19 +216,7 @@
 
       const communityBtn = document.createElement('button');
       communityBtn.textContent = 'Community';
-      Object.assign(communityBtn.style, {
-        backgroundColor: '#ff69b4',
-        color: '#1e1b2e',
-        border: 'none',
-        padding: '0.5rem 1rem',
-        fontWeight: 'bold',
-        fontSize: '0.9rem',
-        borderRadius: '8px',
-        cursor: 'pointer',
-        transition: 'background-color 0.2s',
-      });
-      communityBtn.addEventListener('mouseover', () => communityBtn.style.backgroundColor = '#ff8edb');
-      communityBtn.addEventListener('mouseout', () => communityBtn.style.backgroundColor = '#ff69b4');
+      communityBtn.className = 'auth-btn';
       communityBtn.addEventListener('click', () => {
         window.location.href = 'https://thebalancemusic.com/Community.html';
       });
@@ -229,19 +224,7 @@
 
       const loginBtn = document.createElement('button');
       loginBtn.textContent = 'Login with GitHub';
-      Object.assign(loginBtn.style, {
-        backgroundColor: '#ff69b4',
-        color: '#1e1b2e',
-        border: 'none',
-        padding: '0.5rem 1rem',
-        fontWeight: 'bold',
-        fontSize: '0.9rem',
-        borderRadius: '8px',
-        cursor: 'pointer',
-        transition: 'background-color 0.2s',
-      });
-      loginBtn.addEventListener('mouseover', () => loginBtn.style.backgroundColor = '#ff8edb');
-      loginBtn.addEventListener('mouseout', () => loginBtn.style.backgroundColor = '#ff69b4');
+      loginBtn.className = 'auth-btn';
       loginBtn.addEventListener('click', async () => {
         await supabase.auth.signInWithOAuth({
           provider: 'github',

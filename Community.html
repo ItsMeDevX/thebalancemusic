@@ -443,104 +443,244 @@
   </nav>
 
   <main>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Balance - Community</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: #0f0f0f;
+      color: #f5f5f5;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      box-sizing: border-box;
+      padding: 20px;
+    }
+
+    header {
+      background: linear-gradient(90deg, #ff00cc, #3333ff);
+      padding: 20px 40px;
+      color: #fff;
+      box-shadow: 0 0 20px #ff00cc;
+      position: relative;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 3em;
+      letter-spacing: 2px;
+    }
+
+    .logo {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      width: 80px;
+      height: auto;
+      box-shadow: 0 0 10px #ff00cc88;
+    }
+
+    nav {
+      background: #1a1a1a;
+      text-align: center;
+      padding: 15px 0;
+      box-shadow: 0 0 10px #00ffff;
+      margin-bottom: 30px;
+    }
+
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: #00ffff;
+      font-weight: bold;
+      font-size: 1.1em;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #ff00cc;
+    }
+
+    main section {
+      margin-bottom: 3rem;
+    }
+
+    h2, h3 {
+      color: #39ff14;
+      border-left: 4px solid #ff00cc;
+      padding-left: 10px;
+      margin-top: 0;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: #1c1c1c;
+      margin: 10px 0;
+      padding: 15px;
+      border-left: 5px solid #00ffff;
+      box-shadow: 0 0 8px #00ffff33;
+    }
+
+    a.download-link {
+      color: #ff00cc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a.download-link:hover {
+      color: #ffffff;
+    }
+
+    form {
+      background: #1c1c1c;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #ff00cc44;
+      color: #eee;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 1.25rem;
+      color: #39ff14;
+      font-weight: bold;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.25rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #2a2a2a;
+      color: #fff;
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+
+    input:invalid, textarea:invalid {
+      box-shadow: 0 0 5px red;
+    }
+
+    .error-message {
+      display: none;
+      color: #ff4d4d;
+      font-size: 0.9em;
+      margin-top: 0.25rem;
+      font-weight: normal;
+    }
+
+    button {
+      background-color: #ff00cc;
+      color: #fff;
+      border: none;
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      width: 100%;
+      font-weight: bold;
+      box-shadow: 0 0 12px #ff00cc88;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #cc0099;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #111;
+      color: #888;
+      border-top: 2px solid #ff00cc;
+      box-shadow: 0 -4px 15px #ff00cc33;
+      margin-top: 40px;
+    }
+
+    /* Talk.io widget container styling */
+    #talkjs-container {
+      height: 400px;
+      max-width: 900px;
+      margin: 0 auto 40px auto;
+      border: 2px solid #ff00cc;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #ff00cc88;
+      background: #1c1c1c;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>The Balance</h1>
+    <img src="https://thebalancemusic.com/logo.png" alt="The Balance Logo" class="logo" />
+  </header>
+
+  <nav>
+    <a href="music.html">Music</a>
+    <a href="community.html" aria-current="page">Community</a>
+    <a href="submit.html">Submit</a>
+  </nav>
+
+  <main>
     <section>
-      <h2>Latest Tracks</h2>
-      <ul id="trackList">
-        <!-- Tracks from Supabase will be inserted here -->
+      <h2>Welcome to The Balance Community</h2>
+      <p>Connect with other artists and music lovers! Share your thoughts, ask questions, or just hang out in our live chat below.</p>
+    </section>
+
+    <section>
+      <h3>Community Guidelines</h3>
+      <ul>
+        <li>Respect all members.</li>
+        <li>No spamming or self-promotion.</li>
+        <li>Keep discussions music-focused.</li>
+        <li>Report any inappropriate behavior to moderators.</li>
       </ul>
+    </section>
+
+    <section>
+      <h3>Join the Conversation</h3>
+      <div id="talkjs-container"></div>
     </section>
   </main>
 
   <footer>
-    &copy; 2025 The Balance. All rights reserved.
+    &copy; 2025 The Balance Music — All rights reserved.
   </footer>
 
-  <script type="module">
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-    const supabase = createClient(
-      'https://tpqsceyxdpgerjjiydmy.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
-    );
-
-    const trackList = document.getElementById('trackList');
-
-    function escapeHTML(str) {
-      return String(str).replace(/[&<>"']/g, match => (
-        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[match]
-      ));
-    }
-
-    function getEmbedPlayer(url) {
-      const escapedUrl = escapeHTML(url);
-
-      // YouTube
-      if (/youtube\.com\/watch\?v=|youtu\.be\//.test(url)) {
-        const match = url.match(/(?:v=|\/)([a-zA-Z0-9_-]{11})/);
-        const videoId = match ? match[1] : null;
-        if (videoId) {
-          return `<iframe width="100%" height="166" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
-        }
-      }
-
-      // SoundCloud
-      if (/soundcloud\.com/.test(url)) {
-        return `<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
-          src="https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%230066cc&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false">
-        </iframe>`;
-      }
-
-      // Spotify
-      if (/open\.spotify\.com\/track\//.test(url)) {
-        const embedUrl = url.replace('/track/', '/embed/track/');
-        return `<iframe style="border-radius:12px" src="${embedUrl}" width="100%" height="80" frameborder="0" allow="encrypted-media"></iframe>`;
-      }
-
-      // Apple Music
-      if (/music\.apple\.com/.test(url)) {
-        return `<iframe allow="autoplay *; encrypted-media *;" frameborder="0" height="150" style="width:100%;max-width:660px;overflow:hidden;background:transparent;" 
-          sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation"
-          src="https://embed.music.apple.com/us/album?url=${encodeURIComponent(url)}">
-        </iframe>`;
-      }
-
-      // Direct .mp3, .wav
-      if (/\.(mp3|wav|ogg)$/i.test(url)) {
-        return `<audio controls preload="none">
-                  <source src="${escapedUrl}" type="audio/mpeg">
-                  Your browser does not support the audio element.
-                </audio>`;
-      }
-
-      // Fallback
-      return `<a href="${escapedUrl}" target="_blank" rel="noopener noreferrer">Listen</a>`;
-    }
-
-    async function loadTracks() {
-      const { data, error } = await supabase
-        .from('music_submissions')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error || !data.length) {
-        trackList.innerHTML = `<li style="color: #888;">No tracks available right now.</li>`;
-        return;
-      }
-
-      trackList.innerHTML = '';
-      data.forEach(track => {
-        const item = document.createElement('li');
-        item.innerHTML = `
-          <strong>${escapeHTML(track.artist)} - ${escapeHTML(track.title)}</strong><br/>
-          <em>Genre:</em> ${escapeHTML(track.genre)}<br/>
-          ${getEmbedPlayer(track.music_url)}
-        `;
-        trackList.appendChild(item);
+  <!-- TalkJS chat widget script -->
+  <script src="https://cdn.talkjs.com/talk.js"></script>
+  <script>
+    Talk.ready.then(function() {
+      var me = new Talk.User({
+        id: "user_" + Math.floor(Math.random() * 1000000),
+        name: "Guest User",
+        email: "guest@example.com",
+        photoUrl: "https://thebalancemusic.com/default-user.png",
+        welcomeMessage: "Hey there! Welcome to The Balance community chat."
       });
-    }
 
-    loadTracks();
+      window.talkSession = new Talk.Session({
+        appId: "YOUR_TALKJS_APP_ID",  // <-- Replace with your TalkJS App ID
+        me: me
+      });
+
+      var inbox = window.talkSession.createInbox();
+      inbox.mount(document.getElementById("talkjs-container"));
+    });
   </script>
-
 </body>
 </html>

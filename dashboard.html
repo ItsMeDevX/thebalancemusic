@@ -259,300 +259,134 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Submit & Manage Music - The Balance Music</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    /* Reset & base */
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
     body {
-      margin: 0 auto;
-      max-width: 900px;
-      padding: 24px 20px 40px;
       font-family: 'Orbitron', sans-serif;
-      background: #0f0f0f;
-      color: #d1f01d;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      user-select: none;
-      line-height: 1.4;
+      background-color: #0f0f0f;
+      color: #f0f0f0;
+      margin: 0;
+      padding: 0;
     }
 
     header {
-      background: linear-gradient(90deg, #ff00cc, #3333ff);
-      padding: 28px 40px;
-      color: #fff;
-      box-shadow: 0 0 28px #ff00cccc;
+      background: #1a1a1a;
+      padding: 1.5rem;
       text-align: center;
-      border-radius: 16px;
-      margin-bottom: 42px;
-      user-select: text;
+      border-bottom: 2px solid #39ff14;
     }
+
     header h1 {
       margin: 0;
-      font-size: 3.4rem;
-      letter-spacing: 3px;
-      text-shadow: 0 0 6px #ff00cc, 0 0 12px #3333ff;
+      font-size: 2rem;
+      color: #39ff14;
+    }
+
+    section#navigation-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    button {
+      background-color: #39ff14;
+      color: #0f0f0f;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      font-family: 'Orbitron', sans-serif;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #28cc0a;
     }
 
     h2 {
-      font-weight: 700;
-      color: #d1f01d;
-      border-left: 5px solid #ff00cc;
-      padding-left: 14px;
-      margin-top: 0;
-      margin-bottom: 20px;
-      font-size: 1.8rem;
-      text-shadow: 0 0 4px #d1f01daa;
+      text-align: center;
+      color: #39ff14;
+      margin-top: 2rem;
     }
 
-    /* Form */
     form {
-      background: #1f1f1f;
-      padding: 2.2rem 2.4rem;
-      border-radius: 16px;
-      box-shadow: 0 0 18px #ff00cc55;
-      color: #d1f01d;
-      font-weight: 600;
-      margin-bottom: 42px;
-      transition: box-shadow 0.3s ease;
-    }
-    form:hover {
-      box-shadow: 0 0 30px #ff00ccaa;
+      max-width: 600px;
+      margin: 2rem auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+      background-color: #1a1a1a;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
     }
 
     label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 1.1rem;
-      color: #c5e23b;
-      user-select: text;
+      font-weight: bold;
     }
 
-    input, textarea {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 10px;
-      border: 1.8px solid #d1f01dcc;
-      background: #121212;
-      color: #d1f01d;
-      font-family: inherit;
-      font-size: 1.05rem;
-      margin-bottom: 18px;
-      outline-offset: 2px;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-      resize: vertical;
-      min-height: 48px;
-      box-shadow: inset 0 0 6px #39ff1466;
-    }
-    input:focus, textarea:focus {
-      border-color: #39ff14;
-      box-shadow: 0 0 10px #39ff1466, inset 0 0 8px #39ff1444;
-      background: #0a0a0a;
-      color: #e0ff6b;
-    }
+    input,
     textarea {
-      min-height: 90px;
-    }
-
-    button[type="submit"] {
-      background: #39ff14;
-      border: none;
-      padding: 14px 0;
-      color: #0f0f0f;
-      border-radius: 14px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 1.25rem;
-      width: 100%;
-      box-shadow: 0 0 18px #39ff1466;
-      transition: background-color 0.3s ease, box-shadow 0.25s ease;
-      user-select: none;
-    }
-    button[type="submit"]:hover,
-    button[type="submit"]:focus {
-      background-color: #2ecc40;
-      box-shadow: 0 0 30px #2ecc4066;
-      outline: none;
+      padding: 0.5rem;
+      border: 1px solid #39ff14;
+      border-radius: 4px;
+      background-color: #0f0f0f;
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
     }
 
     #submitStatus {
-      margin-top: 1rem;
-      font-weight: 700;
-      min-height: 1.2em;
-      user-select: text;
+      text-align: center;
+      margin-top: 0.5rem;
     }
 
-    /* Table / Dashboard */
-    #music-dashboard h2 {
-      margin-bottom: 24px;
+    #music-dashboard {
+      max-width: 95%;
+      margin: 2rem auto;
     }
+
     table {
       width: 100%;
-      border-collapse: separate;
-      border-spacing: 0 12px;
-      background: transparent;
-      color: #d1f01d;
-      font-weight: 700;
-      user-select: text;
+      border-collapse: collapse;
+      background-color: #1a1a1a;
     }
-    thead tr {
-      background: #330033cc;
-      border-radius: 12px;
-      box-shadow: 0 0 12px #ff00cc88;
-      user-select: none;
-    }
-    th, td {
-      padding: 14px 16px;
-      vertical-align: middle;
-      font-size: 0.94rem;
-    }
-    th {
+
+    th,
+    td {
+      border: 1px solid #39ff14;
+      padding: 0.75rem;
       text-align: left;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      user-select: none;
     }
 
-    tbody tr {
-      background: #1f1f1fdd;
-      border-radius: 14px;
-      box-shadow: 0 2px 8px #ff00cc33;
-      transition: background-color 0.3s ease;
-    }
-    tbody tr:hover {
-      background: #2a2a2aee;
-      box-shadow: 0 4px 15px #ff00cc88;
+    th {
+      background-color: #0f0f0f;
+      color: #39ff14;
     }
 
-    tbody tr td input[type="text"],
-    tbody tr td input[type="url"],
-    tbody tr td textarea {
-      background: #121212cc;
-      border: 1.5px solid #39ff14aa;
-      border-radius: 12px;
-      padding: 8px 10px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: #d1f01d;
-      box-shadow: inset 0 0 5px #39ff1488;
-      transition: border-color 0.25s ease, box-shadow 0.25s ease;
-    }
-    tbody tr td input[type="text"]:focus,
-    tbody tr td input[type="url"]:focus,
-    tbody tr td textarea:focus {
-      border-color: #70ff3d;
-      box-shadow: 0 0 10px #70ff3daa, inset 0 0 10px #70ff3d88;
-      background: #0a0a0a;
-      color: #e0ff6b;
-      outline: none;
-    }
-    tbody tr td textarea {
-      min-height: 50px;
-      resize: vertical;
+    a {
+      color: #39ff14;
+      text-decoration: underline;
     }
 
-    /* Buttons */
-    .saveBtn, .deleteBtn {
-      border-radius: 10px;
-      padding: 8px 14px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-      box-shadow: 0 0 12px;
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
-      user-select: none;
-      min-width: 70px;
-    }
-    .saveBtn {
-      background: #39ff14;
-      border: none;
-      color: #0f0f0f;
-      box-shadow: 0 0 15px #39ff1477;
-      margin-right: 12px;
-    }
-    .saveBtn:hover, .saveBtn:focus {
-      background-color: #2ecc40;
-      box-shadow: 0 0 25px #2ecc4066;
-      outline: none;
-    }
-    .deleteBtn {
-      background: #ff4d4d;
-      border: none;
-      color: #fff;
-      box-shadow: 0 0 15px #ff4d4d77;
-    }
-    .deleteBtn:hover, .deleteBtn:focus {
-      background-color: #cc3c3c;
-      box-shadow: 0 0 25px #cc3c3c99;
-      outline: none;
-    }
-
-    #dashboardStatus {
-      margin-top: 16px;
-      font-weight: 700;
-      min-height: 1.2em;
-      user-select: text;
-      color: #d1f01d;
-    }
-
-    /* Empty table row */
-    tbody tr td[colspan] {
-      font-style: italic;
-      color: #7a7a7a;
-      user-select: none;
-    }
-
-    /* Footer */
-    footer {
-      margin-top: 60px;
-      text-align: center;
-      color: #666;
-      font-size: 0.9rem;
-      border-top: 2px solid #ff00cc;
-      padding: 20px 0 24px;
-      box-shadow: 0 -4px 20px #ff00cc33;
-      user-select: text;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-    }
-
-    /* Responsive */
     @media (max-width: 600px) {
-      body {
-        padding: 18px 16px 30px;
-      }
-      header h1 {
-        font-size: 2.4rem;
-      }
-      h2 {
-        font-size: 1.4rem;
-        padding-left: 8px;
-        border-left-width: 3px;
-      }
-      form {
-        padding: 1.6rem 1.8rem;
-      }
-      th, td {
-        padding: 10px 8px;
-        font-size: 0.85rem;
-      }
-      button.saveBtn, button.deleteBtn {
-        font-size: 0.85rem;
-        padding: 6px 10px;
-        min-width: 60px;
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
       }
     }
   </style>
 </head>
 <body>
- <header>
+  <header>
     <h1>The Balance Music</h1>
   </header>
 
   <section id="navigation-buttons">
-    <button id="homeBtn" type="button">Home</button>
-    <button id="termsBtn" type="button">Submission Terms</button>
+    <button id="homeBtn">Home</button>
+    <button id="termsBtn">Submission Terms</button>
   </section>
 
   <h2>Submit Your Music</h2>
@@ -595,10 +429,10 @@
   </section>
 
   <script>
-    // 🔑 Replace with your Supabase project details
-    const supabaseUrl = 'https://your-project-id.supabase.co';
-    const supabaseKey = 'your-public-anon-key';
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    const supabase = supabase.createClient(
+      'https://tpqsceyxdpgerjjiydmy.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
+    );
 
     document.getElementById('homeBtn').addEventListener('click', () => {
       window.location.href = '/';
@@ -613,6 +447,12 @@
     const musicTableBody = document.querySelector('#musicTable tbody');
 
     let submissions = [];
+
+    function escapeHTML(str) {
+      return String(str).replace(/[&<>"']/g, match => (
+        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[match]
+      ));
+    }
 
     async function loadSubmissions() {
       const { data, error } = await supabase
@@ -638,31 +478,23 @@
         return;
       }
 
-      submissions.forEach((entry, index) => {
+      submissions.forEach((entry) => {
         const tr = document.createElement('tr');
-
         tr.innerHTML = `
-          <td>${entry.artist}</td>
-          <td>${entry.title}</td>
-          <td>${entry.genre}</td>
-          <td><a href="${entry.music_url}" target="_blank" rel="noopener noreferrer">Listen</a></td>
-          <td>${entry.bio || ''}</td>
-          <td>
-            <button class="deleteBtn" data-id="${entry.id}">Delete</button>
-          </td>
+          <td>${escapeHTML(entry.artist)}</td>
+          <td>${escapeHTML(entry.title)}</td>
+          <td>${escapeHTML(entry.genre)}</td>
+          <td><a href="${escapeHTML(entry.music_url)}" target="_blank" rel="noopener noreferrer">Listen</a></td>
+          <td>${escapeHTML(entry.bio || '')}</td>
+          <td><button class="deleteBtn" data-id="${entry.id}">Delete</button></td>
         `;
-
         musicTableBody.appendChild(tr);
       });
 
       document.querySelectorAll('.deleteBtn').forEach(button => {
-        button.addEventListener('click', async (e) => {
+        button.addEventListener('click', async e => {
           const id = e.target.getAttribute('data-id');
-          const { error } = await supabase
-            .from('music_submissions')
-            .delete()
-            .eq('id', id);
-
+          const { error } = await supabase.from('music_submissions').delete().eq('id', id);
           if (!error) {
             submissions = submissions.filter(item => item.id != id);
             renderTable();
@@ -690,10 +522,7 @@
         return;
       }
 
-      const { error } = await supabase
-        .from('music_submissions')
-        .insert([newSubmission]);
-
+      const { error } = await supabase.from('music_submissions').insert([newSubmission]);
       if (error) {
         console.error('Insert error:', error);
         submitStatus.textContent = 'Error submitting. Try again.';
@@ -706,7 +535,6 @@
       }
     });
 
-    // Initial load
     loadSubmissions();
   </script>
 </body>

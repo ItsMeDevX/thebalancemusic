@@ -268,23 +268,25 @@
       margin-left: auto;
       margin-right: auto;
       box-sizing: border-box;
-      padding: 20px;
+      padding: 30px 20px;
+      line-height: 1.6;
     }
 
     header {
       background: linear-gradient(90deg, #ff00cc, #3333ff);
-      padding: 20px 40px;
+      padding: 25px 40px;
       color: #fff;
       box-shadow: 0 0 20px #ff00cc;
       position: relative;
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 35px;
+      border-radius: 10px;
     }
 
     header h1 {
       margin: 0;
-      font-size: 3em;
-      letter-spacing: 2px;
+      font-size: 3.2em;
+      letter-spacing: 2.5px;
     }
 
     .logo {
@@ -293,24 +295,26 @@
       right: 30px;
       width: 80px;
       height: auto;
-      box-shadow: 0 0 10px #ff00cc88;
+      box-shadow: 0 0 12px #ff00cc88;
+      border-radius: 8px;
     }
 
     nav {
       background: #1a1a1a;
       text-align: center;
-      padding: 15px 0;
-      box-shadow: 0 0 10px #00ffff;
-      margin-bottom: 30px;
+      padding: 18px 0;
+      box-shadow: 0 0 12px #00ffff;
+      margin-bottom: 40px;
+      border-radius: 8px;
     }
 
     nav a {
-      margin: 0 15px;
+      margin: 0 18px;
       text-decoration: none;
       color: #00ffff;
-      font-weight: bold;
-      font-size: 1.1em;
-      transition: color 0.3s;
+      font-weight: 700;
+      font-size: 1.2em;
+      transition: color 0.3s ease;
     }
 
     nav a:hover {
@@ -318,33 +322,51 @@
     }
 
     main section {
-      margin-bottom: 3rem;
+      margin-bottom: 4rem;
     }
 
     h2, h3 {
       color: #39ff14;
-      border-left: 4px solid #ff00cc;
-      padding-left: 10px;
+      border-left: 5px solid #ff00cc;
+      padding-left: 14px;
       margin-top: 0;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 1.2rem;
+      color: #ddd;
     }
 
     ul {
       list-style: none;
       padding: 0;
+      margin: 0;
     }
 
     li {
       background: #1c1c1c;
-      margin: 10px 0;
-      padding: 15px;
-      border-left: 5px solid #00ffff;
-      box-shadow: 0 0 8px #00ffff33;
+      margin: 12px 0;
+      padding: 18px 20px;
+      border-left: 7px solid #00ffff;
+      box-shadow: 0 0 12px #00ffff33;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    li:hover {
+      background-color: #222222;
     }
 
     a.download-link {
       color: #ff00cc;
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 700;
+      font-size: 1.1rem;
     }
 
     a.download-link:hover {
@@ -352,42 +374,63 @@
     }
 
     .featured-track {
-      background: #1c1c1c;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 15px #39ff1444;
+      background: #222222;
+      padding: 30px 25px;
+      border-radius: 16px;
+      box-shadow: 0 0 25px 5px #39ff1444;
       color: #eee;
-      margin-bottom: 3rem;
+      max-width: 100%;
+      margin-bottom: 4rem;
+      line-height: 1.5;
     }
 
     .featured-track h3 {
       margin-top: 0;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
       color: #39ff14;
+      font-size: 2rem;
+      letter-spacing: 0.07em;
+      font-weight: 800;
     }
 
     .featured-track p {
       margin: 0.5rem 0;
+      font-size: 1.15rem;
+    }
+
+    .featured-track strong {
+      color: #ff00cc;
+      font-weight: 700;
     }
 
     .featured-track a.listen-link {
-      color: #ff00cc;
-      font-weight: bold;
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 12px 28px;
+      background-color: #ff00cc;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: 12px;
       text-decoration: none;
+      box-shadow: 0 0 18px #ff00ccaa;
+      transition: background-color 0.3s ease;
     }
 
     .featured-track a.listen-link:hover {
-      color: #ffffff;
+      background-color: #cc0099;
     }
 
     footer {
       text-align: center;
-      padding: 20px;
+      padding: 25px 20px;
       background: #111;
       color: #888;
-      border-top: 2px solid #ff00cc;
-      box-shadow: 0 -4px 15px #ff00cc33;
-      margin-top: 40px;
+      border-top: 3px solid #ff00cc;
+      box-shadow: 0 -5px 20px #ff00cc33;
+      margin-top: 50px;
+      font-size: 1rem;
+      letter-spacing: 0.05em;
     }
   </style>
 </head>
@@ -409,40 +452,42 @@
     <a href="Community.html">Community</a>
   </nav>
 
-  <section class="hero">
-    <h2>Where Independent Music Meets Opportunity</h2>
-    <p>The Balance Music is a digital platform dedicated to showcasing underground, unsigned, and independent musical talent from around the world. Whether you're a producer, vocalist, or band—your sound belongs here.</p>
-  </section>
+  <main>
+    <section class="hero">
+      <h2>Where Independent Music Meets Opportunity</h2>
+      <p>The Balance Music is a digital platform dedicated to showcasing underground, unsigned, and independent musical talent from around the world. Whether you're a producer, vocalist, or band—your sound belongs here.</p>
+    </section>
 
-  <section class="section" id="about">
-    <h3>Our Mission</h3>
-    <p>At The Balance Music, we believe in music without borders—genre, location, or label shouldn't limit creativity. Our goal is to discover, share, and elevate undiscovered artists by providing a space that prioritizes quality, originality, and authenticity. We’re not just a platform—we're a movement for balance in the music industry.</p>
-  </section>
+    <section id="about">
+      <h3>Our Mission</h3>
+      <p>At The Balance Music, we believe in music without borders—genre, location, or label shouldn't limit creativity. Our goal is to discover, share, and elevate undiscovered artists by providing a space that prioritizes quality, originality, and authenticity. We’re not just a platform—we're a movement for balance in the music industry.</p>
+    </section>
 
-  <section class="section">
-    <h3>What We Offer</h3>
-    <ul>
-      <li>🟢 Free music submission for independent artists</li>
-      <li>🟢 Fair and unbiased curation—no gatekeeping</li>
-      <li>🟢 Exposure through playlists, blogs, and social media</li>
-      <li>🟢 Community-focused initiatives & collaborations</li>
-    </ul>
-  </section>
+    <section>
+      <h3>What We Offer</h3>
+      <ul>
+        <li>🟢 Free music submission for independent artists</li>
+        <li>🟢 Fair and unbiased curation—no gatekeeping</li>
+        <li>🟢 Exposure through playlists, blogs, and social media</li>
+        <li>🟢 Community-focused initiatives & collaborations</li>
+      </ul>
+    </section>
 
-  <section class="featured-track">
-    <h3>Featured Track of the Week</h3>
-    <p><strong>Artist:</strong> Neon Circuit</p>
-    <p><strong>Title:</strong> Cyber Dreams</p>
-    <p><strong>Genre:</strong> Synthwave / Cyberpunk</p>
-    <p><a href="https://example.com/cyberdreams" target="_blank" class="listen-link" rel="noopener noreferrer">Listen Now</a></p>
-    <p>A pulsating synthwave journey with neon lights and glitchy beats, perfect for your cyberpunk vibe.</p>
-  </section>
+    <section class="featured-track" aria-label="Featured Track of the Week">
+      <h3>Featured Track of the Week</h3>
+      <p><strong>Artist:</strong> Neon Circuit</p>
+      <p><strong>Title:</strong> Cyber Dreams</p>
+      <p><strong>Genre:</strong> Synthwave / Cyberpunk</p>
+      <p>A pulsating synthwave journey with neon lights and glitchy beats, perfect for your cyberpunk vibe.</p>
+      <a href="https://example.com/cyberdreams" target="_blank" class="listen-link" rel="noopener noreferrer">Listen Now</a>
+    </section>
 
-  <section class="section" id="contact">
-    <h3>Contact Us</h3>
-    <p>For submissions, questions, or collaborations, please reach out to us on Twitter:</p>
-    <p>Twitter: <a href="https://x.com/TheBalanceM" target="_blank" style="color:#39ff14;">@TheBalanceM</a></p>
-  </section>
+    <section id="contact">
+      <h3>Contact Us</h3>
+      <p>For submissions, questions, or collaborations, please reach out to us on Twitter:</p>
+      <p>Twitter: <a href="https://x.com/TheBalanceM" target="_blank" style="color:#39ff14;">@TheBalanceM</a></p>
+    </section>
+  </main>
 
   <footer>
     &copy; 2025 The Balance Music. All rights reserved.

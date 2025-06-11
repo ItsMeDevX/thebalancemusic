@@ -260,7 +260,143 @@
   <title>Multi-Type Music Submission</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    /* Your same CSS here, omitted for brevity */
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background-color: #0f0f0f;
+      color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #1a1a1a;
+      padding: 1.5rem;
+      text-align: center;
+      border-bottom: 2px solid #39ff14;
+      position: relative;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+      color: #39ff14;
+    }
+    header .home-button {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: #39ff14;
+      color: #0f0f0f;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: 'Orbitron', sans-serif;
+    }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+      position: relative;
+    }
+    .tab-button {
+      padding: 0.5rem 1rem;
+      background-color: #333;
+      color: #39ff14;
+      border: 1px solid #39ff14;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .tab-button.active {
+      background-color: #39ff14;
+      color: #0f0f0f;
+    }
+    .submission-terms-link {
+      position: absolute;
+      right: 1rem;
+      font-family: 'Orbitron', sans-serif;
+      color: #39ff14;
+      text-decoration: none;
+      font-weight: bold;
+      border: 1px solid #39ff14;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      background-color: #333;
+      transition: background-color 0.3s ease;
+    }
+    .submission-terms-link:hover {
+      background-color: #39ff14;
+      color: #0f0f0f;
+    }
+    form {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background-color: #1a1a1a;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    input, textarea {
+      padding: 0.5rem;
+      border: 1px solid #39ff14;
+      border-radius: 4px;
+      background-color: #0f0f0f;
+      color: #fff;
+    }
+    button[type="submit"] {
+      background-color: #39ff14;
+      color: #0f0f0f;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #submitStatus {
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+    table {
+      width: 95%;
+      margin: 2rem auto;
+      border-collapse: collapse;
+      background-color: #1a1a1a;
+    }
+    th, td {
+      border: 1px solid #39ff14;
+      padding: 0.75rem;
+      text-align: left;
+    }
+    th {
+      background-color: #0f0f0f;
+      color: #39ff14;
+    }
+    a {
+      color: #39ff14;
+    }
+    @media (max-width: 600px) {
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+      header .home-button,
+      .submission-terms-link {
+        position: static;
+        transform: none;
+        margin: 0.5rem auto;
+        display: block;
+        text-align: center;
+        width: fit-content;
+      }
+      .tabs {
+        justify-content: center;
+      }
+    }
   </style>
 </head>
 <body>
@@ -317,7 +453,7 @@
 
     const supabase = createClient(
       'https://tpqsceyxdpgerjjiydmy.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
     );
 
     const form = document.getElementById('musicForm');
@@ -326,9 +462,9 @@
     let currentType = 'instrumental';
 
     function escapeHTML(str) {
-      return String(str).replace(/[&<>"']/g, match =>
-        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[match])
-      );
+      return String(str).replace(/[&<>"']/g, match => (
+        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[match]
+      ));
     }
 
     function switchTabs(type) {
@@ -345,15 +481,16 @@
 
     form.addEventListener('submit', async e => {
       e.preventDefault();
-
       const { data: { session } } = await supabase.auth.getSession();
 
       if (!session || !session.user) {
-        alert("Please log in to submit your music.");
+        alert("Please log in.");
         return;
       }
 
-      const artist = session.user.user_metadata?.full_name || session.user.user_metadata?.username || 'Unknown Artist';
+      const identities = session.user.user_metadata?.identities || [];
+      const githubIdentity = identities.find(id => id.provider === 'github');
+      const artist = githubIdentity?.user_name || session.user.user_metadata?.username || 'Unknown Artist';
 
       const formData = new FormData(form);
       const entry = {
@@ -372,7 +509,7 @@
         status.style.color = '#ff4d4d';
       } else {
         form.reset();
-        status.textContent = 'Submitted successfully!';
+        status.textContent = 'Submitted!';
         status.style.color = '#39ff14';
         loadSubmissions();
       }
@@ -380,18 +517,14 @@
 
     async function loadSubmissions() {
       const { data: { session } } = await supabase.auth.getSession();
-
       if (!session?.user) {
-        tableBody.innerHTML = `
-          <tr>
-            <td colspan="7" style="text-align:center; color:#ff4d4d;">
-              Please log in to see your submissions.
-            </td>
-          </tr>`;
+        tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#ff4d4d;">Please log in to see your submissions.</td></tr>`;
         return;
       }
 
-      const artist = session.user.user_metadata?.full_name || session.user.user_metadata?.username || 'Unknown Artist';
+      const identities = session.user.user_metadata?.identities || [];
+      const githubIdentity = identities.find(id => id.provider === 'github');
+      const artist = githubIdentity?.user_name || session.user.user_metadata?.username || 'Unknown Artist';
 
       const { data, error } = await supabase
         .from('music_submissions')
@@ -401,22 +534,12 @@
         .order('created_at', { ascending: false });
 
       if (error || !data) {
-        tableBody.innerHTML = `
-          <tr>
-            <td colspan="7" style="text-align:center; color:#f55;">
-              Error loading submissions.
-            </td>
-          </tr>`;
+        tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#f55;">Error loading data</td></tr>`;
         return;
       }
 
       if (data.length === 0) {
-        tableBody.innerHTML = `
-          <tr>
-            <td colspan="7" style="text-align:center; color:#aaa;">
-              No submissions found for "${escapeHTML(currentType)}".
-            </td>
-          </tr>`;
+        tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#aaa;">No submissions found for ${escapeHTML(currentType)}.</td></tr>`;
         return;
       }
 
@@ -432,14 +555,12 @@
         </tr>
       `).join('');
 
-      // Attach delete button handlers
+      // Add delete listeners
       tableBody.querySelectorAll('button').forEach(btn => {
         btn.addEventListener('click', async () => {
           if (!confirm('Are you sure you want to delete this submission?')) return;
-
           const id = btn.getAttribute('data-id');
           const { error } = await supabase.from('music_submissions').delete().eq('id', id);
-
           if (error) {
             alert('Failed to delete submission.');
           } else {

@@ -6,7 +6,6 @@
   <title>Artist Profile - The Balance</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    /* Paste your existing CSS here — same as your previous message */
     body {
       margin: 0;
       font-family: 'Orbitron', sans-serif;
@@ -121,7 +120,7 @@
     );
 
     const artistParam = new URLSearchParams(window.location.search).get('artist');
-    const artistName = decodeURIComponent(artistParam || '');
+    const artistName = decodeURIComponent(artistParam || '').trim();
 
     const artistNameElem = document.getElementById('artistName');
     const artistAvatarElem = document.getElementById('artistAvatar');
@@ -182,12 +181,14 @@
 
       artistNameElem.textContent = escapeHTML(artistName);
 
-      const { data: artistData } = await supabase
+      const { data: artistData, error: artistError } = await supabase
         .from('music_submissions')
         .select('avatar_url, bio')
-        .eq('artist', artistName)
+        .ilike('artist', artistName)
         .limit(1)
         .single();
+
+      if (artistError) console.error('Artist fetch error:', artistError);
 
       if (artistData?.avatar_url) {
         artistAvatarElem.src = artistData.avatar_url;
@@ -196,16 +197,16 @@
         artistAvatarElem.style.display = 'none';
       }
 
-      if (artistData?.bio) {
-        artistBioElem.textContent = artistData.bio;
-      }
+      artistBioElem.textContent = artistData?.bio || 'This artist has not added a bio yet.';
 
-      const { data: tracks } = await supabase
+      const { data: tracks, error: tracksError } = await supabase
         .from('music_submissions')
         .select('*')
-        .eq('artist', artistName)
+        .ilike('artist', artistName)
         .eq('type', 'music')
         .order('created_at', { ascending: false });
+
+      if (tracksError) console.error('Tracks fetch error:', tracksError);
 
       if (!tracks || tracks.length === 0) {
         artistTracksElem.innerHTML = '<li>No tracks found.</li>';

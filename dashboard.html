@@ -435,6 +435,7 @@
     <table id="musicTable" aria-label="Submission list">
       <thead>
         <tr>
+          <th>Avatar</th>
           <th>Artist</th>
           <th>Title</th>
           <th>Genre</th>
@@ -491,6 +492,9 @@
       // Use GitHub main name or fallback to full_name or username
       const artist = session.user.user_metadata?.name || session.user.user_metadata?.full_name || session.user.user_metadata?.username || 'Unknown Artist';
 
+      // Get avatar URL from user metadata (empty string if none)
+      const avatar_url = session.user.user_metadata?.avatar_url || '';
+
       const formData = new FormData(form);
       const entry = {
         artist,
@@ -498,7 +502,8 @@
         genre: formData.get('genre').trim(),
         music_url: formData.get('music_url').trim(),
         bio: formData.get('bio').trim(),
-        type: currentType
+        type: currentType,
+        avatar_url
       };
 
       const { error } = await supabase.from('music_submissions').insert([entry]);
@@ -517,7 +522,7 @@
     async function loadSubmissions() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) {
-        tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#ff4d4d;">Please log in to see your submissions.</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:#ff4d4d;">Please log in to see your submissions.</td></tr>`;
         return;
       }
 
@@ -532,17 +537,18 @@
         .order('id', { ascending: false });
 
       if (error) {
-        tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#ff4d4d;">Failed to load submissions.</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:#ff4d4d;">Failed to load submissions.</td></tr>`;
         return;
       }
 
       if (!data.length) {
-        tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center;">No submissions found for "${escapeHTML(currentType)}".</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="8" style="text-align:center;">No submissions found for "${escapeHTML(currentType)}".</td></tr>`;
         return;
       }
 
       tableBody.innerHTML = data.map(submission => `
         <tr>
+          <td>${submission.avatar_url ? `<img src="${escapeHTML(submission.avatar_url)}" alt="Avatar of ${escapeHTML(submission.artist)}" width="40" height="40" style="border-radius:50%;">` : ''}</td>
           <td>${escapeHTML(submission.artist)}</td>
           <td>${escapeHTML(submission.title)}</td>
           <td>${escapeHTML(submission.genre)}</td>

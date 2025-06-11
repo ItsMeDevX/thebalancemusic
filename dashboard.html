@@ -286,9 +286,10 @@
       justify-content: center;
       gap: 1rem;
       padding: 1rem;
+      flex-wrap: wrap;
     }
 
-    button {
+    button, .tab-button {
       background-color: #39ff14;
       color: #0f0f0f;
       border: none;
@@ -300,8 +301,30 @@
       transition: background 0.3s;
     }
 
-    button:hover {
+    button:hover, .tab-button:hover {
       background-color: #28cc0a;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+      gap: 1rem;
+    }
+
+    .tab-button.active {
+      background-color: #0f0f0f;
+      border: 1px solid #39ff14;
+      color: #39ff14;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 1rem;
+    }
+
+    .tab-content.active {
+      display: block;
     }
 
     h2 {
@@ -341,19 +364,14 @@
       margin-top: 0.5rem;
     }
 
-    #music-dashboard {
-      max-width: 95%;
-      margin: 2rem auto;
-    }
-
     table {
       width: 100%;
       border-collapse: collapse;
       background-color: #1a1a1a;
+      margin-top: 2rem;
     }
 
-    th,
-    td {
+    th, td {
       border: 1px solid #39ff14;
       padding: 0.75rem;
       text-align: left;
@@ -388,27 +406,34 @@
     <button id="termsBtn">Submission Terms</button>
   </section>
 
-  <h2>Submit Your Music</h2>
+  <div class="tabs">
+    <button class="tab-button active" data-tab="formTab">Submit Music</button>
+    <button class="tab-button" data-tab="dashboardTab">Manage Submissions</button>
+  </div>
 
-  <form id="musicForm">
-    <!-- Removed artist input because artist is set automatically -->
-    <label for="title">Title</label>
-    <input id="title" name="title" type="text" required placeholder="Song title" />
+  <!-- Tab Content: Submit Music -->
+  <div id="formTab" class="tab-content active">
+    <h2>Submit Your Music</h2>
+    <form id="musicForm">
+      <label for="title">Title</label>
+      <input id="title" name="title" type="text" required placeholder="Song title" />
 
-    <label for="genre">Genre</label>
-    <input id="genre" name="genre" type="text" required placeholder="Music genre" />
+      <label for="genre">Genre</label>
+      <input id="genre" name="genre" type="text" required placeholder="Music genre" />
 
-    <label for="music_url">Music URL</label>
-    <input id="music_url" name="music_url" type="url" required placeholder="URL to your music" />
+      <label for="music_url">Music URL</label>
+      <input id="music_url" name="music_url" type="url" required placeholder="URL to your music" />
 
-    <label for="bio">Bio</label>
-    <textarea id="bio" name="bio" rows="4" placeholder="A brief bio about the artist or track"></textarea>
+      <label for="bio">Bio</label>
+      <textarea id="bio" name="bio" rows="4" placeholder="A brief bio about the artist or track"></textarea>
 
-    <button type="submit">Submit</button>
-    <div id="submitStatus" role="status" aria-live="polite"></div>
-  </form>
+      <button type="submit">Submit</button>
+      <div id="submitStatus" role="status" aria-live="polite"></div>
+    </form>
+  </div>
 
-  <section id="music-dashboard">
+  <!-- Tab Content: Manage Submissions -->
+  <div id="dashboardTab" class="tab-content">
     <h2>Manage Your Submissions</h2>
     <table id="musicTable" aria-label="Music submissions table">
       <thead>
@@ -423,7 +448,7 @@
       </thead>
       <tbody></tbody>
     </table>
-  </section>
+  </div>
 
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -436,7 +461,6 @@
     const form = document.getElementById('musicForm');
     const status = document.getElementById('submitStatus');
     const musicTableBody = document.querySelector('#musicTable tbody');
-    const dashboardSection = document.getElementById('music-dashboard');
 
     function escapeHTML(str) {
       return String(str).replace(/[&<>"']/g, match => (
@@ -489,8 +513,10 @@
       const { data: { session } } = await supabase.auth.getSession();
 
       if (!session || !session.user) {
+        document.querySelector('.tabs').style.display = 'none';
         form.style.display = 'none';
-        dashboardSection.style.display = 'none';
+        document.getElementById('dashboardTab').style.display = 'none';
+
         const authNotice = document.createElement('p');
         authNotice.textContent = 'Please log in to submit music and view your submissions.';
         authNotice.style.color = '#ff4d4d';
@@ -500,11 +526,7 @@
         return;
       }
 
-      form.style.display = '';
-      dashboardSection.style.display = '';
-
       const userMeta = session.user.user_metadata || {};
-      // Robust artist name extraction with fallback:
       const artistName =
         userMeta.username ||
         userMeta.login ||
@@ -545,6 +567,16 @@
 
     document.getElementById('termsBtn').addEventListener('click', () => {
       alert('Submission Terms:\n\nSubmit only original music. By submitting, you agree to our terms.');
+    });
+
+    // Tab switching logic
+    document.querySelectorAll('.tab-button').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        button.classList.add('active');
+        document.getElementById(button.dataset.tab).classList.add('active');
+      });
     });
 
     checkAuthAndInit();

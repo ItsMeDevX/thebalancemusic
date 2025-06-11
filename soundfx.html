@@ -432,7 +432,7 @@
 </head>
 <body>
 
-  <header>
+ <header>
     <h1>The Balance</h1>
     <img src="TheBalanceLogo.png" alt="The Balance Logo" class="logo" />
     <p>Sound FX</p>
@@ -451,7 +451,7 @@
     <section>
       <h2>Latest Sound FX</h2>
       <ul id="trackList">
-        <!-- Tracks from Supabase will be inserted here -->
+        <!-- Tracks will be inserted here -->
       </ul>
     </section>
   </main>
@@ -479,7 +479,6 @@
     function getEmbedPlayer(url) {
       const escapedUrl = escapeHTML(url);
 
-      // YouTube
       if (/youtube\.com\/watch\?v=|youtu\.be\//.test(url)) {
         const match = url.match(/(?:v=|\/)([a-zA-Z0-9_-]{11})/);
         const videoId = match ? match[1] : null;
@@ -488,20 +487,17 @@
         }
       }
 
-      // SoundCloud
       if (/soundcloud\.com/.test(url)) {
         return `<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
           src="https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%230066cc&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false">
         </iframe>`;
       }
 
-      // Spotify
       if (/open\.spotify\.com\/track\//.test(url)) {
         const embedUrl = url.replace('/track/', '/embed/track/');
         return `<iframe style="border-radius:12px" src="${embedUrl}" width="100%" height="80" frameborder="0" allow="encrypted-media"></iframe>`;
       }
 
-      // Apple Music
       if (/music\.apple\.com/.test(url)) {
         return `<iframe allow="autoplay *; encrypted-media *;" frameborder="0" height="150" style="width:100%;max-width:660px;overflow:hidden;background:transparent;" 
           sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation"
@@ -509,7 +505,6 @@
         </iframe>`;
       }
 
-      // Direct .mp3, .wav
       if (/\.(mp3|wav|ogg)$/i.test(url)) {
         return `<audio controls preload="none">
                   <source src="${escapedUrl}" type="audio/mpeg">
@@ -517,7 +512,6 @@
                 </audio>`;
       }
 
-      // Fallback
       return `<a href="${escapedUrl}" target="_blank" rel="noopener noreferrer">Listen</a>`;
     }
 
@@ -525,7 +519,7 @@
       const { data, error } = await supabase
         .from('music_submissions')
         .select('*')
-        .eq('type', 'sound_fx')             // Filter for only music type
+        .eq('type', 'sound_fx')
         .order('created_at', { ascending: false });
 
       if (error || !data.length) {
@@ -535,9 +529,22 @@
 
       trackList.innerHTML = '';
       data.forEach(track => {
+        const artistName = encodeURIComponent(track.artist);
+        const avatarHTML = track.avatar_url
+          ? `<a href="artist-profile.html?name=${artistName}">
+               <img src="${escapeHTML(track.avatar_url)}" alt="Avatar of ${escapeHTML(track.artist)}"
+                width="40" height="40" style="border-radius:50%; vertical-align: middle; margin-right: 10px;">
+             </a>`
+          : '';
+
         const item = document.createElement('li');
         item.innerHTML = `
-          <strong>${escapeHTML(track.artist)} - ${escapeHTML(track.title)}</strong><br/>
+          ${avatarHTML}
+          <strong style="vertical-align: middle;">
+            <a href="artist-profile.html?name=${artistName}" style="color: #39ff14; text-decoration: none;">
+              ${escapeHTML(track.artist)}
+            </a> - ${escapeHTML(track.title)}
+          </strong><br/>
           <em>Genre:</em> ${escapeHTML(track.genre)}<br/>
           ${getEmbedPlayer(track.music_url)}
         `;

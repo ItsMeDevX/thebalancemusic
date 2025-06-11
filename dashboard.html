@@ -401,12 +401,6 @@
   </style>
 </head>
 <body>
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Balance Music - Submissions</title>
-</head>
-<body>
   <header>
     <a href="index.html" class="home-button" aria-label="Go to home page">Home</a>
     <h1>The Balance Music - Submissions</h1>
@@ -475,6 +469,14 @@
       ));
     }
 
+    // Helper to get the best username from the user object
+    function getUsername(user) {
+      const userMetadata = user.user_metadata || {};
+      const preferredUsername = userMetadata.preferred_username || userMetadata.username || null;
+      const githubLogin = user.app_metadata?.provider_data?.[0]?.login || null;
+      return preferredUsername || githubLogin || user.email || 'Unknown Artist';
+    }
+
     function switchTabs(type) {
       currentType = type;
       document.querySelectorAll('.tab-button').forEach(btn => {
@@ -496,11 +498,7 @@
         return;
       }
 
-      // Get GitHub login from app_metadata.provider_data
-      const githubData = session.user.app_metadata?.provider_data?.[0];
-      const artist = githubData?.login || 'Unknown Artist';
-
-      // Get avatar URL from user metadata
+      const artist = getUsername(session.user);
       const avatar_url = session.user.user_metadata?.avatar_url || '';
 
       const formData = new FormData(form);
@@ -534,9 +532,7 @@
         return;
       }
 
-      // Get GitHub login for filter
-      const githubData = session.user.app_metadata?.provider_data?.[0];
-      const artist = githubData?.login || 'Unknown Artist';
+      const artist = getUsername(session.user);
 
       const { data, error } = await supabase
         .from('music_submissions')

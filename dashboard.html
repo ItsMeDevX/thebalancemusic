@@ -176,7 +176,8 @@
       authBar.appendChild(dashboardBtn);
 
       const userMetadata = session.user.user_metadata || {};
-      const name = userMetadata.username || 'GitHub User';  // <-- Changed this line to use username
+      // Try preferred_username, then username, then email, then fallback
+      const name = userMetadata.preferred_username || userMetadata.username || session.user.email || 'GitHub User';
 
       const avatar = userMetadata.avatar_url || null;
 
@@ -251,7 +252,6 @@
 
 </body>
 </html>
-
 
 <!DOCTYPE html>
 <html lang="en">

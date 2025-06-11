@@ -427,22 +427,11 @@
 </head>
 <body>
 
-  <header>
-    <h1>The Balance</h1>
-    <img src="TheBalanceLogo.png" alt="The Balance Logo" class="logo" />
-    <p>Community</p>
-  </header>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat - The Balance</title>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="instrumentals.html">Instrumentals</a>
-    <a href="samples.html">Samples</a>
-    <a href="soundfx.html">Sound FX</a>
-    <a href="music.html">Music</a>
-    <a href="Community.html">Community</a>
-  </nav>
-
-  <main>
   <style>
     body {
       margin: 0;
@@ -526,16 +515,6 @@
       box-shadow: 0 0 8px #00ffff33;
     }
 
-    a.download-link {
-      color: #ff00cc;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    a.download-link:hover {
-      color: #ffffff;
-    }
-
     form {
       background: #1c1c1c;
       padding: 2rem;
@@ -544,14 +523,7 @@
       color: #eee;
     }
 
-    label {
-      display: block;
-      margin-bottom: 1.25rem;
-      color: #39ff14;
-      font-weight: bold;
-    }
-
-    input, textarea {
+    input {
       width: 100%;
       padding: 0.75rem;
       margin-top: 0.25rem;
@@ -564,16 +536,8 @@
       box-sizing: border-box;
     }
 
-    input:invalid, textarea:invalid {
+    input:invalid {
       box-shadow: 0 0 5px red;
-    }
-
-    .error-message {
-      display: none;
-      color: #ff4d4d;
-      font-size: 0.9em;
-      margin-top: 0.25rem;
-      font-weight: normal;
     }
 
     button {
@@ -594,6 +558,10 @@
       background-color: #cc0099;
     }
 
+    #messages {
+      margin-bottom: 20px;
+    }
+
     footer {
       text-align: center;
       padding: 20px;
@@ -603,33 +571,24 @@
       box-shadow: 0 -4px 15px #ff00cc33;
       margin-top: 40px;
     }
-
-    /* Talk.io widget container styling */
-    #talkjs-container {
-      height: 400px;
-      max-width: 900px;
-      margin: 0 auto 40px auto;
-      border: 2px solid #ff00cc;
-      border-radius: 12px;
-      box-shadow: 0 0 20px #ff00cc88;
-      background: #1c1c1c;
-    }
   </style>
 </head>
-<body>
 
- <main>
-  <section>
-    <h2>Welcome to The Balance Community</h2>
-    <p>Connect with other artists and music lovers! Share your thoughts, ask questions, or just hang out in our live chat below.</p>
-    
-  </section>
-  <title>Chat - The Balance</title>
-  <style>
-    /* [Your existing CSS remains unchanged] */
-  </style>
-</head>
 <body>
+  <header>
+    <h1>The Balance</h1>
+    <img src="TheBalanceLogo.png" alt="The Balance Logo" class="logo" />
+    <p>Community</p>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="instrumentals.html">Instrumentals</a>
+    <a href="samples.html">Samples</a>
+    <a href="soundfx.html">Sound FX</a>
+    <a href="music.html">Music</a>
+    <a href="Community.html">Community</a>
+  </nav>
 
   <main>
     <section>
@@ -658,6 +617,10 @@
       <button type="submit">Send</button>
     </form>
   </main>
+
+  <footer>
+    &copy; 2025 The Balance. All rights reserved.
+  </footer>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
@@ -697,9 +660,7 @@
       }
 
       messagesDiv.innerHTML = data.map(m => `
-        <div>
-          <strong>${m.github_username || 'Guest'}:</strong> ${m.content}
-        </div>
+        <div><strong>${m.github_username || 'Guest'}:</strong> ${m.content}</div>
       `).join('');
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
@@ -724,16 +685,11 @@
       loadMessages();
     });
 
-    // Real-time updates via Supabase Realtime
     supabase.channel('messages')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, () => {
-        loadMessages();
-      })
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, loadMessages)
       .subscribe();
 
-    // Initial load
     loadMessages();
   </script>
-
 </body>
 </html>

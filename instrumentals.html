@@ -434,6 +434,7 @@
     <h1>The Balance</h1>
     <img src="TheBalanceLogo.png" alt="The Balance Logo" class="logo" />
     <p>Instrumentals</p>
+    <div id="user-display" style="display: flex; align-items: center; gap: 10px; margin-top: 10px;"></div>
   </header>
 
   <nav>
@@ -523,7 +524,7 @@
       const { data, error } = await supabase
         .from('music_submissions')
         .select('*')
-        .eq('type', 'instrumental')   // Filter changed here to 'Instrumentals'
+        .eq('type', 'instrumental')
         .order('created_at', { ascending: false });
 
       if (error || !data.length) {
@@ -544,6 +545,35 @@
     }
 
     loadTracks();
+
+    // Display GitHub user avatar and name if logged in
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (session?.user) {
+      const name = session.user.user_metadata.full_name || 'User';
+      const avatar = session.user.user_metadata.avatar_url;
+      const display = document.getElementById('user-display');
+
+      if (display) {
+        const img = document.createElement('img');
+        img.src = avatar;
+        img.alt = name;
+        img.style.width = '32px';
+        img.style.height = '32px';
+        img.style.borderRadius = '50%';
+        img.style.border = '2px solid #00ffcc';
+        img.style.objectFit = 'cover';
+
+        const span = document.createElement('span');
+        span.textContent = name;
+        span.style.color = '#39ff14';
+        span.style.fontFamily = 'Orbitron, sans-serif';
+        span.style.fontWeight = '700';
+
+        display.appendChild(img);
+        display.appendChild(span);
+      }
+    }
   </script>
 
 </body>

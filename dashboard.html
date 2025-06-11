@@ -495,10 +495,11 @@
         return;
       }
 
-      // Use GitHub login ONLY for artist
-      const artist = session.user.user_metadata?.login || 'Unknown Artist';
+      // Get GitHub login from app_metadata.provider_data
+      const githubData = session.user.app_metadata?.provider_data?.[0];
+      const artist = githubData?.login || 'Unknown Artist';
 
-      // Get avatar URL from user metadata (empty string if none)
+      // Get avatar URL from user metadata
       const avatar_url = session.user.user_metadata?.avatar_url || '';
 
       const formData = new FormData(form);
@@ -532,8 +533,9 @@
         return;
       }
 
-      // Use GitHub login ONLY for artist filter
-      const artist = session.user.user_metadata?.login || 'Unknown Artist';
+      // Get GitHub login for filter
+      const githubData = session.user.app_metadata?.provider_data?.[0];
+      const artist = githubData?.login || 'Unknown Artist';
 
       const { data, error } = await supabase
         .from('music_submissions')
@@ -565,7 +567,7 @@
         </tr>
       `).join('');
 
-      // Add delete event listeners
+      // Delete buttons event listener
       tableBody.querySelectorAll('button[data-id]').forEach(btn => {
         btn.addEventListener('click', async () => {
           if (!confirm('Delete this submission?')) return;

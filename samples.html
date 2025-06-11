@@ -523,7 +523,7 @@
       const { data, error } = await supabase
         .from('music_submissions')
         .select('*')
-       .eq('type', 'Samples')            // Filter for only music type
+       .eq('type', 'Sample')            // Filter for only music type
         .order('created_at', { ascending: false });
 
       if (error || !data.length) {

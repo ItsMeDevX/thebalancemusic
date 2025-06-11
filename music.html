@@ -428,6 +428,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     /* ... your existing CSS (unchanged) ... */
+    ul#trackList li {
+      margin-bottom: 1.5rem;
+    }
   </style>
 </head>
 <body>
@@ -535,9 +538,15 @@
 
       trackList.innerHTML = '';
       data.forEach(track => {
+        const avatarHTML = track.avatar_url
+          ? `<img src="${escapeHTML(track.avatar_url)}" alt="Avatar of ${escapeHTML(track.artist)}"
+                width="40" height="40" style="border-radius:50%; vertical-align: middle; margin-right: 10px;">`
+          : '';
+
         const item = document.createElement('li');
         item.innerHTML = `
-          <strong>${escapeHTML(track.artist)} - ${escapeHTML(track.title)}</strong><br/>
+          ${avatarHTML}
+          <strong style="vertical-align: middle;">${escapeHTML(track.artist)} - ${escapeHTML(track.title)}</strong><br/>
           <em>Genre:</em> ${escapeHTML(track.genre)}<br/>
           ${getEmbedPlayer(track.music_url)}
         `;

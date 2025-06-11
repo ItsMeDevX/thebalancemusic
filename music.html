@@ -422,9 +422,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!DOCTYPE html>
-<html lang="en">
-<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Balance - Music Sharing</title>
@@ -557,7 +554,7 @@
 
     const supabase = createClient(
       'https://tpqsceyxdpgerjjiydmy.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaW95ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
     );
 
     const trackList = document.getElementById('trackList');
@@ -623,7 +620,7 @@
       data.forEach(track => {
         const artistName = encodeURIComponent(track.artist);
         const avatarHTML = track.avatar_url
-          ? `<a href="artist-profile.html?name=${artistName}">
+          ? `<a href="artist-profile.html?artist=${artistName}">
                <img src="${escapeHTML(track.avatar_url)}" alt="Avatar of ${escapeHTML(track.artist)}"
                 width="40" height="40" style="border-radius:50%; vertical-align: middle; margin-right: 10px;">
              </a>`
@@ -633,7 +630,7 @@
         item.innerHTML = `
           ${avatarHTML}
           <strong style="vertical-align: middle;">
-            <a href="artist-profile.html?name=${artistName}" style="color: #39ff14; text-decoration: none;">
+            <a href="artist-profile.html?artist=${artistName}" style="color: #39ff14; text-decoration: none;">
               ${escapeHTML(track.artist)}
             </a> - ${escapeHTML(track.title)}
           </strong><br/>

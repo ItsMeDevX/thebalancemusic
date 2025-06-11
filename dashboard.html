@@ -58,7 +58,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Auth Bar Example</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -113,9 +113,22 @@
     color: #1a1a1a;
   }
   #user-info {
-    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     cursor: pointer;
     color: #39ff14;
+  }
+  #user-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #ff00cc;
+    object-fit: cover;
+  }
+  #user-info div {
+    font-size: 1rem;
+    font-weight: bold;
   }
   button.auth-btn {
     background-color: #ff00cc;
@@ -139,7 +152,7 @@
 
   const supabase = createClient(
     'https://tpqsceyxdpgerjjiydmy.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
   );
 
   const authBar = document.getElementById('auth-bar');
@@ -153,8 +166,7 @@
     authBar.innerHTML = '';
 
     if (session?.user) {
-      // Logged in — show Dashboard + GitHub username only
-
+      // Logged in — show Dashboard + user info + dropdown with logout
       const dashboardBtn = document.createElement('button');
       dashboardBtn.textContent = 'Dashboard';
       dashboardBtn.className = 'auth-btn';
@@ -163,16 +175,26 @@
       });
       authBar.appendChild(dashboardBtn);
 
-      // Get GitHub username from provider_data
-      const providerData = session.user.app_metadata?.provider_data?.[0] || {};
-      const username = providerData.login || 'GitHub User';
+      const userMetadata = session.user.user_metadata || {};
+      const name = userMetadata.username || 'GitHub User';  // <-- Changed this line to use username
+
+      const avatar = userMetadata.avatar_url || null;
 
       const userInfo = document.createElement('div');
       userInfo.id = 'user-info';
-      userInfo.textContent = username;
+
+      if (avatar) {
+        const img = document.createElement('img');
+        img.src = avatar;
+        img.alt = name;
+        userInfo.appendChild(img);
+      }
+
+      const nameDiv = document.createElement('div');
+      nameDiv.innerHTML = `<strong>${name}</strong>`;
+      userInfo.appendChild(nameDiv);
       authBar.appendChild(userInfo);
 
-      // Dropdown with logout button
       const dropdown = document.createElement('div');
       dropdown.id = 'user-dropdown';
       dropdown.style.display = 'none';
@@ -221,7 +243,7 @@
 
   renderAuthBar();
 </script>
-
+  
 <!-- 🔽 Your Main Page Content Goes Below This Line -->
 <main style="padding-top: 120px;">
 

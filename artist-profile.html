@@ -504,6 +504,13 @@
       background: #000;
     }
 
+    img.media-image {
+      margin-top: 10px;
+      max-width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 0 5px #00ffff55;
+    }
+
     footer {
       text-align: center;
       padding: 20px;
@@ -529,7 +536,7 @@
     </section>
 
     <section>
-      <h2>Tracks</h2>
+      <h2>Submissions</h2>
       <ul id="artistTracks"></ul>
     </section>
   </main>
@@ -597,7 +604,7 @@
                 </audio>`;
       }
 
-      return `<a href="${escapedUrl}" target="_blank" rel="noopener noreferrer">Listen</a>`;
+      return `<a href="${escapedUrl}" target="_blank" rel="noopener noreferrer">Open media</a>`;
     }
 
     async function loadArtistPage() {
@@ -611,7 +618,6 @@
 
       artistNameElem.textContent = escapeHTML(artistName);
 
-      // Fetch artist avatar and bio - get first matching record (using ilike with wildcards)
       const { data: artistData, error: artistError } = await supabase
         .from('music_submissions')
         .select('avatar_url, bio')
@@ -630,37 +636,47 @@
           artistAvatarElem.style.display = 'block';
         } else {
           artistAvatarElem.style.display = 'none';
-          artistAvatarElem.alt = '';
         }
         artistBioElem.textContent = artistData?.bio ? escapeHTML(artistData.bio) : 'This artist has not added a bio yet.';
       }
 
-      // Fetch all tracks for the artist
       const { data: tracks, error: tracksError } = await supabase
         .from('music_submissions')
         .select('*')
         .ilike('artist', `%${artistName}%`)
-        .eq('type', 'music')
         .order('created_at', { ascending: false });
 
       if (tracksError) {
         console.error('Tracks fetch error:', tracksError);
-        artistTracksElem.innerHTML = '<li>Error loading tracks.</li>';
+        artistTracksElem.innerHTML = '<li>Error loading submissions.</li>';
         return;
       }
 
       if (!tracks || tracks.length === 0) {
-        artistTracksElem.innerHTML = '<li>No tracks found.</li>';
+        artistTracksElem.innerHTML = '<li>No submissions found.</li>';
         return;
       }
 
       artistTracksElem.innerHTML = '';
       tracks.forEach(track => {
         const li = document.createElement('li');
+        let media = '';
+
+        if (track.type === 'music' && track.music_url) {
+          media = getEmbedPlayer(track.music_url);
+        } else if (track.type === 'video' && track.video_url) {
+          media = getEmbedPlayer(track.video_url);
+        } else if (track.type === 'image' && track.image_url) {
+          media = `<img class="media-image" src="${escapeHTML(track.image_url)}" alt="${escapeHTML(track.title)}" />`;
+        } else {
+          media = '<em>No valid media found.</em>';
+        }
+
         li.innerHTML = `
           <strong>${escapeHTML(track.title)}</strong><br/>
-          <em>Genre:</em> ${escapeHTML(track.genre)}<br/>
-          ${getEmbedPlayer(track.music_url)}
+          <em>Type:</em> ${escapeHTML(track.type)}<br/>
+          <em>Genre:</em> ${escapeHTML(track.genre || 'N/A')}<br/>
+          ${media}
         `;
         artistTracksElem.appendChild(li);
       });

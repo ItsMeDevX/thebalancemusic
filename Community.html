@@ -152,7 +152,7 @@
 
   const supabase = createClient(
     'https://tpqsceyxdpgerjjiydmy.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
   );
 
   const authBar = document.getElementById('auth-bar');
@@ -176,7 +176,9 @@
       authBar.appendChild(dashboardBtn);
 
       const userMetadata = session.user.user_metadata || {};
-      const name = userMetadata.full_name || 'GitHub User';
+      // Try preferred_username, then username, then email, then fallback
+      const name = userMetadata.preferred_username || userMetadata.username || session.user.email || 'GitHub User';
+
       const avatar = userMetadata.avatar_url || null;
 
       const userInfo = document.createElement('div');

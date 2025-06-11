@@ -453,7 +453,7 @@
 
     const supabase = createClient(
       'https://tpqsceyxdpgerjjiydmy.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaW95ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
     );
 
     const form = document.getElementById('musicForm');
@@ -488,8 +488,11 @@
         return;
       }
 
-      // Use full_name or fallback to username, never email
-      const artist = session.user.user_metadata?.full_name || session.user.user_metadata?.username || 'Unknown Artist';
+      // Use GitHub main name, or fallback to full_name, then username, never email
+      const artist = session.user.user_metadata?.github?.name
+        || session.user.user_metadata?.full_name
+        || session.user.user_metadata?.username
+        || 'Unknown Artist';
 
       const formData = new FormData(form);
       const entry = {
@@ -521,8 +524,11 @@
         return;
       }
 
-      // Use full_name or fallback to username, never email
-      const artist = session.user.user_metadata?.full_name || session.user.user_metadata?.username || 'Unknown Artist';
+      // Use GitHub main name, or fallback to full_name, then username, never email
+      const artist = session.user.user_metadata?.github?.name
+        || session.user.user_metadata?.full_name
+        || session.user.user_metadata?.username
+        || 'Unknown Artist';
 
       const { data, error } = await supabase
         .from('music_submissions')

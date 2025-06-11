@@ -57,6 +57,9 @@
       object-fit: cover;
       margin: 1rem 0;
       box-shadow: 0 0 10px #ff00cc;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     ul {
@@ -75,6 +78,8 @@
     iframe, audio {
       margin-top: 10px;
       width: 100%;
+      border-radius: 8px;
+      background: #000;
     }
 
     footer {
@@ -119,8 +124,8 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
     );
 
-    const artistParam = new URLSearchParams(window.location.search).get('artist');
-    const artistName = decodeURIComponent(artistParam || '').trim();
+    const artistParam = new URLSearchParams(window.location.search).get('name');
+    const artistName = artistParam ? decodeURIComponent(artistParam).trim() : '';
 
     const artistNameElem = document.getElementById('artistName');
     const artistAvatarElem = document.getElementById('artistAvatar');
@@ -176,43 +181,58 @@
     async function loadArtistPage() {
       if (!artistName) {
         artistNameElem.textContent = 'Unknown Artist';
+        artistAvatarElem.style.display = 'none';
+        artistBioElem.textContent = '';
+        artistTracksElem.innerHTML = '<li>No artist specified.</li>';
         return;
       }
 
       artistNameElem.textContent = escapeHTML(artistName);
 
+      // Fetch artist avatar and bio - get first matching record (using ilike with wildcards)
       const { data: artistData, error: artistError } = await supabase
         .from('music_submissions')
         .select('avatar_url, bio')
-        .ilike('artist', artistName)
+        .ilike('artist', `%${artistName}%`)
         .limit(1)
         .single();
 
-      if (artistError) console.error('Artist fetch error:', artistError);
-
-      if (artistData?.avatar_url) {
-        artistAvatarElem.src = artistData.avatar_url;
-        artistAvatarElem.alt = `Avatar of ${artistName}`;
-      } else {
+      if (artistError) {
+        console.error('Artist fetch error:', artistError);
         artistAvatarElem.style.display = 'none';
+        artistBioElem.textContent = 'Artist information unavailable.';
+      } else {
+        if (artistData?.avatar_url) {
+          artistAvatarElem.src = artistData.avatar_url;
+          artistAvatarElem.alt = `Avatar of ${artistName}`;
+          artistAvatarElem.style.display = 'block';
+        } else {
+          artistAvatarElem.style.display = 'none';
+          artistAvatarElem.alt = '';
+        }
+        artistBioElem.textContent = artistData?.bio ? escapeHTML(artistData.bio) : 'This artist has not added a bio yet.';
       }
 
-      artistBioElem.textContent = artistData?.bio || 'This artist has not added a bio yet.';
-
+      // Fetch all tracks for the artist
       const { data: tracks, error: tracksError } = await supabase
         .from('music_submissions')
         .select('*')
-        .ilike('artist', artistName)
+        .ilike('artist', `%${artistName}%`)
         .eq('type', 'music')
         .order('created_at', { ascending: false });
 
-      if (tracksError) console.error('Tracks fetch error:', tracksError);
+      if (tracksError) {
+        console.error('Tracks fetch error:', tracksError);
+        artistTracksElem.innerHTML = '<li>Error loading tracks.</li>';
+        return;
+      }
 
       if (!tracks || tracks.length === 0) {
         artistTracksElem.innerHTML = '<li>No tracks found.</li>';
         return;
       }
 
+      artistTracksElem.innerHTML = '';
       tracks.forEach(track => {
         const li = document.createElement('li');
         li.innerHTML = `

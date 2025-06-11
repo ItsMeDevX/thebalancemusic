@@ -489,8 +489,8 @@
         return;
       }
 
-      // Use GitHub main name or fallback to full_name or username
-      const artist = session.user.user_metadata?.name || session.user.user_metadata?.full_name || session.user.user_metadata?.username || 'Unknown Artist';
+      // Use GitHub username ONLY for artist
+      const artist = session.user.user_metadata?.username || 'Unknown Artist';
 
       // Get avatar URL from user metadata (empty string if none)
       const avatar_url = session.user.user_metadata?.avatar_url || '';
@@ -526,8 +526,8 @@
         return;
       }
 
-      // Use GitHub main name or fallback to full_name or username
-      const artist = session.user.user_metadata?.name || session.user.user_metadata?.full_name || session.user.user_metadata?.username || 'Unknown Artist';
+      // Use GitHub username ONLY for artist filter
+      const artist = session.user.user_metadata?.username || 'Unknown Artist';
 
       const { data, error } = await supabase
         .from('music_submissions')

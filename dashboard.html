@@ -272,17 +272,36 @@
       padding: 1.5rem;
       text-align: center;
       border-bottom: 2px solid #39ff14;
+      position: relative;
     }
     header h1 {
       margin: 0;
       font-size: 2rem;
       color: #39ff14;
     }
+    header .home-button {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: #39ff14;
+      color: #0f0f0f;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: 'Orbitron', sans-serif;
+    }
     .tabs {
       display: flex;
       justify-content: center;
       gap: 1rem;
       padding: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+      position: relative;
     }
     .tab-button {
       padding: 0.5rem 1rem;
@@ -293,6 +312,23 @@
       cursor: pointer;
     }
     .tab-button.active {
+      background-color: #39ff14;
+      color: #0f0f0f;
+    }
+    .submission-terms-link {
+      position: absolute;
+      right: 1rem;
+      font-family: 'Orbitron', sans-serif;
+      color: #39ff14;
+      text-decoration: none;
+      font-weight: bold;
+      border: 1px solid #39ff14;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      background-color: #333;
+      transition: background-color 0.3s ease;
+    }
+    .submission-terms-link:hover {
       background-color: #39ff14;
       color: #0f0f0f;
     }
@@ -348,11 +384,24 @@
         display: block;
         overflow-x: auto;
       }
+      header .home-button,
+      .submission-terms-link {
+        position: static;
+        transform: none;
+        margin: 0.5rem auto;
+        display: block;
+        text-align: center;
+        width: fit-content;
+      }
+      .tabs {
+        justify-content: center;
+      }
     }
   </style>
 </head>
 <body>
   <header>
+    <a href="index.html" class="home-button" aria-label="Go to home page">Home</a>
     <h1>The Balance Music - Submissions</h1>
   </header>
 
@@ -361,6 +410,7 @@
     <button class="tab-button" data-type="sample">Samples</button>
     <button class="tab-button" data-type="sound_fx">Sound FX</button>
     <button class="tab-button" data-type="music">Music</button>
+    <a href="submission-terms.html" class="submission-terms-link" aria-label="View submission terms">Submission Terms</a>
   </div>
 
   <form id="musicForm">
@@ -438,8 +488,8 @@
         return;
       }
 
-      // Use artist name from full_name only (no fallback)
-      const artist = session.user.user_metadata?.full_name || 'Unknown Artist';
+      // Use full_name or fallback to username, never email
+      const artist = session.user.user_metadata?.full_name || session.user.user_metadata?.username || 'Unknown Artist';
 
       const formData = new FormData(form);
       const entry = {
@@ -471,8 +521,8 @@
         return;
       }
 
-      // Use artist name from full_name only (no fallback)
-      const artist = session.user.user_metadata?.full_name || 'Unknown Artist';
+      // Use full_name or fallback to username, never email
+      const artist = session.user.user_metadata?.full_name || session.user.user_metadata?.username || 'Unknown Artist';
 
       const { data, error } = await supabase
         .from('music_submissions')
@@ -518,7 +568,6 @@
       });
     }
 
-    // Load submissions on page load
     window.addEventListener('load', loadSubmissions);
   </script>
 </body>

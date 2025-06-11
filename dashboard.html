@@ -438,8 +438,8 @@
         return;
       }
 
-      // Use artist name from user metadata or email fallback
-      const artist = session.user.user_metadata?.username || session.user.email || 'Unknown Artist';
+      // Use artist name from full_name only (no fallback)
+      const artist = session.user.user_metadata?.full_name || 'Unknown Artist';
 
       const formData = new FormData(form);
       const entry = {
@@ -471,7 +471,8 @@
         return;
       }
 
-      const artist = session.user.user_metadata?.username || session.user.email || 'Unknown Artist';
+      // Use artist name from full_name only (no fallback)
+      const artist = session.user.user_metadata?.full_name || 'Unknown Artist';
 
       const { data, error } = await supabase
         .from('music_submissions')

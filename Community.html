@@ -634,23 +634,40 @@
     </ul>
     
   </section>
-  <title> Chat - The Balance</title>
+  <title>Chat - The Balance</title>
+  <style>
+    /* [Your existing CSS remains unchanged] */
+  </style>
+</head>
+<body>
 
-  <h1>Music Chat</h1>
+  <main>
+    <section>
+      <h2>Welcome to The Balance Community</h2>
+      <p>Connect with other artists and music lovers! Share your thoughts, ask questions, or just hang out in our live chat below.</p>
+    </section>
 
-  <div id="game-id-container">
-    <label id="game-id-label" for="game-id">Game ID:</label>
-    <input type="text" id="game-id" value="TheBalance" readonly />
-  </div>
+    <section>
+      <h3>Community Guidelines</h3>
+      <ul>
+        <li>Respect all members.</li>
+        <li>No spamming or self-promotion.</li>
+        <li>Keep discussions music-focused.</li>
+        <li>Report any inappropriate behavior to moderators.</li>
+      </ul>
+    </section>
 
-  <div id="messages">
-    <p>Loading messages...</p>
-  </div>
+    <h1>Music Chat</h1>
 
-  <form id="chat-form">
-    <input type="text" id="msg-input" placeholder="Type a message..." required />
-    <button type="submit">Send</button>
-  </form>
+    <div id="messages">
+      <p>Loading messages...</p>
+    </div>
+
+    <form id="chat-form">
+      <input type="text" id="msg-input" placeholder="Type a message..." required />
+      <button type="submit">Send</button>
+    </form>
+  </main>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
@@ -662,7 +679,6 @@
     const messagesDiv = document.getElementById('messages');
     const form = document.getElementById('chat-form');
     const msgInput = document.getElementById('msg-input');
-    const gameIdInput = document.getElementById('game-id');
 
     async function getUserGitHubUsername() {
       const { data: { session } } = await supabase.auth.getSession();
@@ -674,13 +690,9 @@
     }
 
     async function loadMessages() {
-      const gameId = gameIdInput.value.trim();
-      if (!gameId) return;
-
       const { data, error } = await supabase
         .from('messages')
         .select('*')
-        .eq('game_id', gameId)
         .order('created_at', { ascending: true });
 
       if (error) {
@@ -705,14 +717,12 @@
     form.addEventListener('submit', async e => {
       e.preventDefault();
       const msg = msgInput.value.trim();
-      const gameId = gameIdInput.value.trim();
-
-      if (!msg || !gameId) return;
+      if (!msg) return;
 
       const githubUsername = await getUserGitHubUsername();
       const { error } = await supabase
         .from('messages')
-        .insert([{ content: msg, github_username: githubUsername, game_id: gameId }]);
+        .insert([{ content: msg, github_username: githubUsername }]);
 
       if (error) {
         alert('Failed to send message: ' + error.message);
@@ -734,5 +744,6 @@
     // Initial load
     loadMessages();
   </script>
+
 </body>
 </html>

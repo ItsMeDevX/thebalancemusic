@@ -59,6 +59,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Auth Bar Example</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script> <!-- Lucide Icons -->
 </head>
 <body>
 
@@ -92,7 +93,7 @@
     background-color: #1a1a1a;
     border-radius: 8px;
     box-shadow: 0 4px 12px #00ffffcc;
-    min-width: 150px;
+    min-width: 180px;
     display: none;
     flex-direction: column;
     z-index: 1000;
@@ -106,6 +107,9 @@
     font-weight: bold;
     font-family: 'Orbitron', sans-serif;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     transition: background-color 0.2s, color 0.2s;
   }
   #user-dropdown button:hover {
@@ -166,19 +170,8 @@
     authBar.innerHTML = '';
 
     if (session?.user) {
-      // Logged in — show Dashboard + user info + dropdown with logout
-      const dashboardBtn = document.createElement('button');
-      dashboardBtn.textContent = 'Dashboard';
-      dashboardBtn.className = 'auth-btn';
-      dashboardBtn.addEventListener('click', () => {
-        window.location.href = 'dashboard.html';
-      });
-      authBar.appendChild(dashboardBtn);
-
       const userMetadata = session.user.user_metadata || {};
-      // Try preferred_username, then username, then email, then fallback
       const name = userMetadata.preferred_username || userMetadata.username || session.user.email || 'GitHub User';
-
       const avatar = userMetadata.avatar_url || null;
 
       const userInfo = document.createElement('div');
@@ -198,15 +191,28 @@
 
       const dropdown = document.createElement('div');
       dropdown.id = 'user-dropdown';
-      dropdown.style.display = 'none';
-      dropdown.style.flexDirection = 'column';
 
-      const logoutBtn = document.createElement('button');
-      logoutBtn.textContent = 'Logout';
-      logoutBtn.onclick = async () => {
+      // Create a button with icon and label
+      const createIconButton = (iconName, label, onClick) => {
+        const btn = document.createElement('button');
+        btn.innerHTML = `<i data-lucide="${iconName}" style="width: 20px; height: 20px;"></i>${label}`;
+        btn.addEventListener('click', onClick);
+        return btn;
+      };
+
+      const dashboardBtn = createIconButton('layout-dashboard', 'Dashboard', () => {
+        window.location.href = 'dashboard.html';
+      });
+      const profileBtn = createIconButton('user-circle', 'Profile Page', () => {
+        window.location.href = 'profile.html';
+      });
+      const logoutBtn = createIconButton('log-out', 'Logout', async () => {
         await supabase.auth.signOut();
         window.location.reload();
-      };
+      });
+
+      dropdown.appendChild(dashboardBtn);
+      dropdown.appendChild(profileBtn);
       dropdown.appendChild(logoutBtn);
 
       authBar.appendChild(dropdown);
@@ -219,16 +225,8 @@
         }
       });
 
+      lucide.createIcons(); // Render all icons
     } else {
-      // Logged out — show Community + Login with GitHub
-      const communityBtn = document.createElement('button');
-      communityBtn.textContent = 'Community';
-      communityBtn.className = 'auth-btn';
-      communityBtn.addEventListener('click', () => {
-        window.location.href = 'https://thebalancemusic.com/Community.html';
-      });
-      authBar.appendChild(communityBtn);
-
       const loginBtn = document.createElement('button');
       loginBtn.textContent = 'Login with GitHub';
       loginBtn.className = 'auth-btn';
@@ -244,10 +242,10 @@
 
   renderAuthBar();
 </script>
-  
-<!-- 🔽 Your Main Page Content Goes Below This Line -->
-<main style="padding-top: 120px;">
 
+<!-- 🔽 Your Main Page Content -->
+<main style="padding-top: 120px;">
+  <h1 style="font-family: 'Orbitron', sans-serif; color: #fff; padding-left: 20px;">Welcome to The Balance</h1>
 </main>
 
 </body>

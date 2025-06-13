@@ -245,7 +245,16 @@
     }
   }
 
-  renderAuthBar();
+  async function init() {
+    try {
+      await supabase.auth.getSessionFromUrl();
+    } catch (error) {
+      console.error('Error handling OAuth redirect:', error);
+    }
+    await renderAuthBar();
+  }
+
+  init();
 </script>
 
 </body>

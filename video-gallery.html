@@ -58,7 +58,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Balance - Auth Bar</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import * as lucide from "https://unpkg.com/lucide@latest/dist/esm/lucide.js";
+    window.lucide = lucide;
+  </script>
   <style>
     body {
       margin: 0;
@@ -153,7 +156,6 @@
 </div>
 
 <main style="padding-top: 120px;">
-  <!-- Your video gallery content goes here -->
   <h1 style="text-align: center;">Video Gallery</h1>
 </main>
 
@@ -165,11 +167,9 @@
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
   );
 
-  // Handle OAuth redirect
   const { error } = await supabase.auth.getSessionFromUrl();
   if (error) console.error('OAuth error:', error.message);
 
-  // Clean the URL
   if (window.location.hash.includes('access_token')) {
     window.history.replaceState({}, document.title, window.location.pathname);
   }

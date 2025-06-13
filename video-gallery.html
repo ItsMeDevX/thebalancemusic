@@ -153,6 +153,8 @@
 </div>
 
 <main style="padding-top: 120px;">
+  <!-- Your video gallery content goes here -->
+  <h1 style="text-align: center;">Video Gallery</h1>
 </main>
 
 <script type="module">
@@ -162,6 +164,15 @@
     'https://tpqsceyxdpgerjjiydmy.supabase.co',
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
   );
+
+  // Handle OAuth redirect
+  const { error } = await supabase.auth.getSessionFromUrl();
+  if (error) console.error('OAuth error:', error.message);
+
+  // Clean the URL
+  if (window.location.hash.includes('access_token')) {
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
 
   const authBar = document.getElementById('auth-bar');
 

@@ -614,7 +614,7 @@
   <!-- Input and Button -->
   <div style="margin-top: 20px;">
     <input type="text" id="stream-url" placeholder="Enter YouTube/Twitch/SoundCloud URL or Video ID" style="padding: 12px; width: 70%; border-radius: 5px; border: 1px solid #ccc; font-size: 16px; max-width: 600px; margin-bottom: 10px;">
-    <button onclick="embedStream()" style="padding: 12px 20px; margin-left: 10px; background-color: #007BFF; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Embed Stream</button>
+    <button id="embed-btn" style="padding: 12px 20px; margin-left: 10px; background-color: #007BFF; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Embed Stream</button>
   </div>
 
   <!-- Error Message -->
@@ -631,8 +631,11 @@
 
   // Supabase client setup (consider using environment variables for security)
   const supabaseUrl = 'https://tpqsceyxdpgerjjiydmy.supabase.co';
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'; // Replace with environment variable
+  const supabaseKey = 'your_supabase_key'; // Replace with environment variable
   const supabase = createClient(supabaseUrl, supabaseKey);
+
+  // Add event listener to button to trigger embedStream
+  document.getElementById('embed-btn').addEventListener('click', embedStream);
 
   async function embedStream() {
     const url = document.getElementById('stream-url').value.trim();

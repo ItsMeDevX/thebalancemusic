@@ -703,7 +703,7 @@
     // Save the stream data into the database
     await saveStreamToDatabase(url, platform, title, userId);
     
-    // After adding the stream, reload the list of streams (including the new one)
+    // Reload the list of streams (including the new one)
     loadExistingStreams(); 
   }
 
@@ -780,7 +780,7 @@
   }
 
   // Load streams when the page loads
-  window.onload = loadExistingStreams;
+  window.addEventListener('DOMContentLoaded', loadExistingStreams);
 </script>
     
     <h1>Music Chat</h1>

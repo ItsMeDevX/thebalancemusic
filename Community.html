@@ -683,22 +683,22 @@
 
     // Save the stream info to the database
     await saveStream(url);
-    
+
     // Clear the input field after adding the stream
     document.getElementById('stream-url').value = '';
   }
 
   // Function to save stream data to Supabase
   async function saveStream(url) {
-    const platform = getPlatform(url); // Get the platform (YouTube, Twitch, SoundCloud)
     const { error } = await supabase
       .from('streams')
-      .insert([{
-        url: url,
-        platform: platform,
-        title: "Untitled Stream", // You can fetch the title dynamically if needed
-        user_id: 'defaultUserId' // Replace this with the actual user_id if needed
-      }]);
+      .insert([
+        { 
+          url: url, 
+          platform: getPlatform(url),
+          title: "Untitled Stream", // You can fetch the title dynamically or add more fields as needed
+        }
+      ]);
 
     if (error) {
       console.error("Error saving stream:", error);
@@ -746,54 +746,80 @@
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY';
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  // Listen for new messages
-  const messagesContainer = document.getElementById('messages');
+  const messagesDiv = document.getElementById('messages');
+  const form = document.getElementById('chat-form');
+  const msgInput = document.getElementById('msg-input');
 
-  async function getMessages() {
-    const { data: messages, error } = await supabase
+  async function getUserGitHubUsername() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user) {
+      const { user_metadata } = session.user;
+      return user_metadata.full_name || 'GitHub User';
+    }
+    return 'Guest';
+  }
+
+  // Convert URLs into clickable links
+  const linkifyText = (text) => {
+    const urlPattern = /(https?:\/\/[^\s]+)/g;
+    return text.replace(urlPattern, '<a href="$1" target="_blank" style="color: #007BFF;">$1</a>');
+  };
+
+  async function loadMessages() {
+    const { data, error } = await supabase
       .from('messages')
       .select('*')
       .order('created_at', { ascending: true });
 
     if (error) {
-      console.error('Error fetching messages:', error);
+      messagesDiv.innerHTML = <p style="color:red;">Error loading messages: ${error.message}</p>;
+      console.error(error);
       return;
     }
 
-    messagesContainer.innerHTML = '';
-    messages.forEach(msg => {
-      const messageElement = document.createElement('p');
-      messageElement.textContent = `${msg.username}: ${msg.content}`;
-      messagesContainer.appendChild(messageElement);
-    });
+    if (!data.length) {
+      messagesDiv.innerHTML = '<p style="color:#888; text-align: center;">No messages yet. Be the first to start the conversation!</p>';
+      return;
+    }
 
-    // Scroll to the bottom of the messages container
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    messagesDiv.innerHTML = data.map(m => 
+      <div style="margin-bottom: 10px; color: #ddd;">
+        <strong style="color: #ff7d7d;">${m.github_username || 'Guest'}:</strong> ${linkifyText(m.content)}
+      </div>
+    ).join('');
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
   }
 
-  getMessages(); // Fetch initial messages
-
-  // Submit message
-  const chatForm = document.getElementById('chat-form');
-  const msgInput = document.getElementById('msg-input');
-
-  chatForm.addEventListener('submit', async (e) => {
+  form.addEventListener('submit', async e => {
     e.preventDefault();
-    const messageContent = msgInput.value.trim();
-    if (!messageContent) return;
+    const msg = msgInput.value.trim();
+    if (!msg) return;
+
+    const githubUsername = await getUserGitHubUsername();
+
+    // Check if the message contains URLs and convert them to links
+    const linkifiedMessage = linkifyText(msg);
 
     const { error } = await supabase
       .from('messages')
-      .insert([{ content: messageContent, username: 'User1' }]); // Replace 'User1' with actual user
+      .insert([{ content: linkifiedMessage, github_username: githubUsername }]);
+
 
     if (error) {
-      console.error('Error sending message:', error);
+      alert('Failed to send message: ' + error.message);
+      console.error(error);
       return;
     }
 
-    msgInput.value = ''; // Clear the input
-    getMessages(); // Refresh the messages
+    msgInput.value = '';
+    loadMessages();
   });
+
+  supabase.channel('messages')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, loadMessages)
+    .subscribe();
+
+  loadMessages();
 </script>
 
 </body>

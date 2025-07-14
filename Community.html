@@ -624,7 +624,7 @@
   <p id="error-message" style="color: red; font-size: 1rem; display: none;"></p>
 
   <!-- Embedded Stream Display Area -->
-  <div id="embed-container" style="margin-top: 20px; max-width: 100%; height: 500px;">
+  <div id="embed-container" style="margin-top: 20px; max-width: 100%; height: 500px; overflow: hidden;">
     <!-- Embedded iframes will appear here -->
   </div>
 </div>
@@ -651,13 +651,13 @@
     if (url.includes('youtube.com') || url.includes('youtu.be')) {
       const videoId = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/live/')[1] || url.split('/')[url.split('/').length - 1];
       iframeCode = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" frameborder="0" 
-                    allow="autoplay; encrypted-media" allowfullscreen style="width: 100%; height: 500px;"></iframe>`;
+                    allow="autoplay; encrypted-media" allowfullscreen style="width: 100%; height: 100%;"></iframe>`;
     }
     // Twitch URL format: https://www.twitch.tv/CHANNEL_NAME
     else if (url.includes('twitch.tv')) {
       const channelName = url.split('twitch.tv/')[1];
       iframeCode = `<iframe src="https://player.twitch.tv/?channel=${channelName}&autoplay=true" frameborder="0" 
-                    allowfullscreen style="width: 100%; height: 500px;"></iframe>`;
+                    allowfullscreen style="width: 100%; height: 100%;"></iframe>`;
     }
     // SoundCloud URL format: https://soundcloud.com/USER/track
     else if (url.includes('soundcloud.com')) {
@@ -672,7 +672,7 @@
     }
 
     // Append the new iframe to the container (instead of replacing it)
-    embedContainer.innerHTML += `<div style="margin-bottom: 20px;">${iframeCode}</div>`;
+    embedContainer.innerHTML += `<div style="margin-bottom: 20px; height: 500px; overflow: hidden;">${iframeCode}</div>`;
     
     // Clear the input field after adding the stream
     document.getElementById('stream-url').value = '';
@@ -680,19 +680,24 @@
 </script>
 
 <!-- Music Chat Section -->
-<div class="message-container">
-  <h1>Music Chat</h1>
-
-  <div id="messages">
-    <p>Loading messages...</p>
+<div class="message-container" style="display: flex; justify-content: space-between; margin-top: 40px; gap: 20px;">
+  <div style="flex: 2; min-width: 300px;">
+    <h1>Music Chat</h1>
+    <div id="messages" style="height: 400px; overflow-y: scroll; padding: 10px; border: 1px solid #ccc; background-color: #f9f9f9;">
+      <p>Loading messages...</p>
+    </div>
+    <form id="chat-form" style="margin-top: 10px;">
+      <div class="chat-input-container" style="display: flex; gap: 10px;">
+        <input type="text" id="msg-input" placeholder="Type a message..." required style="flex: 1; padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc;" />
+        <button type="submit" style="padding: 10px 15px; background-color: #007BFF; color: white; border: none; border-radius: 5px; font-size: 16px;">Send</button>
+      </div>
+    </form>
   </div>
 
-  <form id="chat-form">
-    <div class="chat-input-container">
-      <input type="text" id="msg-input" placeholder="Type a message..." required />
-      <button type="submit">Send</button>
-    </div>
-  </form>
+  <!-- Optional: If you want the chat to appear beside the video, keep the chat section in the flex layout -->
+  <div style="flex: 3; min-width: 600px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+    <!-- Additional content for the video or related content can go here -->
+  </div>
 </div>
 
 <script type="module">

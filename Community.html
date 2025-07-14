@@ -722,6 +722,12 @@
     return 'Guest';
   }
 
+  // Convert URLs into clickable links
+  const linkifyText = (text) => {
+    const urlPattern = /(https?:\/\/[^\s]+)/g;
+    return text.replace(urlPattern, '<a href="$1" target="_blank" style="color: #007BFF;">$1</a>');
+  };
+
   async function loadMessages() {
     const { data, error } = await supabase
       .from('messages')
@@ -741,7 +747,7 @@
 
     messagesDiv.innerHTML = data.map(m => `
       <div style="margin-bottom: 10px; color: #ddd;">
-        <strong style="color: #ff7d7d;">${m.github_username || 'Guest'}:</strong> ${m.content}
+        <strong style="color: #ff7d7d;">${m.github_username || 'Guest'}:</strong> ${linkifyText(m.content)}
       </div>
     `).join('');
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -753,9 +759,13 @@
     if (!msg) return;
 
     const githubUsername = await getUserGitHubUsername();
+
+    // Check if the message contains URLs and convert them to links
+    const linkifiedMessage = linkifyText(msg);
+
     const { error } = await supabase
       .from('messages')
-      .insert([{ content: msg, github_username: githubUsername }]);
+      .insert([{ content: linkifiedMessage, github_username: githubUsername }]);
 
     if (error) {
       alert('Failed to send message: ' + error.message);

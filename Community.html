@@ -702,6 +702,9 @@
 
     // Save the stream data into the database
     await saveStreamToDatabase(url, platform, title, userId);
+    
+    // After adding the stream, reload the list of streams (including the new one)
+    loadExistingStreams(); 
   }
 
   // Helper functions to extract IDs

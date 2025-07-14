@@ -702,7 +702,7 @@
 
     // Save the stream data into the database
     await saveStreamToDatabase(url, platform, title, userId);
-    
+
     // Reload the list of streams (including the new one)
     loadExistingStreams(); 
   }
@@ -752,8 +752,7 @@
   async function loadExistingStreams() {
     const { data, error } = await supabase
       .from('streams')
-      .select('*')
-      .order('created_at', { ascending: false }); // Order by latest stream
+      .select('*');
 
     if (error) {
       console.error('Error fetching stream data:', error);

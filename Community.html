@@ -654,7 +654,12 @@
     let iframeCode = '';
     let platform = '';
     let title = 'Untitled Stream'; // Default title
-    const userId = 'user123'; // Replace with actual user authentication
+    const userId = supabase.auth.user() ? supabase.auth.user().id : null; // Get user ID from Supabase auth
+
+    if (!userId) {
+      showError("You need to be logged in to save streams.");
+      return;
+    }
 
     // YouTube URL format (both regular and live streams)
     if (url.includes('youtube.com') || url.includes('youtu.be')) {
@@ -702,9 +707,9 @@
 
     // Save the stream data into the database
     await saveStreamToDatabase(url, platform, title, userId);
-    
+
     // Reload the list of streams (including the new one)
-    loadExistingStreams(); 
+    loadExistingStreams();
   }
 
   // Helper functions to extract IDs

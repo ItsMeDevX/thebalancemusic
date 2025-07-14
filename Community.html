@@ -629,12 +629,12 @@
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-  // Supabase client setup (consider using environment variables for security)
+  // Supabase client setup
   const supabaseUrl = 'https://tpqsceyxdpgerjjiydmy.supabase.co';
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'; // Replace with environment variable
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY';
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  // Add event listener to button to trigger embedStream
+  // Add event listener to button
   document.getElementById('embed-btn').addEventListener('click', embedStream);
 
   async function embedStream() {
@@ -647,15 +647,14 @@
 
     // Validate URL input
     if (!url) {
-      errorMessage.textContent = "Please enter a URL or Video ID.";
-      errorMessage.style.display = 'block';
+      showError("Please enter a URL or Video ID.");
       return;
     }
 
     let iframeCode = '';
     let platform = '';
-    let title = 'Untitled Stream'; // Default title if not extracted
-    const userId = 'user123'; // Replace with actual user authentication if needed
+    let title = 'Untitled Stream'; // Default title
+    const userId = 'user123'; // Replace with actual user authentication
 
     // YouTube URL format (both regular and live streams)
     if (url.includes('youtube.com') || url.includes('youtu.be')) {
@@ -717,7 +716,7 @@
   }
 
   function extractSoundCloudTrackId(url) {
-    const match = url.match(/soundcloud\.com\/([^\/]+\/[^\/]+)/);
+    const match = url.match(/soundcloud\.com\/([a-zA-Z0-9-_]+\/[a-zA-Z0-9-_]+)/);
     return match ? match[1] : null;
   }
 

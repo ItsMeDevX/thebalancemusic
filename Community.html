@@ -626,84 +626,123 @@
   </div>
 </div>
 
-<script>
- async function embedStream() {
-  const url = document.getElementById('stream-url').value.trim();
-  const embedContainer = document.getElementById('embed-container');
-  const errorMessage = document.getElementById('error-message');
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-  // Clear previous error
-  errorMessage.style.display = 'none';
+  // Supabase client setup (consider using environment variables for security)
+  const supabaseUrl = 'https://tpqsceyxdpgerjjiydmy.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'; // Keep this in environment variables
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
-  // Validate URL input
-  if (!url) {
-    errorMessage.textContent = "Please enter a URL or Video ID.";
-    errorMessage.style.display = 'block';
-    return;
-  }
+  async function embedStream() {
+    const url = document.getElementById('stream-url').value.trim();
+    const embedContainer = document.getElementById('embed-container');
+    const errorMessage = document.getElementById('error-message');
 
-  let iframeCode = '';
-  let platform = '';
-  let title = 'Untitled Stream'; // You can fetch title dynamically if available.
-  const userId = 'user123'; // Replace with the current user's ID, if using user authentication.
+    // Clear previous error
+    errorMessage.style.display = 'none';
 
-  // YouTube URL format (both regular and live streams)
-  if (url.includes('youtube.com') || url.includes('youtu.be')) {
-    const videoId = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/live/')[1] || url.split('/')[url.split('/').length - 1];
-    iframeCode = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="width: 100%; height: 500px;"></iframe>`;
-    platform = 'YouTube';
-    title = `YouTube Video - ${videoId}`; // You can fetch title dynamically using the YouTube API, but for now, it's static.
-  }
-  // Twitch URL format: https://www.twitch.tv/CHANNEL_NAME
-  else if (url.includes('twitch.tv')) {
-    const channelName = url.split('twitch.tv/')[1];
-    iframeCode = `<iframe src="https://player.twitch.tv/?channel=${channelName}&autoplay=true" frameborder="0" allowfullscreen style="width: 100%; height: 500px;"></iframe>`;
-    platform = 'Twitch';
-    title = `Twitch Stream - ${channelName}`; // You can dynamically fetch the title by using Twitch API.
-  }
-  // SoundCloud URL format: https://soundcloud.com/USER/track
-  else if (url.includes('soundcloud.com')) {
-    const trackId = url.split('soundcloud.com/')[1];
-    iframeCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}&auto_play=true"></iframe>`;
-    platform = 'SoundCloud';
-    title = `SoundCloud Track - ${trackId}`; // Can be fetched dynamically using the SoundCloud API.
-  }
-  else {
-    errorMessage.textContent = "Unsupported URL format. Please provide a valid YouTube, Twitch, or SoundCloud URL.";
-    errorMessage.style.display = 'block';
-    return;
-  }
+    // Validate URL input
+    if (!url) {
+      errorMessage.textContent = "Please enter a URL or Video ID.";
+      errorMessage.style.display = 'block';
+      return;
+    }
 
-  // Append the new iframe to the container (instead of replacing it)
-  embedContainer.innerHTML += `<div style="margin-bottom: 20px;">${iframeCode}</div>`;
+    let iframeCode = '';
+    let platform = '';
+    let title = 'Untitled Stream'; // You can fetch title dynamically if available.
+    const userId = 'user123'; // Replace with the current user's ID, if using user authentication.
+
+    // YouTube URL format (both regular and live streams)
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+      const videoId = extractYouTubeVideoId(url);
+      if (!videoId) {
+        showError("Invalid YouTube URL.");
+        return;
+      }
+      iframeCode = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="width: 100%; height: 500px;"></iframe>`;
+      platform = 'YouTube';
+      title = `YouTube Video - ${videoId}`;
+    }
+    // Twitch URL format: https://www.twitch.tv/CHANNEL_NAME
+    else if (url.includes('twitch.tv')) {
+      const channelName = extractTwitchChannelName(url);
+      if (!channelName) {
+        showError("Invalid Twitch URL.");
+        return;
+      }
+      iframeCode = `<iframe src="https://player.twitch.tv/?channel=${channelName}&autoplay=true" frameborder="0" allowfullscreen style="width: 100%; height: 500px;"></iframe>`;
+      platform = 'Twitch';
+      title = `Twitch Stream - ${channelName}`;
+    }
+    // SoundCloud URL format: https://soundcloud.com/USER/track
+    else if (url.includes('soundcloud.com')) {
+      const trackId = extractSoundCloudTrackId(url);
+      if (!trackId) {
+        showError("Invalid SoundCloud URL.");
+        return;
+      }
+      iframeCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}&auto_play=true"></iframe>`;
+      platform = 'SoundCloud';
+      title = `SoundCloud Track - ${trackId}`;
+    }
+    else {
+      showError("Unsupported URL format. Please provide a valid YouTube, Twitch, or SoundCloud URL.");
+      return;
+    }
+
+    // Append the new iframe to the container (instead of replacing it)
+    embedContainer.innerHTML += `<div style="margin-bottom: 20px;">${iframeCode}</div>`;
   
-  // Clear the input field after adding the stream
-  document.getElementById('stream-url').value = '';
+    // Clear the input field after adding the stream
+    document.getElementById('stream-url').value = '';
 
-  // Save the stream data into the database
-  await saveStreamToDatabase(url, platform, title, userId);
-}
+    // Save the stream data into the database
+    await saveStreamToDatabase(url, platform, title, userId);
+  }
 
-// Function to save stream data to the database
-async function saveStreamToDatabase(url, platform, title, userId) {
-  const { data, error } = await supabase
-    .from('streams')
-    .insert([
-      {
+  // Helper functions to extract IDs
+  function extractYouTubeVideoId(url) {
+    const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.*\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    return match ? match[1] : null;
+  }
+
+  function extractTwitchChannelName(url) {
+    const match = url.match(/twitch\.tv\/([a-zA-Z0-9_]+)/);
+    return match ? match[1] : null;
+  }
+
+  function extractSoundCloudTrackId(url) {
+    const match = url.match(/soundcloud\.com\/([^\/]+\/[^\/]+)/);
+    return match ? match[1] : null;
+  }
+
+  function showError(message) {
+    const errorMessage = document.getElementById('error-message');
+    errorMessage.textContent = message;
+    errorMessage.style.display = 'block';
+  }
+
+  // Function to save stream data to the database
+  async function saveStreamToDatabase(url, platform, title, userId) {
+    const { data, error } = await supabase
+      .from('streams')
+      .insert([{
         url: url,
         platform: platform,
         title: title,
-        user_id: userId, // Make sure you have the current user's ID here
+        user_id: userId,
         created_at: new Date().toISOString(),
-      }
-    ]);
+      }]);
 
-  if (error) {
-    console.error('Error inserting stream data:', error);
-  } else {
-    console.log('Stream data saved successfully:', data);
+    if (error) {
+      console.error('Error inserting stream data:', error);
+    } else {
+      console.log('Stream data saved successfully:', data);
+    }
   }
-}
+</script>
     
     <h1>Music Chat</h1>
 

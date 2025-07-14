@@ -631,7 +631,7 @@
 
   // Supabase client setup
   const supabaseUrl = 'https://tpqsceyxdpgerjjiydmy.supabase.co';
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'; // Make sure to use your actual key.
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   // Add event listener to button
@@ -709,7 +709,7 @@
 
   // Helper functions to extract IDs
   function extractYouTubeVideoId(url) {
-    const match = url.match(/(?:youtube\.com\/(?:live|watch).*v=|youtu\.be\/|youtube\.com\/live\/)([a-zA-Z0-9_-]{11})(?:\?si=.*)?/);
+    const match = url.match(/(?:youtube\.com\/(?:live|watch).*v=|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:\?si=.*)?/);
     return match ? match[1] : null;
   }
 

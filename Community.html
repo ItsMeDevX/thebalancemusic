@@ -709,7 +709,7 @@
 
   // Helper functions to extract IDs
   function extractYouTubeVideoId(url) {
-    const match = url.match(/(?:youtube\.com\/(?:live|watch).*v=|youtu\.be\/|youtube\.com\/live\/)([a-zA-Z0-9_-]{11})/);
+    const match = url.match(/(?:youtube\.com\/(?:live|watch).*v=|youtu\.be\/|youtube\.com\/live\/)([a-zA-Z0-9_-]{11})(?:\?si=.*)?/);
     return match ? match[1] : null;
   }
 

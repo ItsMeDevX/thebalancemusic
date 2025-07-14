@@ -606,44 +606,54 @@
       </ul>
     </section>
 
-<section>
-  <h2>Live Streaming Area</h2>
-  <p>Click below to join the live stream or share your own live video!</p>
+<!-- Embed Stream Section -->
+<div style="text-align: center; padding: 20px;">
+  <h2>Embed Your Stream (YouTube, Twitch, SoundCloud)</h2>
+  <input type="text" id="stream-url" placeholder="Enter YouTube/Twitch/SoundCloud URL" style="padding: 10px; width: 300px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;">
+  <button onclick="embedStream()" style="padding: 10px 15px; margin-left: 10px; background-color: #007BFF; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Embed Stream</button>
 
-  <!-- Live Stream Box (Twitch Embed) -->
-  <div id="streaming-section">
-    <iframe 
-      src="https://player.twitch.tv/?channel=YOUR_TWITCH_CHANNEL_NAME&autoplay=true" 
-      height="500" 
-      width="100%" 
-      frameborder="0" 
-      allowfullscreen>
-    </iframe>
+  <div id="embed-container" style="margin-top: 20px;">
+    <!-- The embedded iframe will appear here -->
   </div>
-</section>
+</div>
 
-<style>
-  #streaming-section {
-    width: 100%;
-    height: 80vh;
-    max-width: 1200px;
-    margin: 0 auto;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #333;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  }
+<script>
+  function embedStream() {
+    const url = document.getElementById('stream-url').value.trim();
+    const embedContainer = document.getElementById('embed-container');
 
-  #streaming-section iframe {
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-    border: none;
+    // Validate URL
+    if (!url) {
+      alert("Please enter a URL.");
+      return;
+    }
+
+    let iframeCode = '';
+
+    // YouTube URL format: https://www.youtube.com/watch?v=VIDEO_ID
+    if (url.includes('youtube.com/watch')) {
+      const videoId = url.split('v=')[1].split('&')[0];
+      iframeCode = `<iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="width: 100%; height: 500px;"></iframe>`;
+    }
+    // Twitch URL format: https://www.twitch.tv/CHANNEL_NAME
+    else if (url.includes('twitch.tv')) {
+      const channelName = url.split('twitch.tv/')[1];
+      iframeCode = `<iframe src="https://player.twitch.tv/?channel=${channelName}&autoplay=true" frameborder="0" allowfullscreen style="width: 100%; height: 500px;"></iframe>`;
+    }
+    // SoundCloud URL format: https://soundcloud.com/USER/track
+    else if (url.includes('soundcloud.com')) {
+      const trackId = url.split('soundcloud.com/')[1];
+      iframeCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}"></iframe>`;
+    } 
+    else {
+      alert("Unsupported URL format.");
+      return;
+    }
+
+    // Inject the iframe into the page
+    embedContainer.innerHTML = iframeCode;
   }
-</style>
+</script>
     
     <h1>Music Chat</h1>
 

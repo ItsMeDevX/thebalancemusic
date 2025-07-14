@@ -625,7 +625,7 @@
   <p id="error-message" style="color: red; font-size: 1rem; display: none;"></p>
 
   <!-- Embedded Stream Display Area -->
-  <div id="embed-container" style="margin-top: 20px; max-width: 100%; height: 500px;">
+  <div id="embed-container" style="margin-top: 20px; max-width: 100%; height: auto;">
     <!-- Embedded iframes will appear here -->
   </div>
 </div>
@@ -641,6 +641,7 @@
   // Add event listener to button
   document.getElementById('embed-btn').addEventListener('click', embedStream);
 
+  // Function to embed the stream
   async function embedStream() {
     const url = document.getElementById('stream-url').value.trim();
     const embedContainer = document.getElementById('embed-container');

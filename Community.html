@@ -745,6 +745,37 @@
       console.log('Stream data saved successfully:', data);
     }
   }
+
+  // Function to load and display existing streams from the database
+  async function loadExistingStreams() {
+    const { data, error } = await supabase
+      .from('streams')
+      .select('*');
+
+    if (error) {
+      console.error('Error fetching stream data:', error);
+      return;
+    }
+
+    const embedContainer = document.getElementById('embed-container');
+
+    // Loop through the streams and add them to the embed container
+    data.forEach(stream => {
+      let iframeCode = '';
+      if (stream.platform === 'YouTube') {
+        const videoId = extractYouTubeVideoId(stream.url);
+        iframeCode = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="width: 100%; height: 500px;"></iframe>`;
+      } else if (stream.platform === 'Twitch') {
+        iframeCode = `<iframe src="https://player.twitch.tv/?channel=${stream.title.split(' - ')[1]}&autoplay=true" frameborder="0" allowfullscreen style="width: 100%; height: 500px;"></iframe>`;
+      } else if (stream.platform === 'SoundCloud') {
+        iframeCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${stream.title.split(' - ')[1]}&auto_play=true"></iframe>`;
+      }
+      embedContainer.innerHTML += `<div style="margin-bottom: 20px;">${iframeCode}</div>`;
+    });
+  }
+
+  // Load streams when the page loads
+  window.onload = loadExistingStreams;
 </script>
     
     <h1>Music Chat</h1>

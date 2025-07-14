@@ -622,7 +622,7 @@
 
   <!-- Embedded Stream Display Area -->
   <div id="embed-container" style="margin-top: 20px; max-width: 100%; height: 500px;">
-    <!-- Embedded iframe will appear here -->
+    <!-- Embedded iframes will appear here -->
   </div>
 </div>
 
@@ -632,9 +632,8 @@
     const embedContainer = document.getElementById('embed-container');
     const errorMessage = document.getElementById('error-message');
 
-    // Clear previous error and embedded content
+    // Clear previous error
     errorMessage.style.display = 'none';
-    embedContainer.innerHTML = '';
 
     // Validate URL input
     if (!url) {
@@ -666,8 +665,11 @@
       return;
     }
 
-    // Inject the iframe into the page
-    embedContainer.innerHTML = iframeCode;
+    // Append the new iframe to the container (instead of replacing it)
+    embedContainer.innerHTML += `<div style="margin-bottom: 20px;">${iframeCode}</div>`;
+    
+    // Clear the input field after adding the stream
+    document.getElementById('stream-url').value = '';
   }
 </script>
     

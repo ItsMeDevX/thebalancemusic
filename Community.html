@@ -629,9 +629,9 @@
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-  // Secure Supabase client setup
-  const supabaseUrl = 'https://tpqsceyxdpgerjjiydmy.supabase.co'; // Replace with environment variable in production
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'; // Never expose this in production! Use environment variables.
+  // Supabase client setup (consider using environment variables for security)
+  const supabaseUrl = 'https://tpqsceyxdpgerjjiydmy.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'; // Use environment variable
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   async function embedStream() {
@@ -704,7 +704,7 @@
 
   // Helper functions to extract IDs
   function extractYouTubeVideoId(url) {
-    const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.*\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    const match = url.match(/(?:youtube\.com\/(?:live|watch).*v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
     return match ? match[1] : null;
   }
 

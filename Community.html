@@ -613,8 +613,12 @@
   
   <!-- Input and Button -->
   <div style="margin-top: 20px;">
-    <input type="text" id="stream-url" placeholder="Enter YouTube/Twitch/SoundCloud URL or Video ID" style="padding: 12px; width: 70%; border-radius: 5px; border: 1px solid #ccc; font-size: 16px; max-width: 600px; margin-bottom: 10px;">
-    <button id="embed-btn" style="padding: 12px 20px; margin-left: 10px; background-color: #007BFF; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Embed Stream</button>
+    <input type="text" id="stream-url" placeholder="Enter YouTube/Twitch/SoundCloud URL or Video ID" 
+           style="padding: 12px; width: 70%; border-radius: 5px; border: 1px solid #ccc; font-size: 16px; max-width: 600px; margin-bottom: 10px;">
+    <button id="embed-btn" 
+            style="padding: 12px 20px; margin-left: 10px; background-color: #007BFF; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">
+            Embed Stream
+    </button>
   </div>
 
   <!-- Error Message -->
@@ -631,7 +635,7 @@
 
   // Supabase client setup
   const supabaseUrl = 'https://tpqsceyxdpgerjjiydmy.supabase.co';
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'; // Make sure to use your actual key.
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'; // Use your actual key
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   // Add event listener to button
@@ -651,60 +655,81 @@
       return;
     }
 
-    let iframeCode = '';
-    let platform = '';
-    let title = 'Untitled Stream'; // Default title
-    const userId = 'user123'; // Replace with actual user authentication
+    let { iframeCode, platform, title } = validateStreamURL(url);
 
-    // YouTube URL format (both regular and live streams)
-    if (url.includes('youtube.com') || url.includes('youtu.be')) {
-      const videoId = extractYouTubeVideoId(url);
-      if (!videoId) {
-        showError("Invalid YouTube URL.");
-        return;
-      }
-      iframeCode = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="width: 100%; height: 500px;"></iframe>`;
-      platform = 'YouTube';
-      title = `YouTube Video - ${videoId}`;
-    }
-    // Twitch URL format: https://www.twitch.tv/CHANNEL_NAME
-    else if (url.includes('twitch.tv')) {
-      const channelName = extractTwitchChannelName(url);
-      if (!channelName) {
-        showError("Invalid Twitch URL.");
-        return;
-      }
-      iframeCode = `<iframe src="https://player.twitch.tv/?channel=${channelName}&autoplay=true" frameborder="0" allowfullscreen style="width: 100%; height: 500px;"></iframe>`;
-      platform = 'Twitch';
-      title = `Twitch Stream - ${channelName}`;
-    }
-    // SoundCloud URL format: https://soundcloud.com/USER/track
-    else if (url.includes('soundcloud.com')) {
-      const trackId = extractSoundCloudTrackId(url);
-      if (!trackId) {
-        showError("Invalid SoundCloud URL.");
-        return;
-      }
-      iframeCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}&auto_play=true"></iframe>`;
-      platform = 'SoundCloud';
-      title = `SoundCloud Track - ${trackId}`;
-    }
-    else {
-      showError("Unsupported URL format. Please provide a valid YouTube, Twitch, or SoundCloud URL.");
-      return;
+    if (!iframeCode) {
+      return; // Error already shown in validateStreamURL
     }
 
-    // Append the new iframe to the container (instead of replacing it)
+    // Append the new iframe to the container
     embedContainer.innerHTML += `<div style="margin-bottom: 20px;">${iframeCode}</div>`;
 
     // Clear the input field after adding the stream
     document.getElementById('stream-url').value = '';
 
     // Save the stream data into the database
+    const userId = 'user123'; // Replace with actual user authentication
     await saveStreamToDatabase(url, platform, title, userId);
 
     // Reload the list of streams (including the new one)
     loadExistingStreams(); 
+  }
+
+  // Function to validate and extract stream data
+  function validateStreamURL(url) {
+    let iframeCode = '';
+    let platform = '';
+    let title = 'Untitled Stream'; // Default title
+
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+      const videoId = extractYouTubeVideoId(url);
+      if (!videoId) {
+        showError("Invalid YouTube URL.");
+        return {};
+      }
+      iframeCode = createYouTubeIframe(videoId);
+      platform = 'YouTube';
+      title = `YouTube Video - ${videoId}`;
+    }
+    else if (url.includes('twitch.tv')) {
+      const channelName = extractTwitchChannelName(url);
+      if (!channelName) {
+        showError("Invalid Twitch URL.");
+        return {};
+      }
+      iframeCode = createTwitchIframe(channelName);
+      platform = 'Twitch';
+      title = `Twitch Stream - ${channelName}`;
+    }
+    else if (url.includes('soundcloud.com')) {
+      const trackId = extractSoundCloudTrackId(url);
+      if (!trackId) {
+        showError("Invalid SoundCloud URL.");
+        return {};
+      }
+      iframeCode = createSoundCloudIframe(trackId);
+      platform = 'SoundCloud';
+      title = `SoundCloud Track - ${trackId}`;
+    }
+    else {
+      showError("Unsupported URL format. Please provide a valid YouTube, Twitch, or SoundCloud URL.");
+      return {};
+    }
+
+    return { iframeCode, platform, title };
+  }
+
+  // Helper functions to create iframes
+  function createYouTubeIframe(videoId) {
+    return `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="width: 100%; height: 500px;"></iframe>`;
+  }
+
+  function createTwitchIframe(channelName) {
+    return `<iframe src="https://player.twitch.tv/?channel=${channelName}&autoplay=true" frameborder="0" allowfullscreen style="width: 100%; height: 500px;"></iframe>`;
+  }
+
+  function createSoundCloudIframe(trackId) {
+    return `<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}&auto_play=true"></iframe>`;
   }
 
   // Helper functions to extract IDs
@@ -723,13 +748,14 @@
     return match ? match[1] : null;
   }
 
+  // Show error message
   function showError(message) {
     const errorMessage = document.getElementById('error-message');
     errorMessage.textContent = message;
     errorMessage.style.display = 'block';
   }
 
-  // Function to save stream data to the database
+  // Save stream data into the database
   async function saveStreamToDatabase(url, platform, title, userId) {
     const { data, error } = await supabase
       .from('streams')
@@ -748,7 +774,7 @@
     }
   }
 
-  // Function to load and display existing streams from the database
+  // Load and display existing streams from the database
   async function loadExistingStreams() {
     const { data, error } = await supabase
       .from('streams')
@@ -767,13 +793,13 @@
       let iframeCode = '';
       if (stream.platform === 'YouTube') {
         const videoId = extractYouTubeVideoId(stream.url);
-        iframeCode = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="width: 100%; height: 500px;"></iframe>`;
+        iframeCode = createYouTubeIframe(videoId);
       } else if (stream.platform === 'Twitch') {
         const channelName = extractTwitchChannelName(stream.url);
-        iframeCode = `<iframe src="https://player.twitch.tv/?channel=${channelName}&autoplay=true" frameborder="0" allowfullscreen style="width: 100%; height: 500px;"></iframe>`;
+        iframeCode = createTwitchIframe(channelName);
       } else if (stream.platform === 'SoundCloud') {
         const trackId = extractSoundCloudTrackId(stream.url);
-        iframeCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}&auto_play=true"></iframe>`;
+        iframeCode = createSoundCloudIframe(trackId);
       }
       embedContainer.innerHTML += `<div style="margin-bottom: 20px;">${iframeCode}</div>`;
     });

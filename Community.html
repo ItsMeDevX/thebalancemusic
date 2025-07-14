@@ -633,7 +633,7 @@
 
 <script>
   const supabaseUrl = 'https://tpqsceyxdpgerjjiydmy.supabase.co'; // Your Supabase URL
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'; // Your Supabase API key
+  const supabaseKey = 'your-supabase-key'; // Your Supabase API key
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   // Embed Stream Function
@@ -690,18 +690,29 @@
 
   // Function to save stream data to Supabase
   async function saveStream(url) {
+    const { data: { session } } = await supabase.auth.getSession();
+    const userId = session?.user?.id;  // Get user_id from the session
+
+    if (!userId) {
+      console.error("User is not logged in.");
+      return;
+    }
+
     const { error } = await supabase
       .from('streams')
       .insert([
         { 
           url: url, 
           platform: getPlatform(url),
-          title: "Untitled Stream", // You can fetch the title dynamically
+          title: "Untitled Stream", // You can fetch the title dynamically (e.g., using YouTube API)
+          user_id: userId, // Insert the logged-in user's ID
         }
       ]);
 
     if (error) {
       console.error("Error saving stream:", error);
+    } else {
+      console.log("Stream saved successfully.");
     }
   }
 
@@ -743,7 +754,7 @@
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
   const supabaseUrl = 'https://tpqsceyxdpgerjjiydmy.supabase.co';
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY';
+  const supabaseKey = 'your-supabase-key';
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   const messagesDiv = document.getElementById('messages');
@@ -803,7 +814,6 @@
     const { error } = await supabase
       .from('messages')
       .insert([{ content: linkifiedMessage, github_username: githubUsername }]);
-
 
     if (error) {
       alert('Failed to send message: ' + error.message);

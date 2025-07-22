@@ -251,381 +251,143 @@
 </body>
 </html>
   
- <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Balance - Music Sharing</title>
-    <img src="TheBalanceLogo.png" alt="The Balance Logo" class="logo" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Orbitron', sans-serif;
-      background: #0f0f0f;
-      color: #f5f5f5;
-      max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
-      box-sizing: border-box;
-      padding: 20px;
-    }
-
-    header {
-      background: linear-gradient(90deg, #ff00cc, #3333ff);
-      padding: 20px 40px;
-      color: #fff;
-      box-shadow: 0 0 20px #ff00cc;
-      position: relative;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 3em;
-      letter-spacing: 2px;
-    }
-
-    .logo {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      width: 80px;
-      height: auto;
-      box-shadow: 0 0 10px #ff00cc88;
-    }
-
-    nav {
-      background: #1a1a1a;
-      text-align: center;
-      padding: 15px 0;
-      box-shadow: 0 0 10px #00ffff;
-      margin-bottom: 30px;
-    }
-
-    nav a {
-      margin: 0 15px;
-      text-decoration: none;
-      color: #00ffff;
-      font-weight: bold;
-      font-size: 1.1em;
-      transition: color 0.3s;
-    }
-
-    nav a:hover {
-      color: #ff00cc;
-    }
-
-    main section {
-      margin-bottom: 3rem;
-    }
-
-    h2, h3 {
-      color: #39ff14;
-      border-left: 4px solid #ff00cc;
-      padding-left: 10px;
-      margin-top: 0;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
-      background: #1c1c1c;
-      margin: 10px 0;
-      padding: 15px;
-      border-left: 5px solid #00ffff;
-      box-shadow: 0 0 8px #00ffff33;
-    }
-
-    a.download-link {
-      color: #ff00cc;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    a.download-link:hover {
-      color: #ffffff;
-    }
-
-    form {
-      background: #1c1c1c;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 0 15px #ff00cc44;
-      color: #eee;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 1.25rem;
-      color: #39ff14;
-      font-weight: bold;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 0.75rem;
-      margin-top: 0.25rem;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      background: #2a2a2a;
-      color: #fff;
-      font-family: inherit;
-      box-sizing: border-box;
-    }
-
-    input:invalid, textarea:invalid {
-      box-shadow: 0 0 5px red;
-    }
-
-    .error-message {
-      display: none;
-      color: #ff4d4d;
-      font-size: 0.9em;
-      margin-top: 0.25rem;
-      font-weight: normal;
-    }
-
-    button {
-      background-color: #ff00cc;
-      color: #fff;
-      border: none;
-      padding: 1rem;
-      border-radius: 10px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      width: 100%;
-      font-weight: bold;
-      box-shadow: 0 0 12px #ff00cc88;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #cc0099;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #111;
-      color: #888;
-      border-top: 2px solid #ff00cc;
-      box-shadow: 0 -4px 15px #ff00cc33;
-      margin-top: 40px;
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <h1>The Balance</h1>
-    <p>Home</p>
-  </header>
-
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="instrumentals.html">Instrumentals</a>
-    <a href="samples.html">Samples</a>
-    <a href="soundfx.html">Sound FX</a>
-    <a href="music.html">Music</a>
-    <a href="live.html">Live</a>
-    <a href="Community.html">Community</a>
-    
-  </nav>
-
-  <main>
-    <section class="hero">
-      <h2>Where Independent Music Meets Opportunity</h2>
-      <p>The Balance Music is a digital platform dedicated to showcasing underground, unsigned, and independent musical talent from around the world. Whether you're a producer, vocalist, or band—your sound belongs here.</p>
-    </section>
-
-    <section id="about">
-      <h3>Our Mission</h3>
-      <p>At The Balance Music, we believe in music without borders—genre, location, or label shouldn't limit creativity. Our goal is to discover, share, and elevate undiscovered artists by providing a space that prioritizes quality, originality, and authenticity. We’re not just a platform—we're a movement for balance in the music industry.</p>
-    </section>
-
-    <section>
-      <h3>What We Offer</h3>
-      <ul>
-        <li>🟢 Free music submission for independent artists</li>
-        <li>🟢 Fair and unbiased curation—no gatekeeping</li>
-        <li>🟢 Exposure through playlists, blogs, and social media</li>
-        <li>🟢 Community-focused initiatives & collaborations</li>
-      </ul>
-      
-  <section class="featured-track" aria-label="Featured Track of the Week" style="background: #1c1c1c; padding: 2rem; border-radius: 15px; box-shadow: 0 0 15px #ff00cc66; margin-bottom: 3rem;">
-  <h3 style="color: #39ff14; border-left: 4px solid #ff00cc; padding-left: 10px; margin-top: 0;">🎧 Featured Track of the Week</h3>
-  <p><strong style="color: #00ffff;">Artist:</strong> Overdrive</p>
-  <p><strong style="color: #00ffff;">Title:</strong> Fast Life</p>
-  <p><strong style="color: #00ffff;">Genre:</strong> Rap/Electro</p>
-  <p style="margin-bottom: 1.5rem; line-height: 1.6;">
-    A high-energy blend of rap and electro inspired by Beastie Boys' chaotic charm — this track fuses punchy breaks, distorted vocals, and retro-futuristic energy into a loud, unapologetic anthem.
-  </p>
-  <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px; box-shadow: 0 0 12px #00ffff66;">
-    <iframe 
-      src="https://www.youtube.com/embed/T-aqUuMby4g?si=svfnmS5JHoI8fo0O" 
-      title="Fast Life by Overdrive" 
-      frameborder="0" 
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-      allowfullscreen 
-      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;">
-    </iframe>
-  </div>
-</section>
-      
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Balance - Music Videos</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Streams Filter</title>
   <style>
     body {
+      font-family: Arial, sans-serif;
       margin: 0;
-      font-family: 'Orbitron', sans-serif;
-      background: #0f0f0f;
-      color: #f5f5f5;
-      max-width: 900px;
-      margin: 0 auto;
       padding: 20px;
-      box-sizing: border-box;
     }
-
-    header {
-      background: linear-gradient(90deg, #ff00cc, #3333ff);
-      padding: 20px;
+    h1 {
       text-align: center;
-      color: white;
-      box-shadow: 0 0 20px #ff00cc;
-      margin-bottom: 30px;
-      position: relative;
+      margin-bottom: 20px;
     }
-
-    header h1 {
-      margin: 0;
-      font-size: 2.5em;
-      letter-spacing: 2px;
+    .filter-container {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
     }
-
-    .logo {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 70px;
-      height: auto;
-      box-shadow: 0 0 10px #ff00cc88;
+    .filter-container select, .filter-container input {
+      padding: 10px;
+      font-size: 14px;
+      width: 200px;
     }
-
-    h2 {
-      color: #39ff14;
-      border-left: 4px solid #ff00cc;
-      padding-left: 10px;
-    }
-
-    #player-container {
-      text-align: center;
-      margin: 40px 0;
-    }
-
-    #mainPlayer {
+    table {
       width: 100%;
-      max-width: 640px;
-      height: 360px;
-      border: none;
-      box-shadow: 0 0 20px #00ffff44;
-    }
-
-    #controls {
+      border-collapse: collapse;
       margin-top: 20px;
     }
-
-    #controls button {
-      background: #ff00cc;
-      color: #fff;
-      border: none;
-      padding: 12px 20px;
-      margin: 0 10px;
-      font-size: 1rem;
-      border-radius: 10px;
-      font-weight: bold;
-      box-shadow: 0 0 12px #ff00cc88;
-      cursor: pointer;
-      transition: background-color 0.3s;
+    table, th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
     }
-
-    #controls button:hover {
-      background: #cc0099;
+    th {
+      background-color: #f4f4f4;
     }
-
-    #contact {
-      margin-top: 60px;
-    }
-
-    #contact a {
-      color: #00ffff;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    #contact a:hover {
-      color: #ff00cc;
-    }
-
-    footer {
+    .no-records {
       text-align: center;
-      padding: 20px;
-      margin-top: 60px;
-      background: #111;
-      color: #888;
-      border-top: 2px solid #ff00cc;
-      box-shadow: 0 -4px 15px #ff00cc33;
-      font-size: 0.9em;
-    }
-
-    footer a {
-      color: #ff00cc;
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      color: #ffffff;
-    }
-
-    footer img {
-      vertical-align: middle;
-      width: 1em;
-      height: 1em;
-      margin-left: .3em;
+      font-size: 18px;
+      color: #666;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>The Balance - Video Gallery</h1>
-  </header>
-<div style="text-align: center; margin: 40px 0;">
-  <a href="video-gallery.html" style="
-    display: inline-block;
-    background: #ff00cc;
-    color: #fff;
-    padding: 14px 28px;
-    border-radius: 12px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    font-family: 'Orbitron', sans-serif;
-    text-decoration: none;
-    box-shadow: 0 0 15px #ff00cc88;
-    transition: background 0.3s ease;
-  " onmouseover="this.style.background='#cc0099'" onmouseout="this.style.background='#ff00cc'">
-    🎬 Check Out Our Music Video Gallery — The Balance
-  </a>
-</div>
+  <h1>Stream Listings</h1>
 
+  <!-- Filters Section -->
+  <div class="filter-container">
+    <select id="platform-filter" onchange="applyFilters()">
+      <option value="">Filter by Platform</option>
+      <option value="youtube">YouTube</option>
+      <option value="twitch">Twitch</option>
+      <option value="soundcloud">SoundCloud</option>
+    </select>
+    <input type="text" id="title-filter" placeholder="Filter by Title" onkeyup="applyFilters()" />
+    <input type="date" id="date-filter" onchange="applyFilters()" />
+  </div>
+
+  <!-- Streams Table -->
+  <table id="streams-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>URL</th>
+        <th>Platform</th>
+        <th>Title</th>
+        <th>Created At</th>
+        <th>User ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Example data will be injected here -->
+    </tbody>
+  </table>
+
+  <div id="no-records-message" class="no-records" style="display:none;">No records found matching the filters.</div>
+
+  <script>
+    // Sample stream data (simulating data from the database)
+    const streamData = [
+      { id: 1, url: "https://youtube.com/stream1", platform: "youtube", title: "Awesome Stream 1", created_at: "2023-07-10T12:00:00", user_id: "user123" },
+      { id: 2, url: "https://twitch.tv/stream2", platform: "twitch", title: "Cool Twitch Stream", created_at: "2023-07-11T14:30:00", user_id: "user456" },
+      { id: 3, url: "https://soundcloud.com/stream3", platform: "soundcloud", title: "Great SoundCloud Stream", created_at: "2023-07-12T16:00:00", user_id: "user789" },
+      { id: 4, url: "https://youtube.com/stream4", platform: "youtube", title: "Another YouTube Stream", created_at: "2023-07-14T17:30:00", user_id: "user101" }
+    ];
+
+    // Function to render the table with filtered streams
+    function renderTable(filteredStreams) {
+      const tableBody = document.querySelector('#streams-table tbody');
+      tableBody.innerHTML = '';
+
+      // If no records match the filters, show the "No records" message
+      if (filteredStreams.length === 0) {
+        document.getElementById('no-records-message').style.display = 'block';
+      } else {
+        document.getElementById('no-records-message').style.display = 'none';
+      }
+
+      // Create table rows for the filtered data
+      filteredStreams.forEach(stream => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${stream.id}</td>
+          <td><a href="${stream.url}" target="_blank">${stream.url}</a></td>
+          <td>${stream.platform}</td>
+          <td>${stream.title}</td>
+          <td>${new Date(stream.created_at).toLocaleString()}</td>
+          <td>${stream.user_id}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Function to apply filters based on user input
+    function applyFilters() {
+      const platformFilter = document.getElementById('platform-filter').value;
+      const titleFilter = document.getElementById('title-filter').value.toLowerCase();
+      const dateFilter = document.getElementById('date-filter').value;
+
+      const filteredStreams = streamData.filter(stream => {
+        const platformMatch = platformFilter ? stream.platform === platformFilter : true;
+        const titleMatch = stream.title.toLowerCase().includes(titleFilter);
+        const dateMatch = dateFilter ? stream.created_at.startsWith(dateFilter) : true;
+
+        return platformMatch && titleMatch && dateMatch;
+      });
+
+      renderTable(filteredStreams);
+    }
+
+    // Initial render of the table
+    renderTable(streamData);
+  </script>
 
 </body>
-</html>  
+</html>

@@ -542,8 +542,6 @@
         if (error) {
           console.error('Supabase Error:', error);
           throw new Error("Failed to save the stream to database.");
-        } else {
-          console.log('Stream inserted:', data);
         }
     
         // Display the embed
@@ -564,7 +562,7 @@
       return match ? match[1] : null;
     }
 
-    // Optional: Function to load streams from the database if needed
+    // Function to load streams from the database
     async function loadStreams() {
       const { data, error } = await supabase
         .from('streams')

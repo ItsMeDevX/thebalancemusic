@@ -253,98 +253,232 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>Submit Stream with Supabase</title>
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Embed a Stream URL - The Balance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Orbitron', sans-serif;
+            background: #0f0f0f;
+            color: #f5f5f5;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
+            padding: 20px;
+        }
 
-    // Your Supabase credentials here:
-    const SUPABASE_URL = 'https://tpqsceyxdpgerjjiydmy.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY';
+        header {
+            background: linear-gradient(90deg, #ff00cc, #3333ff);
+            padding: 20px 40px;
+            color: #fff;
+            box-shadow: 0 0 20px #ff00cc;
+            position: relative;
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        header h1 {
+            margin: 0;
+            font-size: 3em;
+            letter-spacing: 2px;
+        }
 
-    async function signIn() {
-      // Login via GitHub OAuth
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'github',
-        options: { redirectTo: window.location.href }
-      });
-      if (error) alert('Login error: ' + error.message);
-    }
+        .logo {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            width: 80px;
+            height: auto;
+            box-shadow: 0 0 10px #ff00cc88;
+        }
 
-    async function signOut() {
-      const { error } = await supabase.auth.signOut();
-      if (error) alert('Logout error: ' + error.message);
-      else location.reload();
-    }
+        nav {
+            background: #1a1a1a;
+            text-align: center;
+            padding: 15px 0;
+            box-shadow: 0 0 10px #00ffff;
+            margin-bottom: 30px;
+        }
 
-    async function renderUI() {
-      const { data: { session } } = await supabase.auth.getSession();
-      const container = document.getElementById('container');
-      container.innerHTML = '';
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #00ffff;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: color 0.3s;
+        }
 
-      if (session?.user) {
-        // User is logged in
-        const user = session.user;
-        container.innerHTML = `
-          <p>Logged in as <strong>${user.email}</strong></p>
-          <button id="logout-btn">Logout</button>
-          <form id="streamForm">
-            <label>Stream URL: <input type="url" id="url" required></label><br/>
-            <label>Platform: <input type="text" id="platform" required></label><br/>
-            <label>Title: <input type="text" id="title" required></label><br/>
-            <button type="submit">Submit Stream</button>
-          </form>
-          <p id="msg"></p>
-        `;
+        nav a:hover {
+            color: #ff00cc;
+        }
 
-        document.getElementById('logout-btn').onclick = signOut;
+        .container {
+            background-color: #1c1c1c;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px #ff00cc44;
+            color: #eee;
+        }
 
-        document.getElementById('streamForm').onsubmit = async (e) => {
-          e.preventDefault();
+        h2 {
+            color: #39ff14;
+            border-left: 4px solid #ff00cc;
+            padding-left: 10px;
+            margin-top: 0;
+        }
 
-          const url = document.getElementById('url').value.trim();
-          const platform = document.getElementById('platform').value.trim();
-          const title = document.getElementById('title').value.trim();
+        label {
+            display: block;
+            margin-bottom: 1.25rem;
+            color: #39ff14;
+            font-weight: bold;
+        }
 
-          const newStream = {
-            url,
-            platform,
-            title,
-            user_id: user.id,           // Important: associate user
-            created_at: new Date().toISOString()
-          };
+        input,
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            margin-top: 0.25rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #2a2a2a;
+            color: #fff;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
 
-          const { error } = await supabase.from('streams').insert([newStream]);
+        button {
+            background-color: #ff00cc;
+            color: #fff;
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            box-shadow: 0 0 12px #ff00cc88;
+            transition: background-color 0.3s ease;
+        }
 
-          const msg = document.getElementById('msg');
-          if (error) {
-            msg.style.color = 'red';
-            msg.textContent = `Error: ${error.message}`;
-          } else {
-            msg.style.color = 'green';
-            msg.textContent = 'Stream submitted successfully!';
-            e.target.reset();
-          }
-        };
-      } else {
-        // Not logged in
-        container.innerHTML = '<button id="login-btn">Login with GitHub</button>';
-        document.getElementById('login-btn').onclick = signIn;
-      }
-    }
+        button:hover {
+            background-color: #cc0099;
+        }
 
-    // Listen to auth state changes
-    supabase.auth.onAuthStateChange(() => {
-      renderUI();
-    });
+        .error-message {
+            display: none;
+            color: #ff4d4d;
+            font-size: 0.9em;
+            margin-top: 0.25rem;
+            font-weight: normal;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #330000;
+        }
 
-    renderUI();
-  </script>
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #111;
+            color: #888;
+            border-top: 2px solid #ff00cc;
+            box-shadow: 0 -4px 15px #ff00cc33;
+            margin-top: 40px;
+        }
+    </style>
 </head>
+
 <body>
-  <div id="container"></div>
+
+    <header>
+        <h1>The Balance</h1>
+        <p>Embed a New Stream URL</p>
+        <img src="TheBalanceLogo.png" alt="The Balance Logo" class="logo" />
+    </header>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="instrumentals.html">Instrumentals</a>
+        <a href="samples.html">Samples</a>
+        <a href="soundfx.html">Sound FX</a>
+        <a href="music.html">Music</a>
+        <a href="live.html">Live</a>
+        <a href="community.html">Community</a>
+    </nav>
+
+    <main>
+        <div class="container">
+            <h2>Submit Stream URL</h2>
+            <form id="streamForm" method="POST" onsubmit="return false;">
+                <label for="url">Stream URL:</label>
+                <input type="url" id="url" name="url" required placeholder="Enter the URL of the stream">
+
+                <label for="platform">Platform:</label>
+                <input type="text" id="platform" name="platform" required placeholder="Enter the platform name (e.g., YouTube, Twitch)">
+
+                <label for="title">Stream Title:</label>
+                <input type="text" id="title" name="title" required placeholder="Enter the title of the stream">
+
+                <button type="submit">Submit</button>
+            </form>
+
+            <div class="error-message" id="errorMessage"></div>
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2025 The Balance. All rights reserved.
+    </footer>
+
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.0/dist/umd/supabase.min.js"></script>
+    <script>
+        // Initialize Supabase client with URL and anon key
+        const supabase = createClient(
+            'https://tpqsceyxdpgerjjiydmy.supabase.co', // Replace this with your own Supabase URL
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY' // Replace with your own anon key
+        );
+
+        // Handle form submission
+        document.getElementById('streamForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Get the form values
+            const url = document.getElementById('url').value;
+            const platform = document.getElementById('platform').value;
+            const title = document.getElementById('title').value;
+
+            // Insert stream data into Supabase
+            const { data, error } = await supabase
+                .from('streams')
+                .insert([
+                    {
+                        url: url,
+                        platform: platform,
+                        title: title,
+                    }
+                ]);
+
+            if (error) {
+                console.error("Error inserting data:", error);
+                document.getElementById('errorMessage').textContent = `Error: ${error.message}`;
+                document.getElementById('errorMessage').style.display = 'block';
+            } else {
+                // Success - show alert and reset form
+                alert('Stream URL has been successfully added!');
+                document.getElementById('streamForm').reset();
+                document.getElementById('errorMessage').style.display = 'none';
+            }
+        });
+    </script>
+
 </body>
+
 </html>

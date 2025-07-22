@@ -496,46 +496,53 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
     );
 
-    async function embedStream() {
-      const url = document.getElementById('stream-url').value.trim();
-      const errorMessage = document.getElementById('error-message');
-      const successMessage = document.getElementById('success-message');
-      const loading = document.getElementById('loading');
-      const embedContainer = document.getElementById('embed-container');
-      
-      errorMessage.style.display = 'none';
-      successMessage.style.display = 'none';
-      loading.style.display = 'block';
-      
-      if (!url) {
-        errorMessage.textContent = "Please enter a URL.";
-        errorMessage.style.display = 'block';
-        loading.style.display = 'none';
-        return;
-      }
+ async function embedStream() {
+  const url = document.getElementById('stream-url').value.trim();
+  const errorMessage = document.getElementById('error-message');
+  const successMessage = document.getElementById('success-message');
+  const loading = document.getElementById('loading');
+  const embedContainer = document.getElementById('embed-container');
+  
+  errorMessage.style.display = 'none';
+  successMessage.style.display = 'none';
+  loading.style.display = 'block';
+  
+  if (!url) {
+    errorMessage.textContent = "Please enter a URL.";
+    errorMessage.style.display = 'block';
+    loading.style.display = 'none';
+    return;
+  }
 
-      try {
-        const { data, error } = await supabase
-          .from('streams')
-          .insert([{ 
-            url, 
-            created_at: new Date().toISOString() 
-          }]);
+  // Check if URL is a YouTube URL and convert it to embed format
+  const youtubeRegex = /(?:https?:\/\/(?:www\.)?youtube\.com\/(?:[^\/\n\s]+\/\S+\/\S+|\S+)?|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+  const match = url.match(youtubeRegex);
+  if (match) {
+    url = `https://www.youtube.com/embed/${match[1]}`;
+  }
 
-        if (error) {
-          throw new Error(error.message || 'Failed to store URL');
-        }
+  try {
+    const { data, error } = await supabase
+      .from('streams')
+      .insert([{ 
+        url, 
+        created_at: new Date().toISOString() 
+      }]);
 
-        successMessage.style.display = 'block';
-        loadStreams(); // Refresh the stream list
-        document.getElementById('stream-url').value = '';
-      } catch (err) {
-        errorMessage.textContent = err.message;
-        errorMessage.style.display = 'block';
-      } finally {
-        loading.style.display = 'none';
-      }
+    if (error) {
+      throw new Error(error.message || 'Failed to store URL');
     }
+
+    successMessage.style.display = 'block';
+    loadStreams(); // Refresh the stream list
+    document.getElementById('stream-url').value = '';
+  } catch (err) {
+    errorMessage.textContent = err.message;
+    errorMessage.style.display = 'block';
+  } finally {
+    loading.style.display = 'none';
+  }
+}
 
     async function loadStreams() {
       try {

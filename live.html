@@ -253,11 +253,10 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Embed a Stream URL - The Balance</title>
+    <title>Submit Stream URL - The Balance</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
     <style>
         body {
@@ -340,8 +339,7 @@
             font-weight: bold;
         }
 
-        input,
-        textarea {
+        input, textarea {
             width: 100%;
             padding: 0.75rem;
             margin-top: 0.25rem;
@@ -441,10 +439,10 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.0/dist/umd/supabase.min.js"></script>
     <script>
         // Initialize Supabase client with URL and anon key
-        const supabase = createClient(
-            'https://tpqsceyxdpgerjjiydmy.supabase.co', // Replace this with your own Supabase URL
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY' // Replace with your own anon key
-        );
+  const supabase = createClient(
+    'https://tpqsceyxdpgerjjiydmy.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
+  );
 
         // Handle form submission
         document.getElementById('streamForm').addEventListener('submit', async function (event) {
@@ -455,6 +453,16 @@
             const platform = document.getElementById('platform').value;
             const title = document.getElementById('title').value;
 
+            // Get the current user id (assuming you're using Supabase Auth for authentication)
+            const user = supabase.auth.user();  // This retrieves the logged-in user
+            if (!user) {
+                document.getElementById('errorMessage').textContent = 'You must be logged in to submit a stream URL.';
+                document.getElementById('errorMessage').style.display = 'block';
+                return;
+            }
+
+            const user_id = user.id;  // Assuming `user.id` contains the user ID.
+
             // Insert stream data into Supabase
             const { data, error } = await supabase
                 .from('streams')
@@ -463,6 +471,8 @@
                         url: url,
                         platform: platform,
                         title: title,
+                        user_id: user_id,  // Insert the user_id as well
+                        created_at: new Date().toISOString(),  // Optionally add the created_at timestamp manually
                     }
                 ]);
 
@@ -480,5 +490,4 @@
     </script>
 
 </body>
-
 </html>

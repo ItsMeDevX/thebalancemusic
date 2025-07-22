@@ -511,12 +511,14 @@
         if (data) {
           data.forEach((stream) => {
             let iframeCode = '';
-            console.log(stream.url);  // Debugging line
+
+            // Debugging log for stream URLs
+            console.log(stream.url);
 
             if (stream.url.includes('youtube.com') || stream.url.includes('youtu.be')) {
               const videoId = stream.url.split('v=')[1]?.split('&')[0];
               if (videoId) {
-                iframeCode = `<iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                iframeCode = `<iframe width="100%" height="166" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
               }
             } else if (stream.url.includes('twitch.tv')) {
               const channelName = stream.url.split('twitch.tv/')[1];

@@ -256,207 +256,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Balance - Music Sharing</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+  <title>Stream Sharing</title>
   <style>
     body {
-      margin: 0;
-      font-family: 'Orbitron', sans-serif;
-      background: #0f0f0f;
-      color: #f5f5f5;
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #fff;
       max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
-      box-sizing: border-box;
+      margin: auto;
       padding: 20px;
     }
-    header {
-      background: linear-gradient(90deg, #ff00cc, #3333ff);
-      padding: 20px 40px;
-      color: #fff;
-      box-shadow: 0 0 20px #ff00cc;
-      position: relative;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 3em;
-      letter-spacing: 2px;
-    }
-    .logo {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      width: 80px;
-      height: auto;
-      box-shadow: 0 0 10px #ff00cc88;
-    }
-    nav {
-      background: #1a1a1a;
-      text-align: center;
-      padding: 15px 0;
-      box-shadow: 0 0 10px #00ffff;
-      margin-bottom: 30px;
-    }
-    nav a {
-      margin: 0 15px;
-      text-decoration: none;
-      color: #00ffff;
-      font-weight: bold;
-      font-size: 1.1em;
-      transition: color 0.3s;
-    }
-    nav a:hover {
-      color: #ff00cc;
-    }
-    main section {
-      margin-bottom: 3rem;
-    }
-    h2, h3 {
-      color: #39ff14;
-      border-left: 4px solid #ff00cc;
-      padding-left: 10px;
-      margin-top: 0;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-      max-height: 600px;
-      overflow-y: auto;
-    }
-    li {
-      background: #1c1c1c;
+    input, button {
+      width: 100%;
+      padding: 10px;
       margin: 10px 0;
-      padding: 15px;
-      border-left: 5px solid #00ffff;
-      box-shadow: 0 0 8px #00ffff33;
-    }
-    a.download-link {
-      color: #ff00cc;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    a.download-link:hover {
-      color: #ffffff;
-    }
-    form {
-      background: #1c1c1c;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 0 15px #ff00cc44;
-      color: #eee;
-    }
-    label {
-      display: block;
-      margin-bottom: 1.25rem;
-      color: #39ff14;
-      font-weight: bold;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 0.75rem;
-      margin-top: 0.25rem;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      background: #2a2a2a;
-      color: #fff;
-      font-family: inherit;
-      box-sizing: border-box;
-    }
-    input:invalid, textarea:invalid {
-      box-shadow: 0 0 5px red;
-    }
-    .error-message {
-      display: none;
-      color: #ff4d4d;
-      font-size: 0.9em;
-      margin-top: 0.25rem;
-      font-weight: normal;
-    }
-    button {
-      background-color: #ff00cc;
-      color: #fff;
-      border: none;
-      padding: 1rem;
-      border-radius: 10px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      width: 100%;
-      font-weight: bold;
-      box-shadow: 0 0 12px #ff00cc88;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #cc0099;
-    }
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #111;
-      color: #888;
-      border-top: 2px solid #ff00cc;
-      box-shadow: 0 -4px 15px #ff00cc33;
-      margin-top: 40px;
-    }
-    #embed-container iframe {
-      margin-top: 20px;
-      width: 100%;
-      height: 500px;
+      border-radius: 5px;
     }
     #error-message {
       color: red;
-      font-size: 1rem;
+    }
+    #embed-container {
+      margin-top: 20px;
+    }
+    .stream-embed {
+      margin-bottom: 20px;
+      border: 1px solid #00ffff;
+      padding: 10px;
+      background-color: #1a1a1a;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>The Balance</h1>
-    <p>Live</p>
-    <img src="TheBalanceLogo.png" alt="The Balance Logo" class="logo" />
-  </header>
-
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="instrumentals.html">Instrumentals</a>
-    <a href="samples.html">Samples</a>
-    <a href="soundfx.html">Sound FX</a>
-    <a href="music.html">Music</a>
-    <a href="live.html">Live</a>
-    <a href="Community.html">Community</a>
-  </nav>
-
-  <main>
-    <section>
-      <h2>Latest Streams</h2>
-      <ul id="trackList">
-        <!-- Tracks will be inserted here -->
-      </ul>
-    </section>
-
-    <section>
-      <h3>Embed Your Stream (YouTube, Twitch, SoundCloud)</h3>
-      <p style="color: #555; font-size: 1.1rem;">Enter the URL of a live stream or video from YouTube, Twitch, or SoundCloud to embed it below.</p>
-    
-      <div style="margin-top: 20px;">
-        <input type="text" id="stream-url" placeholder="Enter YouTube/Twitch/SoundCloud URL or Video ID" style="width: 100%; border-radius: 5px; border: 1px solid #ccc;">
-        <button onclick="embedStream()">Embed Stream</button>
-      </div>
-    
-      <p id="error-message" class="error-message"></p>
-
-      <div id="embed-container">
-        <!-- Embedded iframes will appear here -->
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    &copy; 2025 The Balance. All rights reserved.
-  </footer>
+  <h1>Stream Sharing</h1>
+  
+  <div>
+    <input type="text" id="stream-url" placeholder="Enter YouTube/Twitch/SoundCloud URL or Video ID" />
+    <button onclick="storeStream()">Embed Stream</button>
+    <p id="error-message" style="display: none;"></p>
+  </div>
+  
+  <div id="embed-container"></div>
 
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -515,15 +355,20 @@
             // Debugging log for stream URLs
             console.log(stream.url);
 
+            // Embed YouTube URL
             if (stream.url.includes('youtube.com') || stream.url.includes('youtu.be')) {
               const videoId = stream.url.split('v=')[1]?.split('&')[0];
               if (videoId) {
                 iframeCode = `<iframe width="100%" height="166" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
               }
-            } else if (stream.url.includes('twitch.tv')) {
+            } 
+            // Embed Twitch URL
+            else if (stream.url.includes('twitch.tv')) {
               const channelName = stream.url.split('twitch.tv/')[1];
               iframeCode = `<iframe src="https://player.twitch.tv/?channel=${channelName}" frameborder="0" allowfullscreen></iframe>`;
-            } else if (stream.url.includes('soundcloud.com')) {
+            } 
+            // Embed SoundCloud URL
+            else if (stream.url.includes('soundcloud.com')) {
               const trackId = stream.url.split('soundcloud.com/')[1];
               iframeCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}"></iframe>`;
             }
@@ -542,5 +387,6 @@
     // Initial load of streams
     loadStreams();
   </script>
+
 </body>
 </html>

@@ -260,17 +260,26 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.0/dist/umd/supabase.min.js"></script>
 </head>
 <body>
-  <h1>Submit a Stream</h1>
+  <h2>Submit a Stream</h2>
+
   <form id="streamForm">
-    <label>URL: <input type="url" id="url" required /></label><br />
-    <label>Platform: <input type="text" id="platform" required /></label><br />
-    <label>Title: <input type="text" id="title" required /></label><br />
+    <label>URL:<br />
+      <input type="url" id="url" required placeholder="https://example.com/stream" />
+    </label><br /><br />
+
+    <label>Platform:<br />
+      <input type="text" id="platform" required placeholder="YouTube, Twitch..." />
+    </label><br /><br />
+
+    <label>Title:<br />
+      <input type="text" id="title" required placeholder="Stream Title" />
+    </label><br /><br />
+
     <button type="submit">Submit</button>
     <p id="errorMessage" style="color:red;"></p>
   </form>
 
   <script>
-    // Supabase UMD exposes createClient globally
     const supabase = createClient(
       'https://tpqsceyxdpgerjjiydmy.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
@@ -279,19 +288,19 @@
     document.getElementById('streamForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const url = document.getElementById('url').value;
-      const platform = document.getElementById('platform').value;
-      const title = document.getElementById('title').value;
+      const url = document.getElementById('url').value.trim();
+      const platform = document.getElementById('platform').value.trim();
+      const title = document.getElementById('title').value.trim();
 
       const { data, error } = await supabase
         .from('streams')
         .insert([{ url, platform, title }]);
 
       if (error) {
-        console.error("Insert error:", error);
-        document.getElementById('errorMessage').textContent = error.message;
+        console.error('Insert error:', error);
+        document.getElementById('errorMessage').textContent = `❌ ${error.message}`;
       } else {
-        alert('Stream submitted!');
+        alert('✅ Stream submitted!');
         document.getElementById('streamForm').reset();
         document.getElementById('errorMessage').textContent = '';
       }
@@ -299,3 +308,4 @@
   </script>
 </body>
 </html>
+

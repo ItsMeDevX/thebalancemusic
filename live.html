@@ -480,22 +480,24 @@
     &copy; 2025 The Balance. All rights reserved.
   </footer>
 
-<script type="module">
+ <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
+    // Initialize Supabase client
     const supabase = createClient(
-      'https://tpqsceyxdpgerjjiydmy.supabase.co', // Your Supabase URL
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY' // Your Supabase API key
+      'https://tpqsceyxdpgerjjiydmy.supabase.co',  // Replace with your Supabase URL
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY' // Replace with your Supabase API key
     );
 
-    // Store the URL
+    // Function to store stream URL
     async function storeStream() {
       const url = document.getElementById('stream-url').value.trim();
       const errorMessage = document.getElementById('error-message');
       
-      // Clear any previous error messages
+      // Clear any previous error message
       errorMessage.style.display = 'none';
-      
+
+      // Validate URL input
       if (!url) {
         errorMessage.textContent = "Please enter a URL.";
         errorMessage.style.display = 'block';
@@ -503,50 +505,60 @@
       }
       
       try {
-        // Insert the URL into Supabase
+        // Insert URL into Supabase
         const { data, error } = await supabase
           .from('streams')
           .insert([{
-            url,
-            created_at: new Date().toISOString(),
+            url: url,
+            created_at: new Date().toISOString()
           }]);
 
+        // Handle any errors from Supabase
         if (error) {
           console.error('Error inserting data:', error);
           throw new Error('Failed to store the URL');
         }
 
-        // Clear input field
+        // Clear the input field after submission
         document.getElementById('stream-url').value = '';
-        loadStreams(); // Refresh the list of streams
+        loadStreams();  // Refresh the stream list after submission
       } catch (err) {
         errorMessage.textContent = err.message;
         errorMessage.style.display = 'block';
       }
     }
 
-    // Load stored URLs from Supabase
+    // Function to load and display stored URLs
     async function loadStreams() {
-      const { data, error } = await supabase
-        .from('streams')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      const streamList = document.getElementById('stream-list');
-      streamList.innerHTML = ''; // Clear existing list
-      
-      if (data) {
-        data.forEach(stream => {
-          const li = document.createElement('li');
-          li.innerHTML = `<a href="${stream.url}" target="_blank">${stream.url}</a>`;
-          streamList.appendChild(li);
-        });
+      try {
+        const { data, error } = await supabase
+          .from('streams')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        // Handle any errors from Supabase
+        if (error) {
+          console.error("Error loading streams:", error);
+        } else {
+          const streamList = document.getElementById('stream-list');
+          streamList.innerHTML = ''; // Clear the existing list
+
+          // Display each stored stream URL
+          if (data) {
+            data.forEach(stream => {
+              const li = document.createElement('li');
+              li.innerHTML = `<a href="${stream.url}" target="_blank">${stream.url}</a>`;
+              streamList.appendChild(li);
+            });
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching streams:", err);
       }
     }
 
-    // Initial load of streams
+    // Initial load of streams when the page loads
     loadStreams();
   </script>
-
 </body>
 </html>

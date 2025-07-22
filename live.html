@@ -254,411 +254,427 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Balance - Music Sharing</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Balance - Music Sharing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: #0f0f0f;
+      color: #f5f5f5;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      transition: background-color 0.3s ease;
+    }
+    header {
+      background: linear-gradient(90deg, #ff00cc, #3333ff);
+      padding: 20px 40px;
+      color: #fff;
+      text-align: center;
+      box-shadow: 0 0 20px #ff00cc;
+      position: relative;
+      margin-bottom: 20px;
+    }
+    header h1 {
+      font-size: 3em;
+      letter-spacing: 2px;
+    }
+    header .logo {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      width: 80px;
+      height: auto;
+      box-shadow: 0 0 10px #ff00cc88;
+    }
+    nav {
+      background: #1a1a1a;
+      padding: 15px 0;
+      text-align: center;
+      box-shadow: 0 0 10px #00ffff;
+      margin-bottom: 30px;
+    }
+    nav a {
+      text-decoration: none;
+      color: #00ffff;
+      font-weight: bold;
+      font-size: 1.1em;
+      margin: 0 15px;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #ff00cc;
+    }
+    main {
+      padding-bottom: 40px;
+    }
+    section {
+      margin-bottom: 3rem;
+    }
+    h2, h3 {
+      color: #39ff14;
+      border-left: 4px solid #ff00cc;
+      padding-left: 10px;
+      margin-top: 0;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    li {
+      background: #1c1c1c;
+      margin: 10px 0;
+      padding: 15px;
+      border-left: 5px solid #00ffff;
+      box-shadow: 0 0 8px #00ffff33;
+    }
+    a.download-link {
+      color: #ff00cc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a.download-link:hover {
+      color: #ffffff;
+    }
+    form {
+      background: #1c1c1c;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #ff00cc44;
+      color: #eee;
+    }
+    label {
+      display: block;
+      margin-bottom: 1.25rem;
+      color: #39ff14;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.25rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #2a2a2a;
+      color: #fff;
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+    input:invalid, textarea:invalid {
+      box-shadow: 0 0 5px red;
+    }
+    .error-message {
+      display: none;
+      color: #ff4d4d;
+      font-size: 0.9em;
+      margin-top: 0.25rem;
+    }
+    .success-message {
+      display: none;
+      color: #39ff14;
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+    button {
+      background-color: #ff00cc;
+      color: #fff;
+      border: none;
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      width: 100%;
+      font-weight: bold;
+      box-shadow: 0 0 12px #ff00cc88;
+      transition: background-color 0.3s ease;
+      margin-top: 15px; /* Added margin for button */
+    }
+    button:disabled { /* Style for disabled button */
+        background-color: #888;
+        cursor: not-allowed;
+        box-shadow: none;
     }
-    body {
-      font-family: 'Orbitron', sans-serif;
-      background: #0f0f0f;
-      color: #f5f5f5;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
-      transition: background-color 0.3s ease;
-    }
-    header {
-      background: linear-gradient(90deg, #ff00cc, #3333ff);
-      padding: 20px 40px;
-      color: #fff;
-      text-align: center;
-      box-shadow: 0 0 20px #ff00cc;
-      position: relative;
-      margin-bottom: 20px;
-    }
-    header h1 {
-      font-size: 3em;
-      letter-spacing: 2px;
-    }
-    header .logo {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      width: 80px;
-      height: auto;
-      box-shadow: 0 0 10px #ff00cc88;
-    }
-    nav {
-      background: #1a1a1a;
-      padding: 15px 0;
-      text-align: center;
-      box-shadow: 0 0 10px #00ffff;
-      margin-bottom: 30px;
-    }
-    nav a {
-      text-decoration: none;
-      color: #00ffff;
-      font-weight: bold;
-      font-size: 1.1em;
-      margin: 0 15px;
-      transition: color 0.3s;
-    }
-    nav a:hover {
-      color: #ff00cc;
-    }
-    main {
-      padding-bottom: 40px;
-    }
-    section {
-      margin-bottom: 3rem;
-    }
-    h2, h3 {
-      color: #39ff14;
-      border-left: 4px solid #ff00cc;
-      padding-left: 10px;
-      margin-top: 0;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-      max-height: 600px;
-      overflow-y: auto;
-    }
-    li {
-      background: #1c1c1c;
-      margin: 10px 0;
-      padding: 15px;
-      border-left: 5px solid #00ffff;
-      box-shadow: 0 0 8px #00ffff33;
-    }
-    a.download-link {
-      color: #ff00cc;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    a.download-link:hover {
-      color: #ffffff;
-    }
-    form {
-      background: #1c1c1c;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 0 15px #ff00cc44;
-      color: #eee;
-    }
-    label {
-      display: block;
-      margin-bottom: 1.25rem;
-      color: #39ff14;
-      font-weight: bold;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 0.75rem;
-      margin-top: 0.25rem;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      background: #2a2a2a;
-      color: #fff;
-      font-family: inherit;
-      box-sizing: border-box;
-    }
-    input:invalid, textarea:invalid {
-      box-shadow: 0 0 5px red;
-    }
-    .error-message {
-      display: none;
-      color: #ff4d4d;
-      font-size: 0.9em;
-      margin-top: 0.25rem;
-    }
-    .success-message {
-      display: none;
-      color: #39ff14;
-      font-size: 1rem;
-      margin-top: 1rem;
-    }
-    button {
-      background-color: #ff00cc;
-      color: #fff;
-      border: none;
-      padding: 1rem;
-      border-radius: 10px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      width: 100%;
-      font-weight: bold;
-      box-shadow: 0 0 12px #ff00cc88;
-      transition: background-color 0.3s ease;
-      margin-top: 15px; /* Added margin for button */
-    }
-    button:hover {
-      background-color: #cc0099;
-    }
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #111;
-      color: #888;
-      border-top: 2px solid #ff00cc;
-      box-shadow: 0 -4px 15px #ff00cc33;
-      margin-top: 40px;
-      position: sticky;
-      bottom: 0;
-    }
-    #embed-container iframe {
-      width: 100%;
-      height: 500px; /* Increased default height for better viewing */
-      margin-top: 20px;
-      border-radius: 8px;
-    }
-    .stream-embed {
-        margin-bottom: 20px; /* Space between embedded streams */
-    }
-    #error-message {
-      color: red;
-      font-size: 1rem;
-    }
-    .loading {
-      display: none;
-      color: #ff00cc;
-      font-size: 1.2rem;
-      font-weight: bold;
-      text-align: center;
-      margin-top: 10px;
-    }
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 2em;
-      }
-      nav a {
-        margin: 0 10px;
-        font-size: 1em;
-      }
-    }
-  </style>
+    button:hover:not(:disabled) { /* Apply hover only when not disabled */
+      background-color: #cc0099;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #111;
+      color: #888;
+      border-top: 2px solid #ff00cc;
+      box-shadow: 0 -4px 15px #ff00cc33;
+      margin-top: 40px;
+      position: sticky;
+      bottom: 0;
+    }
+    #embed-container iframe {
+      width: 100%;
+      height: 500px; /* Increased default height for better viewing */
+      margin-top: 20px;
+      border-radius: 8px;
+    }
+    .stream-embed {
+        margin-bottom: 20px; /* Space between embedded streams */
+    }
+    #error-message {
+      color: red;
+      font-size: 1rem;
+    }
+    .loading {
+      display: none;
+      color: #ff00cc;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 10px;
+    }
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2em;
+      }
+      nav a {
+        margin: 0 10px;
+        font-size: 1em;
+      }
+    }
+  </style>
 </head>
 <body>
 
-  <header>
-    <h1>The Balance</h1>
-    <p>Live Music Sharing</p>
-    <img src="TheBalanceLogo.png" alt="The Balance Logo" class="logo" />
-  </header>
+  <header>
+    <h1>The Balance</h1>
+    <p>Live Music Sharing</p>
+    <img src="TheBalanceLogo.png" alt="The Balance Logo" class="logo" />
+  </header>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="instrumentals.html">Instrumentals</a>
-    <a href="samples.html">Samples</a>
-    <a href="soundfx.html">Sound FX</a>
-    <a href="music.html">Music</a>
-    <a href="live.html">Live</a>
-    <a href="Community.html">Community</a>
-  </nav>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="instrumentals.html">Instrumentals</a>
+    <a href="samples.html">Samples</a>
+    <a href="soundfx.html">Sound FX</a>
+    <a href="music.html">Music</a>
+    <a href="live.html">Live</a>
+    <a href="Community.html">Community</a>
+  </nav>
 
-  <main>
-    <section>
-      <h2>Latest Streams</h2>
-      <ul id="trackList">
-        </ul>
-    </section>
+  <main>
+    <section>
+      <h2>Latest Streams</h2>
+      <ul id="trackList">
+        </ul>
+    </section>
 
-    <section>
-      <h3>Embed Your Stream (YouTube, Twitch, SoundCloud)</h3>
-      <p style="color: #555; font-size: 1.1rem;">Enter the URL of a live stream or video from YouTube, Twitch, or SoundCloud to embed it below.</p>
-      
-      <div style="margin-top: 20px;">
-        <input type="text" id="stream-url" placeholder="Enter YouTube/Twitch/SoundCloud URL" style="width: 100%; border-radius: 5px; border: 1px solid #ccc;" />
-        <button onclick="embedStream()">Embed Stream</button>
-      </div>
-      
-      <p id="error-message" class="error-message"></p>
-      <p id="success-message" class="success-message">Stream added successfully!</p>
+    <section>
+      <h3>Embed Your Stream (YouTube, Twitch, SoundCloud)</h3>
+      <p style="color: #555; font-size: 1.1rem;">Enter the URL of a live stream or video from YouTube, Twitch, or SoundCloud to embed it below.</p>
+      
+      <div style="margin-top: 20px;">
+        <input type="text" id="stream-url" placeholder="Enter YouTube/Twitch/SoundCloud URL" style="width: 100%; border-radius: 5px; border: 1px solid #ccc;" />
+        <button id="embedButton" onclick="embedStream()">Embed Stream</button>
+      </div>
+      
+      <p id="error-message" class="error-message"></p>
+      <p id="success-message" class="success-message">Stream added successfully!</p>
 
-      <div id="embed-container">
-        </div>
-      <div id="loading" class="loading">Loading...</div>
-    </section>
-  </main>
+      <div id="embed-container">
+        </div>
+      <div id="loading" class="loading">Loading...</div>
+    </section>
+  </main>
 
-  <footer>
-    © 2025 The Balance. All rights reserved.
-  </footer>
+  <footer>
+    © 2025 The Balance. All rights reserved.
+  </footer>
 
-  <script type="module">
-    import { createClient } from '@supabase/supabase-js';
+  <script type="module">
+    import { createClient } from '@supabase/supabase-js';
 
-    const supabase = createClient(
-      'https://tpqsceyxdpgerjjiydmy.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
-    );
+    const supabase = createClient(
+      'https://tpqsceyxdpgerjjiydmy.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
+    );
 
-    // Function to get platform and embed details from URL
-    function getEmbedDetails(url) {
-      if (!url) return null;
+    // Function to get platform and embed details from URL
+    function getEmbedDetails(url) {
+      if (!url) return null;
 
-      let platform = 'Unknown';
-      let embedSrc = '';
-      let videoId = '';
-      let channelName = '';
+      let platform = 'Unknown';
+      let embedSrc = '';
+      let videoId = '';
+      let channelName = '';
 
-      // YouTube
-      const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=|embed\/|v\/|)([\w-]{11})(?:\S+)?/i;
-      const youtubeMatch = url.match(youtubeRegex);
-      if (youtubeMatch && youtubeMatch[1]) {
-        platform = 'YouTube';
-        videoId = youtubeMatch[1];
-        embedSrc = `https://www.youtube.com/embed/${videoId}?autoplay=0&controls=1&showinfo=0&rel=0`;
-        return { platform, embedSrc, videoId };
-      }
+      // YouTube
+      const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:m\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=|embed\/|v\/|)([a-zA-Z0-9_-]{11})(?:\S+)?/i;
+      const youtubeMatch = url.match(youtubeRegex);
+      if (youtubeMatch && youtubeMatch[1]) {
+        platform = 'YouTube';
+        videoId = youtubeMatch[1];
+        embedSrc = `https://www.youtube.com/embed/${videoId}?autoplay=0&controls=1&showinfo=0&rel=0`;
+        return { platform, embedSrc, videoId };
+      }
 
-      // Twitch
-      const twitchChannelRegex = /(?:https?:\/\/)?(?:www\.)?twitch\.tv\/([a-zA-Z0-9_]+)\/?$/i;
-      const twitchVideoRegex = /(?:https?:\/\/)?(?:www\.)?twitch\.tv\/videos\/(\d+)\/?$/i;
-      const twitchClipRegex = /(?:https?:\/\/)?(?:www\.)?twitch\.tv\/([a-zA-Z0-9_]+)\/clip\/([a-zA-Z0-9_]+)\/?$/i;
+      // Twitch
+      const twitchChannelRegex = /(?:https?:\/\/)?(?:www\.)?twitch\.tv\/([a-zA-Z0-9_]+)\/?$/i;
+      const twitchVideoRegex = /(?:https?:\/\/)?(?:www\.)?twitch\.tv\/videos\/(\d+)\/?$/i;
+      const twitchClipRegex = /(?:https?:\/\/)?(?:www\.)?twitch\.tv\/([a-zA-Z0-9_]+)\/clip\/([a-zA-Z0-9_]+)\/?$/i;
 
-      const twitchChannelMatch = url.match(twitchChannelRegex);
-      const twitchVideoMatch = url.match(twitchVideoRegex);
-      const twitchClipMatch = url.match(twitchClipRegex);
+      const twitchChannelMatch = url.match(twitchChannelRegex);
+      const twitchVideoMatch = url.match(twitchVideoRegex);
+      const twitchClipMatch = url.match(twitchClipRegex);
 
-      if (twitchChannelMatch && twitchChannelMatch[1]) {
-        platform = 'Twitch';
-        channelName = twitchChannelMatch[1];
-        // Replace 'yourdomain.com' with the actual domain where your HTML is hosted
-        // For local development, you might use 'localhost' or your local IP.
-        embedSrc = `https://player.twitch.tv/?channel=${channelName}&parent=${window.location.hostname}`;
-        return { platform, embedSrc, channelName };
-      } else if (twitchVideoMatch && twitchVideoMatch[1]) {
-        platform = 'Twitch (VOD)';
-        const videoId = twitchVideoMatch[1];
-        embedSrc = `https://player.twitch.tv/?video=${videoId}&parent=${window.location.hostname}`;
-        return { platform, embedSrc, videoId };
-      } else if (twitchClipMatch && twitchClipMatch[1] && twitchClipMatch[2]) {
-          platform = 'Twitch (Clip)';
-          const clipId = twitchClipMatch[2];
-          embedSrc = `https://clips.twitch.tv/embed?clip=${clipId}&parent=${window.location.hostname}`;
-          return { platform, embedSrc, clipId };
-      }
+      if (twitchChannelMatch && twitchChannelMatch[1]) {
+        platform = 'Twitch';
+        channelName = twitchChannelMatch[1];
+        // Replace 'yourdomain.com' with the actual domain where your HTML is hosted
+        // For local development, you might use 'localhost' or your local IP.
+        embedSrc = `https://player.twitch.tv/?channel=${channelName}&parent=${window.location.hostname}`;
+        return { platform, embedSrc, channelName };
+      } else if (twitchVideoMatch && twitchVideoMatch[1]) {
+        platform = 'Twitch (VOD)';
+        const videoId = twitchVideoMatch[1];
+        embedSrc = `https://player.twitch.tv/?video=${videoId}&parent=${window.location.hostname}`;
+        return { platform, embedSrc, videoId };
+      } else if (twitchClipMatch && twitchClipMatch[1] && twitchClipMatch[2]) {
+          platform = 'Twitch (Clip)';
+          const clipId = twitchClipMatch[2];
+          embedSrc = `https://clips.twitch.tv/embed?clip=${clipId}&parent=${window.location.hostname}`;
+          return { platform, embedSrc, clipId };
+      }
 
-      // SoundCloud (Direct track URL - for embedding with SoundCloud player)
-      const soundcloudTrackRegex = /(?:https?:\/\/)?(?:www\.)?soundcloud\.com\/([\w-]+)\/([\w-]+)(?:\S+)?/i;
-      const soundcloudMatch = url.match(soundcloudTrackRegex);
-      if (soundcloudMatch) {
-          platform = 'SoundCloud';
-          // SoundCloud's embed code usually involves their player API, which takes the full track URL.
-          // The `client_id` is deprecated or not directly needed for simple embeds anymore.
-          // Using the official widget URL format:
-          embedSrc = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23ff00cc&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true`;
-          return { platform, embedSrc };
-      }
+      // SoundCloud (Direct track URL - for embedding with SoundCloud player)
+      // This regex now captures the full track path, which is what the widget needs.
+      const soundcloudTrackRegex = /(?:https?:\/\/)?(?:www\.)?(?:m\.)?soundcloud\.com\/[\w-]+\/[\w-]+(?:\S+)?/i;
+      const soundcloudMatch = url.match(soundcloudTrackRegex);
+      if (soundcloudMatch) {
+          platform = 'SoundCloud';
+          embedSrc = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23ff00cc&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true`;
+          return { platform, embedSrc };
+      }
 
-      return null;
-    }
+      return null;
+    }
 
-    async function embedStream() {
-      const url = document.getElementById('stream-url').value.trim();
-      const errorMessage = document.getElementById('error-message');
-      const successMessage = document.getElementById('success-message');
-      const loading = document.getElementById('loading');
-      
-      errorMessage.style.display = 'none';
-      successMessage.style.display = 'none';
-      loading.style.display = 'block';
-      
-      if (!url) {
-        errorMessage.textContent = "Please enter a URL.";
-        errorMessage.style.display = 'block';
-        loading.style.display = 'none';
-        return;
-      }
+    async function embedStream() {
+      const urlInput = document.getElementById('stream-url');
+      const embedButton = document.getElementById('embedButton'); // Get the button element
+      const errorMessage = document.getElementById('error-message');
+      const successMessage = document.getElementById('success-message');
+      const loading = document.getElementById('loading');
+     
+      const originalButtonText = embedButton.textContent; // Store original text
 
-      const embedDetails = getEmbedDetails(url);
+      errorMessage.style.display = 'none';
+      successMessage.style.display = 'none';
+      loading.style.display = 'block';
+      embedButton.disabled = true; // Disable button immediately
+      embedButton.textContent = 'Embedding...'; // Change button text
 
-      if (!embedDetails) {
-        errorMessage.textContent = "Invalid or unsupported URL. Please enter a valid YouTube, Twitch, or SoundCloud URL.";
-        errorMessage.style.display = 'block';
-        loading.style.display = 'none';
-        return;
-      }
+      const url = urlInput.value.trim();
+      
+      if (!url) {
+        errorMessage.textContent = "Please enter a URL.";
+        errorMessage.style.display = 'block';
+        loading.style.display = 'none';
+        embedButton.disabled = false; // Re-enable button
+        embedButton.textContent = originalButtonText; // Restore button text
+        return;
+      }
 
-      try {
-        const { data, error } = await supabase
-          .from('streams')
-          .insert([{ 
-            url, 
-            platform: embedDetails.platform, // Store the recognized platform
-            created_at: new Date().toISOString() 
-          }]);
+      const embedDetails = getEmbedDetails(url);
 
-        if (error) {
-          throw new Error(error.message || 'Failed to store URL');
-        }
+      if (!embedDetails) {
+        errorMessage.textContent = "Invalid or unsupported URL. Please enter a valid YouTube, Twitch, or SoundCloud URL.";
+        errorMessage.style.display = 'block';
+        loading.style.display = 'none';
+        embedButton.disabled = false; // Re-enable button
+        embedButton.textContent = originalButtonText; // Restore button text
+        return;
+      }
 
-        successMessage.style.display = 'block';
-        loadStreams(); // Reload streams to show the new one
-        document.getElementById('stream-url').value = ''; // Clear input field
-      } catch (err) {
-        errorMessage.textContent = err.message;
-        errorMessage.style.display = 'block';
-      } finally {
-        loading.style.display = 'none';
-      }
-    }
+      try {
+        const { data, error } = await supabase
+          .from('streams')
+          .insert([{ 
+            url, 
+            platform: embedDetails.platform, // Store the recognized platform
+            created_at: new Date().toISOString() 
+          }]);
 
-    async function loadStreams() {
-      try {
-        const { data, error } = await supabase
-          .from('streams')
-          .select('*')
-          .order('created_at', { ascending: false });
+        if (error) {
+          throw new Error(error.message || 'Failed to store URL');
+        }
 
-        const embedContainer = document.getElementById('embed-container');
-        embedContainer.innerHTML = ''; // Clear previous embeds
+        successMessage.style.display = 'block';
+        loadStreams(); // Reload streams to show the new one
+        urlInput.value = ''; // Clear input field
+      } catch (err) {
+        errorMessage.textContent = err.message;
+        errorMessage.style.display = 'block';
+      } finally {
+        loading.style.display = 'none';
+        embedButton.disabled = false; // Always re-enable button
+        embedButton.textContent = originalButtonText; // Always restore button text
+      }
+    }
 
-        if (error) {
-          throw new Error(error.message || 'Failed to fetch streams');
-        }
+    async function loadStreams() {
+      try {
+        const { data, error } = await supabase
+          .from('streams')
+          .select('*')
+          .order('created_at', { ascending: false });
 
-        if (data && data.length > 0) {
-          data.forEach((stream) => {
-            const embedDetails = getEmbedDetails(stream.url);
-            if (embedDetails && embedDetails.embedSrc) {
-              let iframeCode = '';
-              let iframeHeight = '500px'; // Default height
+        const embedContainer = document.getElementById('embed-container');
+        embedContainer.innerHTML = ''; // Clear previous embeds
 
-              // Adjust height for SoundCloud if needed, or keep uniform
-              if (embedDetails.platform === 'SoundCloud') {
-                iframeHeight = '166px'; // SoundCloud player is typically shorter
-              }
+        if (error) {
+          throw new Error(error.message || 'Failed to fetch streams');
+        }
 
-              iframeCode = `<iframe width="100%" height="${iframeHeight}" src="${embedDetails.embedSrc}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-              embedContainer.innerHTML += `<div class="stream-embed">${iframeCode}</div>`;
-            } else {
-              console.warn(`Could not embed stream with URL: ${stream.url} (Platform: ${stream.platform})`);
-            }
-          });
-        } else {
-            embedContainer.innerHTML = '<p style="text-align: center; color: #888; margin-top: 20px;">No streams embedded yet. Add one above!</p>';
-        }
-      } catch (err) {
-        console.error("Error fetching or embedding streams:", err);
-        const embedContainer = document.getElementById('embed-container');
-        embedContainer.innerHTML = `<p style="color: red; text-align: center;">Error loading streams: ${err.message}</p>`;
-      }
-    }
+        if (data && data.length > 0) {
+          data.forEach((stream) => {
+            const embedDetails = getEmbedDetails(stream.url);
+            if (embedDetails && embedDetails.embedSrc) {
+              let iframeCode = '';
+              let iframeHeight = '500px'; // Default height
 
-    // Initial load of streams when the page loads
-    loadStreams();
+              // Adjust height for SoundCloud if needed, or keep uniform
+              if (embedDetails.platform === 'SoundCloud') {
+                iframeHeight = '166px'; // SoundCloud player is typically shorter
+              }
 
-    // Expose functions to the global scope if called directly from HTML (e.g., onclick)
-    window.embedStream = embedStream;
-  </script>
+              iframeCode = `<iframe width="100%" height="${iframeHeight}" src="${embedDetails.embedSrc}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+              embedContainer.innerHTML += `<div class="stream-embed">${iframeCode}</div>`;
+            } else {
+              console.warn(`Could not embed stream with URL: ${stream.url} (Platform: ${stream.platform})`);
+            }
+          });
+        } else {
+            embedContainer.innerHTML = '<p style="text-align: center; color: #888; margin-top: 20px;">No streams embedded yet. Add one above!</p>';
+        }
+      } catch (err) {
+        console.error("Error fetching or embedding streams:", err);
+        const embedContainer = document.getElementById('embed-container');
+        embedContainer.innerHTML = `<p style="color: red; text-align: center;">Error loading streams: ${err.message}</p>`;
+      }
+    }
+
+    // Initial load of streams when the page loads
+    loadStreams();
+
+    // Expose functions to the global scope if called directly from HTML (e.g., onclick)
+    window.embedStream = embedStream;
+  </script>
 </body>
 </html>

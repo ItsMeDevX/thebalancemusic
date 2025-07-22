@@ -334,7 +334,7 @@
             <input type="text" id="title" name="title" required placeholder="Enter the title of the stream">
 
             <label for="user_id">User ID:</label>
-            <input type="text" id="user_id" name="user_id" required placeholder="Enter your user ID">
+            <input type="text" id="user_id" name="user_id" required placeholder="Enter your user ID" readonly>
 
             <button type="submit">Submit</button>
         </form>
@@ -348,6 +348,35 @@
             'https://tpqsceyxdpgerjjiydmy.supabase.co',
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
         );
+
+        async function getUser() {
+            const { data: { session }, error } = await supabase.auth.getSession();
+
+            if (error) {
+                console.error('Error fetching session:', error.message);
+                return null;
+            }
+
+            // If the session exists, return the user ID
+            if (session && session.user) {
+                return session.user.id;
+            }
+
+            return null;  // User not logged in
+        }
+
+        // Auto-fill user ID when the page loads
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userId = await getUser();
+
+            if (userId) {
+                // If the user is logged in, set the user ID in the form field
+                document.getElementById('user_id').value = userId;
+            } else {
+                // Handle case if user is not logged in (could show login option)
+                document.getElementById('errorMessage').textContent = 'Please log in first.';
+            }
+        });
 
         document.getElementById('streamForm').addEventListener('submit', async function(event) {
             event.preventDefault();
@@ -365,22 +394,24 @@
             }
 
             // Insert data into Supabase
-            const { data, error } = await supabase
-                .from('streams')
-                .insert([
-                    {
+            try {
+                const { data, error } = await supabase
+                    .from('streams')
+                    .insert([{
                         url: url,
                         platform: platform,
                         title: title,
                         user_id: userId
-                    }
-                ]);
+                    }]);
 
-            if (error) {
+                if (error) {
+                    document.getElementById('errorMessage').textContent = `Error: ${error.message}`;
+                } else {
+                    alert('Stream URL has been successfully added!');
+                    document.getElementById('streamForm').reset();  // Reset form
+                }
+            } catch (error) {
                 document.getElementById('errorMessage').textContent = `Error: ${error.message}`;
-            } else {
-                alert('Stream URL has been successfully added!');
-                document.getElementById('streamForm').reset();
             }
         });
     </script>

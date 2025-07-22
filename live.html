@@ -345,7 +345,7 @@
       // YouTube URL format (both regular and live streams)
       if (url.includes('youtube.com') || url.includes('youtu.be')) {
         platform = 'YouTube';
-        const videoId = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/live/')[1] || url.split('/')[url.split('/').length - 1];
+        const videoId = getYouTubeVideoId(url);
         iframeCode = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
       }
       // Twitch URL format
@@ -389,6 +389,18 @@
       document.getElementById('stream-url').value = '';
     }
 
+    // Function to get YouTube video ID (including live streams)
+    function getYouTubeVideoId(url) {
+      let videoId = '';
+      if (url.includes('youtube.com')) {
+        const urlParams = new URLSearchParams(new URL(url).search);
+        videoId = urlParams.get('v') || url.split('live/')[1];
+      } else if (url.includes('youtu.be')) {
+        videoId = url.split('/').pop();
+      }
+      return videoId;
+    }
+
     // Fetch and display streams from Supabase on page load
     async function loadStreams() {
       const { data, error } = await supabase
@@ -411,7 +423,7 @@
     function getEmbedPlayer(url) {
       let iframeCode = '';
       if (url.includes('youtube.com') || url.includes('youtu.be')) {
-        const videoId = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/live/')[1] || url.split('/')[url.split('/').length - 1];
+        const videoId = getYouTubeVideoId(url);
         iframeCode = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
       }
       else if (url.includes('twitch.tv')) {

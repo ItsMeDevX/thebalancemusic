@@ -496,53 +496,76 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
     );
 
- async function embedStream() {
-  const url = document.getElementById('stream-url').value.trim();
-  const errorMessage = document.getElementById('error-message');
-  const successMessage = document.getElementById('success-message');
-  const loading = document.getElementById('loading');
-  const embedContainer = document.getElementById('embed-container');
-  
-  errorMessage.style.display = 'none';
-  successMessage.style.display = 'none';
-  loading.style.display = 'block';
-  
-  if (!url) {
-    errorMessage.textContent = "Please enter a URL.";
-    errorMessage.style.display = 'block';
-    loading.style.display = 'none';
-    return;
-  }
+    async function embedStream() {
+      const url = document.getElementById('stream-url').value.trim();
+      const errorMessage = document.getElementById('error-message');
+      const successMessage = document.getElementById('success-message');
+      const loading = document.getElementById('loading');
+      const embedContainer = document.getElementById('embed-container');
+      
+      errorMessage.style.display = 'none';
+      successMessage.style.display = 'none';
+      loading.style.display = 'block';
+      
+      if (!url) {
+        errorMessage.textContent = "Please enter a URL.";
+        errorMessage.style.display = 'block';
+        loading.style.display = 'none';
+        return;
+      }
 
-  // Check if URL is a YouTube URL and convert it to embed format
-  const youtubeRegex = /(?:https?:\/\/(?:www\.)?youtube\.com\/(?:[^\/\n\s]+\/\S+\/\S+|\S+)?|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-  const match = url.match(youtubeRegex);
-  if (match) {
-    url = `https://www.youtube.com/embed/${match[1]}`;
-  }
+      // Check for YouTube URL and convert to embed URL
+      let embedUrl = url;
+      let platform = "Unknown";
 
-  try {
-    const { data, error } = await supabase
-      .from('streams')
-      .insert([{ 
-        url, 
-        created_at: new Date().toISOString() 
-      }]);
+      // YouTube URL format detection and conversion
+      const youtubeRegex = /(?:https?:\/\/(?:www\.)?youtube\.com\/(?:[^\/\n\s]+\/\S+\/\S+|\S+)?|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+      const youtubeMatch = url.match(youtubeRegex);
+      if (youtubeMatch) {
+        platform = "YouTube";
+        embedUrl = `https://www.youtube.com/embed/${youtubeMatch[1]}`;
+      }
 
-    if (error) {
-      throw new Error(error.message || 'Failed to store URL');
+      // Twitch URL format detection and conversion
+      const twitchRegex = /(?:https?:\/\/(?:www\.)?twitch\.tv\/)([a-zA-Z0-9_]+)/;
+      const twitchMatch = url.match(twitchRegex);
+      if (twitchMatch) {
+        platform = "Twitch";
+        embedUrl = `https://player.twitch.tv/?channel=${twitchMatch[1]}`;
+      }
+
+      // SoundCloud URL format detection and conversion
+      const soundcloudRegex = /(?:https?:\/\/(?:www\.)?soundcloud\.com\/)([a-zA-Z0-9_\/\-]+)/;
+      const soundcloudMatch = url.match(soundcloudRegex);
+      if (soundcloudMatch) {
+        platform = "SoundCloud";
+        embedUrl = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${soundcloudMatch[1]}`;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('streams')
+          .insert([{ 
+            url, // original URL
+            platform, // platform (YouTube, Twitch, SoundCloud, etc.)
+            created_at: new Date().toISOString(),
+            user_id: "user-id", // You can replace this with actual user ID if you have authentication
+          }]);
+
+        if (error) {
+          throw new Error(error.message || 'Failed to store URL');
+        }
+
+        successMessage.style.display = 'block';
+        loadStreams(); // Refresh the stream list
+        document.getElementById('stream-url').value = '';
+      } catch (err) {
+        errorMessage.textContent = err.message;
+        errorMessage.style.display = 'block';
+      } finally {
+        loading.style.display = 'none';
+      }
     }
-
-    successMessage.style.display = 'block';
-    loadStreams(); // Refresh the stream list
-    document.getElementById('stream-url').value = '';
-  } catch (err) {
-    errorMessage.textContent = err.message;
-    errorMessage.style.display = 'block';
-  } finally {
-    loading.style.display = 'none';
-  }
-}
 
     async function loadStreams() {
       try {
@@ -557,8 +580,20 @@
         if (data) {
           data.forEach((stream) => {
             let iframeCode = '';
-
-            iframeCode = `<iframe width="100%" height="166" src="${stream.url}" frameborder="0" allowfullscreen></iframe>`;
+            
+            // For each stream, generate an appropriate iframe
+            if (stream.url.includes('youtube.com') || stream.url.includes('youtu.be')) {
+              const videoId = stream.url.split('v=')[1]?.split('&')[0];
+              if (videoId) {
+                iframeCode = `<iframe width="100%" height="166" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+              }
+            } else if (stream.url.includes('twitch.tv')) {
+              const channelName = stream.url.split('twitch.tv/')[1];
+              iframeCode = `<iframe src="https://player.twitch.tv/?channel=${channelName}" frameborder="0" allowfullscreen></iframe>`;
+            } else if (stream.url.includes('soundcloud.com')) {
+              const trackId = stream.url.split('soundcloud.com/')[1];
+              iframeCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}"></iframe>`;
+            }
 
             if (iframeCode) {
               embedContainer.innerHTML += `<div class="stream-embed">${iframeCode}</div>`;
@@ -569,6 +604,9 @@
         console.error("Error fetching streams:", err);
       }
     }
+
+    // Initial load of streams
+    loadStreams();
   </script>
 
 </body>

@@ -480,50 +480,49 @@
     &copy; 2025 The Balance. All rights reserved.
   </footer>
 
- <script type="module">
+  <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-    // Initialize Supabase client
     const supabase = createClient(
-      'https://tpqsceyxdpgerjjiydmy.supabase.co',  // Your Supabase URL
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'  // Your Supabase API Key
+      'https://tpqsceyxdpgerjjiydmy.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
     );
 
-    // Store the stream URL
+    // Function to store stream URL
     async function storeStream() {
       const url = document.getElementById('stream-url').value.trim();
       const errorMessage = document.getElementById('error-message');
-
-      errorMessage.style.display = 'none';  // Clear any previous error messages
-
-      // Ensure the URL is not empty
+      
+      // Clear error message
+      errorMessage.style.display = 'none';
+      
+      // Check if URL is empty
       if (!url) {
         errorMessage.textContent = "Please enter a URL.";
         errorMessage.style.display = 'block';
         return;
       }
 
+      // Save the URL to Supabase
       try {
-        // Insert the URL into Supabase
         const { data, error } = await supabase
           .from('streams')
           .insert([{ url, created_at: new Date().toISOString() }]);
 
         if (error) {
-          console.error('Error inserting data:', error);
-          throw new Error('Failed to store the URL');
+          throw new Error('Failed to store URL');
         }
 
-        document.getElementById('stream-url').value = '';  // Clear the input field
-        loadStreams();  // Reload streams list after storing the URL
-
+        // Clear input and reload streams
+        document.getElementById('stream-url').value = '';
+        loadStreams();
       } catch (err) {
         errorMessage.textContent = err.message;
         errorMessage.style.display = 'block';
       }
     }
 
-    // Load the stored stream URLs from Supabase
+    // Function to load and display the streams
     async function loadStreams() {
       try {
         const { data, error } = await supabase
@@ -531,26 +530,37 @@
           .select('*')
           .order('created_at', { ascending: false });
 
-        if (error) {
-          console.error("Error loading streams:", error);
-        } else {
-          const streamList = document.getElementById('stream-list');
-          streamList.innerHTML = '';  // Clear the existing list
+        const embedContainer = document.getElementById('embed-container');
+        embedContainer.innerHTML = ''; // Clear previous embeds
 
-          if (data) {
-            data.forEach((stream) => {
-              const li = document.createElement('li');
-              li.innerHTML = `<a href="${stream.url}" target="_blank">${stream.url}</a>`;
-              streamList.appendChild(li);
-            });
-          }
+        if (data) {
+          data.forEach((stream) => {
+            let iframeCode = '';
+            if (stream.url.includes('youtube.com') || stream.url.includes('youtu.be')) {
+              const videoId = stream.url.split('v=')[1]?.split('&')[0];
+              if (videoId) {
+                iframeCode = `<iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+              }
+            } else if (stream.url.includes('twitch.tv')) {
+              const channelName = stream.url.split('twitch.tv/')[1];
+              iframeCode = `<iframe src="https://player.twitch.tv/?channel=${channelName}" frameborder="0" allowfullscreen></iframe>`;
+            } else if (stream.url.includes('soundcloud.com')) {
+              const trackId = stream.url.split('soundcloud.com/')[1];
+              iframeCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}"></iframe>`;
+            }
+
+            // Add the iframe code to the page
+            if (iframeCode) {
+              embedContainer.innerHTML += `<div class="stream-embed">${iframeCode}</div>`;
+            }
+          });
         }
       } catch (err) {
         console.error("Error fetching streams:", err);
       }
     }
 
-    // Load stored streams when the page loads
+    // Initial load of streams
     loadStreams();
   </script>
   

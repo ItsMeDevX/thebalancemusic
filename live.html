@@ -352,8 +352,12 @@
 
         // Function to get the current authenticated user
         async function getUserId() {
-            const { data: { session } } = await supabase.auth.getSession();
-            return session?.user?.id; // Return user ID if logged in
+            const { data: { session }, error } = await supabase.auth.getSession();
+            if (error) {
+                console.error("Error fetching session:", error.message);
+                return null; // Return null if there's an error fetching session
+            }
+            return session?.user?.id || null; // Return user ID if logged in, otherwise null
         }
 
         // Handle form submission

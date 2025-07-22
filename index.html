@@ -66,65 +66,59 @@
       color: white;
       font-family: 'Orbitron', sans-serif;
     }
-
     #auth-bar {
       position: absolute;
       top: 20px;
       left: 20px;
       background-color: #1a1a1a;
       border-radius: 12px;
-      box-shadow: 0 0 12px rgba(255, 0, 204, 0.5);
-      padding: 12px 18px;
+      box-shadow: 0 0 12px #ff00cc88;
+      padding: 10px 16px;
       color: #39ff14;
       min-height: 60px;
       user-select: none;
       z-index: 1000;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
     }
-
     #user-dropdown {
       position: absolute;
       top: 70px;
       left: 0;
       background-color: #1a1a1a;
       border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 255, 255, 0.4);
-      min-width: 200px;
+      box-shadow: 0 4px 12px #00ffffcc;
+      min-width: 180px;
       display: none;
       flex-direction: column;
       z-index: 1000;
     }
-
     #user-dropdown button {
       background: none;
       border: none;
       color: #39ff14;
-      padding: 12px 18px;
+      padding: 10px 16px;
       text-align: left;
       font-weight: bold;
       font-family: 'Orbitron', sans-serif;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       transition: background-color 0.2s, color 0.2s;
     }
-
     #user-dropdown button:hover {
       background-color: #ff00cc;
       color: #1a1a1a;
     }
-
     #user-info {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       cursor: pointer;
       color: #39ff14;
     }
-
     #user-info img {
       width: 40px;
       height: 40px;
@@ -132,12 +126,10 @@
       border: 2px solid #ff00cc;
       object-fit: cover;
     }
-
     #user-info div {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: bold;
     }
-
     button.auth-btn {
       background-color: #ff00cc;
       color: #1a1a1a;
@@ -149,7 +141,6 @@
       cursor: pointer;
       transition: background-color 0.2s;
     }
-
     button.auth-btn:hover {
       background-color: #cc0099;
     }
@@ -161,7 +152,8 @@
   <!-- Auth UI Injected Here -->
 </div>
 
-<main style="padding-top: 120px;"></main>
+<main style="padding-top: 120px;">
+</main>
 
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';

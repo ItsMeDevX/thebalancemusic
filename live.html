@@ -331,6 +331,8 @@
     ul {
       list-style: none;
       padding: 0;
+      max-height: 600px;
+      overflow-y: auto;
     }
 
     li {
@@ -490,112 +492,67 @@
       const url = document.getElementById('stream-url').value.trim();
       const embedContainer = document.getElementById('embed-container');
       const errorMessage = document.getElementById('error-message');
-
-      errorMessage.style.display = 'none';
-
+    
+      errorMessage.style.display = 'none'; // Hide any previous error messages
+    
       if (!url) {
         errorMessage.textContent = "Please enter a URL or Video ID.";
         errorMessage.style.display = 'block';
         return;
       }
-
+    
       let iframeCode = '';
       let platform = '';
       let title = 'Untitled Stream';
-
-      // Check for supported platforms and generate embed code
-      if (url.includes('youtube.com') || url.includes('youtu.be')) {
-        platform = 'YouTube';
-        const videoId = getYouTubeVideoId(url);
-        iframeCode = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-      } else if (url.includes('twitch.tv')) {
-        platform = 'Twitch';
-        const channelName = url.split('twitch.tv/')[1];
-        iframeCode = `<iframe src="https://player.twitch.tv/?channel=${channelName}&autoplay=true" frameborder="0" allowfullscreen></iframe>`;
-      } else if (url.includes('soundcloud.com')) {
-        platform = 'SoundCloud';
-        const trackId = url.split('soundcloud.com/')[1];
-        iframeCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}&auto_play=true"></iframe>`;
-      } else {
-        errorMessage.textContent = "Unsupported URL format. Please provide a valid YouTube, Twitch, or SoundCloud URL.";
+    
+      try {
+        // Check for supported platforms and generate embed code
+        if (url.includes('youtube.com') || url.includes('youtu.be')) {
+          platform = 'YouTube';
+          const videoId = getYouTubeVideoId(url);
+          if (!videoId) throw new Error('Invalid YouTube URL');
+          iframeCode = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+        } else if (url.includes('twitch.tv')) {
+          platform = 'Twitch';
+          const channelName = url.split('twitch.tv/')[1];
+          if (!channelName) throw new Error('Invalid Twitch URL');
+          iframeCode = `<iframe src="https://player.twitch.tv/?channel=${channelName}&autoplay=true" frameborder="0" allowfullscreen></iframe>`;
+        } else if (url.includes('soundcloud.com')) {
+          platform = 'SoundCloud';
+          const trackId = url.split('soundcloud.com/')[1];
+          if (!trackId) throw new Error('Invalid SoundCloud URL');
+          iframeCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}&auto_play=true"></iframe>`;
+        } else {
+          throw new Error("Unsupported URL format. Please provide a valid YouTube, Twitch, or SoundCloud URL.");
+        }
+    
+        title = platform + ' Stream';
+    
+        // Insert the stream data into Supabase
+        const { data, error } = await supabase
+          .from('streams')
+          .insert([{
+            url,
+            platform,
+            title,
+            user_id: 'anonymous',
+            created_at: new Date().toISOString()
+          }]);
+    
+        if (error) {
+          throw new Error("Failed to save the stream to database.");
+        }
+    
+        // Display the embed
+        embedContainer.innerHTML += `<div style="margin-bottom: 20px;">${iframeCode}</div>`;
+        document.getElementById('stream-url').value = ''; // Clear input field
+        loadStreams(); // Refresh the stream list after adding a new one
+      } catch (err) {
+        console.error("Error: ", err);
+        errorMessage.textContent = err.message;
         errorMessage.style.display = 'block';
-        return;
       }
-
-      title = platform + ' Stream';
-
-      // Insert the stream data into the Supabase table
-      const { data, error } = await supabase
-        .from('streams')
-        .insert([{
-          url,
-          platform,
-          title,
-          user_id: 'anonymous',
-          created_at: new Date().toISOString()
-        }]);
-
-      if (error) {
-        console.error("Error inserting stream into database:", error);
-        errorMessage.textContent = "Failed to save the stream.";
-        errorMessage.style.display = 'block';
-        return;
-      }
-
-      embedContainer.innerHTML += `<div style="margin-bottom: 20px;">${iframeCode}</div>`;
-      document.getElementById('stream-url').value = ''; // Clear input field
-      loadStreams(); // Refresh the stream list after adding a new one
     }
-
-    function getYouTubeVideoId(url) {
-      let videoId = '';
-      if (url.includes('youtube.com')) {
-        const urlParams = new URLSearchParams(new URL(url).search);
-        videoId = urlParams.get('v') || url.split('live/')[1];
-      } else if (url.includes('youtu.be')) {
-        videoId = url.split('/').pop();
-      }
-      return videoId;
-    }
-
-    async function loadStreams() {
-      const { data, error } = await supabase
-        .from('streams')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error("Error fetching streams:", error);
-        return;
-      }
-
-      const trackList = document.getElementById('trackList');
-      trackList.innerHTML = ''; // Clear current list before adding new entries
-      data.forEach(stream => {
-        const iframeCode = getEmbedPlayer(stream.url);
-        const listItem = document.createElement('li');
-        listItem.innerHTML = iframeCode;
-        trackList.appendChild(listItem);
-      });
-    }
-
-    function getEmbedPlayer(url) {
-      let iframeCode = '';
-      if (url.includes('youtube.com') || url.includes('youtu.be')) {
-        const videoId = getYouTubeVideoId(url);
-        iframeCode = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-      } else if (url.includes('twitch.tv')) {
-        const channelName = url.split('twitch.tv/')[1];
-        iframeCode = `<iframe src="https://player.twitch.tv/?channel=${channelName}&autoplay=true" frameborder="0" allowfullscreen></iframe>`;
-      } else if (url.includes('soundcloud.com')) {
-        const trackId = url.split('soundcloud.com/')[1];
-        iframeCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}&auto_play=true"></iframe>`;
-      }
-      return iframeCode;
-    }
-
-    window.onload = loadStreams;
   </script>
-
 </body>
 </html>

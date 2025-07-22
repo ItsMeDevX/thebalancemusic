@@ -334,7 +334,8 @@
             <input type="text" id="title" name="title" required placeholder="Enter the title of the stream">
 
             <label for="user_id">User ID:</label>
-            <input type="text" id="user_id" name="user_id" required placeholder="Enter your user ID" readonly>
+            <!-- Hidden User ID field that will be filled dynamically -->
+            <input type="hidden" id="user_id" name="user_id">
 
             <button type="submit">Submit</button>
         </form>
@@ -344,47 +345,20 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.0/dist/umd/supabase.min.js"></script>
     <script>
+        // Initialize Supabase client
         const supabase = createClient(
             'https://tpqsceyxdpgerjjiydmy.supabase.co',
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
         );
 
-        async function getUser() {
-            const { data: { session }, error } = await supabase.auth.getSession();
-
-            if (error) {
-                console.error('Error fetching session:', error.message);
-                return null;
-            }
-
-            // If the session exists, return the user ID
-            if (session && session.user) {
-                return session.user.id;
-            }
-
-            return null;  // User not logged in
-        }
-
-        // Auto-fill user ID when the page loads
-        document.addEventListener('DOMContentLoaded', async () => {
-            const userId = await getUser();
-
-            if (userId) {
-                // If the user is logged in, set the user ID in the form field
-                document.getElementById('user_id').value = userId;
-            } else {
-                // Handle case if user is not logged in (could show login option)
-                document.getElementById('errorMessage').textContent = 'Please log in first.';
-            }
-        });
-
         document.getElementById('streamForm').addEventListener('submit', async function(event) {
             event.preventDefault();
 
+            // Get form values
             const url = document.getElementById('url').value;
             const platform = document.getElementById('platform').value;
             const title = document.getElementById('title').value;
-            const userId = document.getElementById('user_id').value;
+            const userId = document.getElementById('user_id').value; // Get user_id (which is hidden)
 
             // Basic URL validation
             const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}.*$/;
@@ -393,27 +367,40 @@
                 return;
             }
 
-            // Insert data into Supabase
-            try {
-                const { data, error } = await supabase
-                    .from('streams')
-                    .insert([{
+            // Insert stream data into Supabase
+            const { data, error } = await supabase
+                .from('streams')
+                .insert([
+                    {
                         url: url,
                         platform: platform,
                         title: title,
                         user_id: userId
-                    }]);
+                    }
+                ]);
 
-                if (error) {
-                    document.getElementById('errorMessage').textContent = `Error: ${error.message}`;
-                } else {
-                    alert('Stream URL has been successfully added!');
-                    document.getElementById('streamForm').reset();  // Reset form
-                }
-            } catch (error) {
+            if (error) {
                 document.getElementById('errorMessage').textContent = `Error: ${error.message}`;
+            } else {
+                alert('Stream URL has been successfully added!');
+                document.getElementById('streamForm').reset();
             }
         });
+
+        // Function to get the logged-in user and fill the hidden user_id field
+        async function getUser() {
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (session?.user) {
+                // Fill the hidden user_id field with the authenticated user's ID
+                document.getElementById('user_id').value = session.user.id;
+            } else {
+                document.getElementById('errorMessage').textContent = 'You need to be logged in to submit a stream.';
+            }
+        }
+
+        // Run the getUser function to set the user_id on page load
+        getUser();
     </script>
 
 </body>

@@ -440,14 +440,14 @@
     <!-- Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.0/dist/umd/supabase.min.js"></script>
     <script>
-        // Create Supabase client
+        // Initialize Supabase client with URL and anon key
         const supabase = createClient(
-            'https://tpqsceyxdpgerjjiydmy.supabase.co',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
+            'https://tpqsceyxdpgerjjiydmy.supabase.co', // Replace this with your own Supabase URL
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY' // Replace with your own anon key
         );
 
         // Handle form submission
-        document.getElementById('streamForm').addEventListener('submit', async function(event) {
+        document.getElementById('streamForm').addEventListener('submit', async function (event) {
             event.preventDefault(); // Prevent default form submission
 
             // Get the form values
@@ -455,29 +455,26 @@
             const platform = document.getElementById('platform').value;
             const title = document.getElementById('title').value;
 
-            try {
-                // Insert stream data into Supabase
-                const { data, error } = await supabase
-                    .from('streams')
-                    .insert([{
+            // Insert stream data into Supabase
+            const { data, error } = await supabase
+                .from('streams')
+                .insert([
+                    {
                         url: url,
                         platform: platform,
-                        title: title
-                    }]);
+                        title: title,
+                    }
+                ]);
 
-                if (error) {
-                    console.error("Error inserting data:", error);
-                    document.getElementById('errorMessage').textContent = `Error: ${error.message}`;
-                    document.getElementById('errorMessage').style.display = 'block';
-                } else {
-                    alert('Stream URL has been successfully added!');
-                    document.getElementById('streamForm').reset(); // Reset form after success
-                    document.getElementById('errorMessage').style.display = 'none'; // Hide error messages
-                }
-            } catch (error) {
-                console.error("Error during form submission:", error);
-                document.getElementById('errorMessage').textContent = 'An error occurred while submitting the stream.';
+            if (error) {
+                console.error("Error inserting data:", error);
+                document.getElementById('errorMessage').textContent = `Error: ${error.message}`;
                 document.getElementById('errorMessage').style.display = 'block';
+            } else {
+                // Success - show alert and reset form
+                alert('Stream URL has been successfully added!');
+                document.getElementById('streamForm').reset();
+                document.getElementById('errorMessage').style.display = 'none';
             }
         });
     </script>

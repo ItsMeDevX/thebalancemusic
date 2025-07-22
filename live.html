@@ -354,16 +354,6 @@
             box-sizing: border-box;
         }
 
-        input:invalid,
-        textarea:invalid {
-            box-shadow: 0 0 5px red;
-        }
-
-        input:focus,
-        textarea:focus {
-            border: 2px solid #ff00cc;
-        }
-
         button {
             background-color: #ff00cc;
             color: #fff;
@@ -482,16 +472,8 @@
             document.getElementById('user_id').value = userId;  // Set user_id to hidden input
             console.log("User ID:", userId); // Log user ID for debugging
 
-            // Validate the URL format
-            const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}.*$/;
-            if (!urlPattern.test(url)) {
-                document.getElementById('errorMessage').textContent = 'Please enter a valid URL.';
-                document.getElementById('errorMessage').style.display = 'block';
-                return;
-            }
-
             try {
-                // Insert stream data into Supabase
+                // Insert stream data into Supabase (no validation)
                 const { data, error } = await supabase
                     .from('streams')
                     .insert([{
@@ -521,3 +503,4 @@
 </body>
 
 </html>
+

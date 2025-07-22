@@ -357,7 +357,7 @@
                 console.error("Error fetching session:", error.message);
                 return null; // Return null if there's an error fetching session
             }
-            return session?.user?.id || null; // Return user ID if logged in, otherwise null
+            return session?.user?.id || "guest"; // Return user ID if logged in, otherwise "guest"
         }
 
         // Handle form submission
@@ -369,12 +369,9 @@
             const platform = document.getElementById('platform').value;
             const title = document.getElementById('title').value;
 
-            // Get user ID from Supabase
+            // Get user ID from Supabase (or "guest" if not logged in)
             const userId = await getUserId();
-            if (!userId) {
-                document.getElementById('errorMessage').textContent = 'You must be logged in to submit a stream.';
-                return;
-            }
+            document.getElementById('user_id').value = userId;  // Set user_id to hidden input
 
             // Basic URL validation
             const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}.*$/;

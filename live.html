@@ -397,6 +397,7 @@
       font-weight: bold;
       box-shadow: 0 0 12px #ff00cc88;
       transition: background-color 0.3s ease;
+      margin-top: 15px; /* Added margin for button */
     }
     button:hover {
       background-color: #cc0099;
@@ -414,9 +415,12 @@
     }
     #embed-container iframe {
       width: 100%;
-      height: 500px;
+      height: 500px; /* Increased default height for better viewing */
       margin-top: 20px;
       border-radius: 8px;
+    }
+    .stream-embed {
+        margin-bottom: 20px; /* Space between embedded streams */
     }
     #error-message {
       color: red;
@@ -427,6 +431,8 @@
       color: #ff00cc;
       font-size: 1.2rem;
       font-weight: bold;
+      text-align: center;
+      margin-top: 10px;
     }
     @media (max-width: 600px) {
       header h1 {
@@ -461,31 +467,29 @@
     <section>
       <h2>Latest Streams</h2>
       <ul id="trackList">
-        <!-- Tracks will be inserted here -->
-      </ul>
+        </ul>
     </section>
 
     <section>
       <h3>Embed Your Stream (YouTube, Twitch, SoundCloud)</h3>
       <p style="color: #555; font-size: 1.1rem;">Enter the URL of a live stream or video from YouTube, Twitch, or SoundCloud to embed it below.</p>
-    
+      
       <div style="margin-top: 20px;">
-        <input type="text" id="stream-url" placeholder="Enter YouTube/Twitch/SoundCloud URL or Video ID" style="width: 100%; border-radius: 5px; border: 1px solid #ccc;" />
+        <input type="text" id="stream-url" placeholder="Enter YouTube/Twitch/SoundCloud URL" style="width: 100%; border-radius: 5px; border: 1px solid #ccc;" />
         <button onclick="embedStream()">Embed Stream</button>
       </div>
-    
+      
       <p id="error-message" class="error-message"></p>
       <p id="success-message" class="success-message">Stream added successfully!</p>
 
       <div id="embed-container">
-        <!-- Embedded iframes will appear here -->
-      </div>
+        </div>
       <div id="loading" class="loading">Loading...</div>
     </section>
   </main>
 
   <footer>
-    &copy; 2025 The Balance. All rights reserved.
+    © 2025 The Balance. All rights reserved.
   </footer>
 
   <script type="module">
@@ -496,12 +500,73 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
     );
 
+    // Function to get platform and embed details from URL
+    function getEmbedDetails(url) {
+      if (!url) return null;
+
+      let platform = 'Unknown';
+      let embedSrc = '';
+      let videoId = '';
+      let channelName = '';
+
+      // YouTube
+      const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=|embed\/|v\/|)([\w-]{11})(?:\S+)?/i;
+      const youtubeMatch = url.match(youtubeRegex);
+      if (youtubeMatch && youtubeMatch[1]) {
+        platform = 'YouTube';
+        videoId = youtubeMatch[1];
+        embedSrc = `https://www.youtube.com/embed/${videoId}?autoplay=0&controls=1&showinfo=0&rel=0`;
+        return { platform, embedSrc, videoId };
+      }
+
+      // Twitch
+      const twitchChannelRegex = /(?:https?:\/\/)?(?:www\.)?twitch\.tv\/([a-zA-Z0-9_]+)\/?$/i;
+      const twitchVideoRegex = /(?:https?:\/\/)?(?:www\.)?twitch\.tv\/videos\/(\d+)\/?$/i;
+      const twitchClipRegex = /(?:https?:\/\/)?(?:www\.)?twitch\.tv\/([a-zA-Z0-9_]+)\/clip\/([a-zA-Z0-9_]+)\/?$/i;
+
+      const twitchChannelMatch = url.match(twitchChannelRegex);
+      const twitchVideoMatch = url.match(twitchVideoRegex);
+      const twitchClipMatch = url.match(twitchClipRegex);
+
+      if (twitchChannelMatch && twitchChannelMatch[1]) {
+        platform = 'Twitch';
+        channelName = twitchChannelMatch[1];
+        // Replace 'yourdomain.com' with the actual domain where your HTML is hosted
+        // For local development, you might use 'localhost' or your local IP.
+        embedSrc = `https://player.twitch.tv/?channel=${channelName}&parent=${window.location.hostname}`;
+        return { platform, embedSrc, channelName };
+      } else if (twitchVideoMatch && twitchVideoMatch[1]) {
+        platform = 'Twitch (VOD)';
+        const videoId = twitchVideoMatch[1];
+        embedSrc = `https://player.twitch.tv/?video=${videoId}&parent=${window.location.hostname}`;
+        return { platform, embedSrc, videoId };
+      } else if (twitchClipMatch && twitchClipMatch[1] && twitchClipMatch[2]) {
+          platform = 'Twitch (Clip)';
+          const clipId = twitchClipMatch[2];
+          embedSrc = `https://clips.twitch.tv/embed?clip=${clipId}&parent=${window.location.hostname}`;
+          return { platform, embedSrc, clipId };
+      }
+
+      // SoundCloud (Direct track URL - for embedding with SoundCloud player)
+      const soundcloudTrackRegex = /(?:https?:\/\/)?(?:www\.)?soundcloud\.com\/([\w-]+)\/([\w-]+)(?:\S+)?/i;
+      const soundcloudMatch = url.match(soundcloudTrackRegex);
+      if (soundcloudMatch) {
+          platform = 'SoundCloud';
+          // SoundCloud's embed code usually involves their player API, which takes the full track URL.
+          // The `client_id` is deprecated or not directly needed for simple embeds anymore.
+          // Using the official widget URL format:
+          embedSrc = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23ff00cc&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true`;
+          return { platform, embedSrc };
+      }
+
+      return null;
+    }
+
     async function embedStream() {
       const url = document.getElementById('stream-url').value.trim();
       const errorMessage = document.getElementById('error-message');
       const successMessage = document.getElementById('success-message');
       const loading = document.getElementById('loading');
-      const embedContainer = document.getElementById('embed-container');
       
       errorMessage.style.display = 'none';
       successMessage.style.display = 'none';
@@ -514,12 +579,21 @@
         return;
       }
 
+      const embedDetails = getEmbedDetails(url);
+
+      if (!embedDetails) {
+        errorMessage.textContent = "Invalid or unsupported URL. Please enter a valid YouTube, Twitch, or SoundCloud URL.";
+        errorMessage.style.display = 'block';
+        loading.style.display = 'none';
+        return;
+      }
+
       try {
         const { data, error } = await supabase
           .from('streams')
           .insert([{ 
             url, 
-            platform: getPlatformFromUrl(url),
+            platform: embedDetails.platform, // Store the recognized platform
             created_at: new Date().toISOString() 
           }]);
 
@@ -528,21 +602,14 @@
         }
 
         successMessage.style.display = 'block';
-        loadStreams();
-        document.getElementById('stream-url').value = '';
+        loadStreams(); // Reload streams to show the new one
+        document.getElementById('stream-url').value = ''; // Clear input field
       } catch (err) {
         errorMessage.textContent = err.message;
         errorMessage.style.display = 'block';
       } finally {
         loading.style.display = 'none';
       }
-    }
-
-    function getPlatformFromUrl(url) {
-      if (url.includes('youtube.com') || url.includes('youtu.be')) return 'YouTube';
-      if (url.includes('twitch.tv')) return 'Twitch';
-      if (url.includes('soundcloud.com')) return 'SoundCloud';
-      return 'Unknown';
     }
 
     async function loadStreams() {
@@ -555,35 +622,43 @@
         const embedContainer = document.getElementById('embed-container');
         embedContainer.innerHTML = ''; // Clear previous embeds
 
-        if (data) {
+        if (error) {
+          throw new Error(error.message || 'Failed to fetch streams');
+        }
+
+        if (data && data.length > 0) {
           data.forEach((stream) => {
-            let iframeCode = '';
+            const embedDetails = getEmbedDetails(stream.url);
+            if (embedDetails && embedDetails.embedSrc) {
+              let iframeCode = '';
+              let iframeHeight = '500px'; // Default height
 
-            if (stream.url.includes('youtube.com') || stream.url.includes('youtu.be')) {
-              const videoId = stream.url.split('v=')[1]?.split('&')[0];
-              if (videoId) {
-                iframeCode = `<iframe width="100%" height="166" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+              // Adjust height for SoundCloud if needed, or keep uniform
+              if (embedDetails.platform === 'SoundCloud') {
+                iframeHeight = '166px'; // SoundCloud player is typically shorter
               }
-            } else if (stream.url.includes('twitch.tv')) {
-              const channelName = stream.url.split('twitch.tv/')[1];
-              iframeCode = `<iframe src="https://player.twitch.tv/?channel=${channelName}" frameborder="0" allowfullscreen></iframe>`;
-            } else if (stream.url.includes('soundcloud.com')) {
-              const trackId = stream.url.split('soundcloud.com/')[1];
-              iframeCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}"></iframe>`;
-            }
 
-            if (iframeCode) {
+              iframeCode = `<iframe width="100%" height="${iframeHeight}" src="${embedDetails.embedSrc}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
               embedContainer.innerHTML += `<div class="stream-embed">${iframeCode}</div>`;
+            } else {
+              console.warn(`Could not embed stream with URL: ${stream.url} (Platform: ${stream.platform})`);
             }
           });
+        } else {
+            embedContainer.innerHTML = '<p style="text-align: center; color: #888; margin-top: 20px;">No streams embedded yet. Add one above!</p>';
         }
       } catch (err) {
-        console.error("Error fetching streams:", err);
+        console.error("Error fetching or embedding streams:", err);
+        const embedContainer = document.getElementById('embed-container');
+        embedContainer.innerHTML = `<p style="color: red; text-align: center;">Error loading streams: ${err.message}</p>`;
       }
     }
 
-    // Initial load of streams
+    // Initial load of streams when the page loads
     loadStreams();
+
+    // Expose functions to the global scope if called directly from HTML (e.g., onclick)
+    window.embedStream = embedStream;
   </script>
 </body>
 </html>

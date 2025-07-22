@@ -485,50 +485,45 @@
 
     // Initialize Supabase client
     const supabase = createClient(
-      'https://tpqsceyxdpgerjjiydmy.supabase.co',  // Replace with your Supabase URL
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY' // Replace with your Supabase API key
+      'https://tpqsceyxdpgerjjiydmy.supabase.co',  // Your Supabase URL
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'  // Your Supabase API Key
     );
 
-    // Function to store stream URL
+    // Store the stream URL
     async function storeStream() {
       const url = document.getElementById('stream-url').value.trim();
       const errorMessage = document.getElementById('error-message');
-      
-      // Clear any previous error message
-      errorMessage.style.display = 'none';
 
-      // Validate URL input
+      errorMessage.style.display = 'none';  // Clear any previous error messages
+
+      // Ensure the URL is not empty
       if (!url) {
         errorMessage.textContent = "Please enter a URL.";
         errorMessage.style.display = 'block';
         return;
       }
-      
+
       try {
-        // Insert URL into Supabase
+        // Insert the URL into Supabase
         const { data, error } = await supabase
           .from('streams')
-          .insert([{
-            url: url,
-            created_at: new Date().toISOString()
-          }]);
+          .insert([{ url, created_at: new Date().toISOString() }]);
 
-        // Handle any errors from Supabase
         if (error) {
           console.error('Error inserting data:', error);
           throw new Error('Failed to store the URL');
         }
 
-        // Clear the input field after submission
-        document.getElementById('stream-url').value = '';
-        loadStreams();  // Refresh the stream list after submission
+        document.getElementById('stream-url').value = '';  // Clear the input field
+        loadStreams();  // Reload streams list after storing the URL
+
       } catch (err) {
         errorMessage.textContent = err.message;
         errorMessage.style.display = 'block';
       }
     }
 
-    // Function to load and display stored URLs
+    // Load the stored stream URLs from Supabase
     async function loadStreams() {
       try {
         const { data, error } = await supabase
@@ -536,16 +531,14 @@
           .select('*')
           .order('created_at', { ascending: false });
 
-        // Handle any errors from Supabase
         if (error) {
           console.error("Error loading streams:", error);
         } else {
           const streamList = document.getElementById('stream-list');
-          streamList.innerHTML = ''; // Clear the existing list
+          streamList.innerHTML = '';  // Clear the existing list
 
-          // Display each stored stream URL
           if (data) {
-            data.forEach(stream => {
+            data.forEach((stream) => {
               const li = document.createElement('li');
               li.innerHTML = `<a href="${stream.url}" target="_blank">${stream.url}</a>`;
               streamList.appendChild(li);
@@ -557,8 +550,9 @@
       }
     }
 
-    // Initial load of streams when the page loads
+    // Load stored streams when the page loads
     loadStreams();
   </script>
+  
 </body>
 </html>

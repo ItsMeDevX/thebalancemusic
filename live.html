@@ -480,7 +480,7 @@
     &copy; 2025 The Balance. All rights reserved.
   </footer>
 
-  <script type="module">
+<script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
     const supabase = createClient(
@@ -538,9 +538,12 @@
             user_id: 'anonymous',
             created_at: new Date().toISOString()
           }]);
-    
+
         if (error) {
+          console.error('Supabase Error:', error);
           throw new Error("Failed to save the stream to database.");
+        } else {
+          console.log('Stream inserted:', data);
         }
     
         // Display the embed
@@ -553,6 +556,36 @@
         errorMessage.style.display = 'block';
       }
     }
+
+    // Helper function to extract YouTube video ID
+    function getYouTubeVideoId(url) {
+      const regex = /(?:https?:\/\/(?:www\.)?(?:youtube\.com\/(?:[^/]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/))([a-zA-Z0-9_-]{11})/;
+      const match = url.match(regex);
+      return match ? match[1] : null;
+    }
+
+    // Optional: Function to load streams from the database if needed
+    async function loadStreams() {
+      const { data, error } = await supabase
+        .from('streams')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.error("Error loading streams:", error);
+      } else {
+        const trackList = document.getElementById('trackList');
+        trackList.innerHTML = ''; // Clear the existing list
+        data.forEach(stream => {
+          const li = document.createElement('li');
+          li.innerHTML = `<a href="${stream.url}" class="download-link" target="_blank">${stream.title}</a>`;
+          trackList.appendChild(li);
+        });
+      }
+    }
+
+    // Initial load of streams when the page loads
+    loadStreams();
   </script>
 </body>
 </html>

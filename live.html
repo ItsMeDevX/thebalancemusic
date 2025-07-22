@@ -259,32 +259,34 @@
   <title>The Balance - Music Sharing</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    body {
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
       font-family: 'Orbitron', sans-serif;
       background: #0f0f0f;
       color: #f5f5f5;
       max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
-      box-sizing: border-box;
+      margin: 0 auto;
       padding: 20px;
+      transition: background-color 0.3s ease;
     }
     header {
       background: linear-gradient(90deg, #ff00cc, #3333ff);
       padding: 20px 40px;
       color: #fff;
+      text-align: center;
       box-shadow: 0 0 20px #ff00cc;
       position: relative;
-      text-align: center;
       margin-bottom: 20px;
     }
     header h1 {
-      margin: 0;
       font-size: 3em;
       letter-spacing: 2px;
     }
-    .logo {
+    header .logo {
       position: absolute;
       top: 20px;
       right: 30px;
@@ -294,23 +296,26 @@
     }
     nav {
       background: #1a1a1a;
-      text-align: center;
       padding: 15px 0;
+      text-align: center;
       box-shadow: 0 0 10px #00ffff;
       margin-bottom: 30px;
     }
     nav a {
-      margin: 0 15px;
       text-decoration: none;
       color: #00ffff;
       font-weight: bold;
       font-size: 1.1em;
+      margin: 0 15px;
       transition: color 0.3s;
     }
     nav a:hover {
       color: #ff00cc;
     }
-    main section {
+    main {
+      padding-bottom: 40px;
+    }
+    section {
       margin-bottom: 3rem;
     }
     h2, h3 {
@@ -373,7 +378,12 @@
       color: #ff4d4d;
       font-size: 0.9em;
       margin-top: 0.25rem;
-      font-weight: normal;
+    }
+    .success-message {
+      display: none;
+      color: #39ff14;
+      font-size: 1rem;
+      margin-top: 1rem;
     }
     button {
       background-color: #ff00cc;
@@ -399,15 +409,33 @@
       border-top: 2px solid #ff00cc;
       box-shadow: 0 -4px 15px #ff00cc33;
       margin-top: 40px;
+      position: sticky;
+      bottom: 0;
     }
     #embed-container iframe {
-      margin-top: 20px;
       width: 100%;
       height: 500px;
+      margin-top: 20px;
+      border-radius: 8px;
     }
     #error-message {
       color: red;
       font-size: 1rem;
+    }
+    .loading {
+      display: none;
+      color: #ff00cc;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2em;
+      }
+      nav a {
+        margin: 0 10px;
+        font-size: 1em;
+      }
     }
   </style>
 </head>
@@ -415,7 +443,7 @@
 
   <header>
     <h1>The Balance</h1>
-    <p>Live</p>
+    <p>Live Music Sharing</p>
     <img src="TheBalanceLogo.png" alt="The Balance Logo" class="logo" />
   </header>
 
@@ -442,15 +470,17 @@
       <p style="color: #555; font-size: 1.1rem;">Enter the URL of a live stream or video from YouTube, Twitch, or SoundCloud to embed it below.</p>
     
       <div style="margin-top: 20px;">
-        <input type="text" id="stream-url" placeholder="Enter YouTube/Twitch/SoundCloud URL or Video ID" style="width: 100%; border-radius: 5px; border: 1px solid #ccc;">
+        <input type="text" id="stream-url" placeholder="Enter YouTube/Twitch/SoundCloud URL or Video ID" style="width: 100%; border-radius: 5px; border: 1px solid #ccc;" />
         <button onclick="embedStream()">Embed Stream</button>
       </div>
     
       <p id="error-message" class="error-message"></p>
+      <p id="success-message" class="success-message">Stream added successfully!</p>
 
       <div id="embed-container">
         <!-- Embedded iframes will appear here -->
       </div>
+      <div id="loading" class="loading">Loading...</div>
     </section>
   </main>
 
@@ -461,26 +491,29 @@
   <script type="module">
     import { createClient } from '@supabase/supabase-js';
 
-  const supabase = createClient(
-    'https://tpqsceyxdpgerjjiydmy.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
-  );
+    const supabase = createClient(
+      'https://tpqsceyxdpgerjjiydmy.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
+    );
 
-    async function storeStream() {
+    async function embedStream() {
       const url = document.getElementById('stream-url').value.trim();
       const errorMessage = document.getElementById('error-message');
+      const successMessage = document.getElementById('success-message');
+      const loading = document.getElementById('loading');
+      const embedContainer = document.getElementById('embed-container');
       
-      // Clear error message
       errorMessage.style.display = 'none';
+      successMessage.style.display = 'none';
+      loading.style.display = 'block';
       
-      // Check if URL is empty
       if (!url) {
         errorMessage.textContent = "Please enter a URL.";
         errorMessage.style.display = 'block';
+        loading.style.display = 'none';
         return;
       }
 
-      // Save the URL to Supabase
       try {
         const { data, error } = await supabase
           .from('streams')
@@ -494,11 +527,14 @@
           throw new Error(error.message || 'Failed to store URL');
         }
 
-        document.getElementById('stream-url').value = '';
+        successMessage.style.display = 'block';
         loadStreams();
+        document.getElementById('stream-url').value = '';
       } catch (err) {
         errorMessage.textContent = err.message;
         errorMessage.style.display = 'block';
+      } finally {
+        loading.style.display = 'none';
       }
     }
 

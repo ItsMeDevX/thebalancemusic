@@ -450,7 +450,7 @@
 
   <main>
     <section>
-      <h2>Latest Streans</h2>
+      <h2>Latest Streams</h2>
       <ul id="trackList">
         <!-- Tracks will be inserted here -->
       </ul>
@@ -461,11 +461,11 @@
       <p style="color: #555; font-size: 1.1rem;">Enter the URL of a live stream or video from YouTube, Twitch, or SoundCloud to embed it below.</p>
     
       <div style="margin-top: 20px;">
-        <input type="text" id="stream-url" placeholder="Enter YouTube/Twitch/SoundCloud URL or Video ID" style="width: 70%; border-radius: 5px; border: 1px solid #ccc;">
-        <button onclick="embedStream()" style="background-color: #007BFF; color: white; border: none; border-radius: 5px;">Embed Stream</button>
+        <input type="text" id="stream-url" placeholder="Enter YouTube/Twitch/SoundCloud URL or Video ID" style="width: 100%; border-radius: 5px; border: 1px solid #ccc;">
+        <button onclick="embedStream()">Embed Stream</button>
       </div>
     
-      <p id="error-message" style="display: none;"></p>
+      <p id="error-message" class="error-message"></p>
 
       <div id="embed-container">
         <!-- Embedded iframes will appear here -->
@@ -565,10 +565,12 @@
         return;
       }
 
-      const embedContainer = document.getElementById('embed-container');
+      const trackList = document.getElementById('trackList');
       data.forEach(stream => {
         const iframeCode = getEmbedPlayer(stream.url);
-        embedContainer.innerHTML += `<div style="margin-bottom: 20px;">${iframeCode}</div>`;
+        const listItem = document.createElement('li');
+        listItem.innerHTML = iframeCode;
+        trackList.appendChild(listItem);
       });
     }
 

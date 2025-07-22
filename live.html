@@ -426,8 +426,6 @@
                 <label for="title">Stream Title:</label>
                 <input type="text" id="title" name="title" required placeholder="Enter the title of the stream">
 
-                <input type="hidden" id="user_id" name="user_id">
-
                 <button type="submit">Submit</button>
             </form>
 
@@ -448,16 +446,6 @@
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
         );
 
-        // Function to get the current authenticated user
-        async function getUserId() {
-            const { data: { session }, error } = await supabase.auth.getSession();
-            if (error) {
-                console.error("Error fetching session:", error.message);
-                return "guest"; // Default to "guest" if there's an issue fetching session
-            }
-            return session?.user?.id || "guest"; // Return user ID or "guest" if not logged in
-        }
-
         // Handle form submission
         document.getElementById('streamForm').addEventListener('submit', async function(event) {
             event.preventDefault(); // Prevent default form submission
@@ -467,20 +455,14 @@
             const platform = document.getElementById('platform').value;
             const title = document.getElementById('title').value;
 
-            // Get user ID (or guest if not logged in)
-            const userId = await getUserId();
-            document.getElementById('user_id').value = userId;  // Set user_id to hidden input
-            console.log("User ID:", userId); // Log user ID for debugging
-
             try {
-                // Insert stream data into Supabase (no validation)
+                // Insert stream data into Supabase
                 const { data, error } = await supabase
                     .from('streams')
                     .insert([{
                         url: url,
                         platform: platform,
-                        title: title,
-                        user_id: userId
+                        title: title
                     }]);
 
                 if (error) {
@@ -503,4 +485,3 @@
 </body>
 
 </html>
-

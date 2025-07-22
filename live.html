@@ -259,7 +259,137 @@
     <title>Submit Stream URL - The Balance</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
     <style>
-        /* Your existing styles remain the same */
+        body {
+            margin: 0;
+            font-family: 'Orbitron', sans-serif;
+            background: #0f0f0f;
+            color: #f5f5f5;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(90deg, #ff00cc, #3333ff);
+            padding: 20px 40px;
+            color: #fff;
+            box-shadow: 0 0 20px #ff00cc;
+            position: relative;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 3em;
+            letter-spacing: 2px;
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            width: 80px;
+            height: auto;
+            box-shadow: 0 0 10px #ff00cc88;
+        }
+
+        nav {
+            background: #1a1a1a;
+            text-align: center;
+            padding: 15px 0;
+            box-shadow: 0 0 10px #00ffff;
+            margin-bottom: 30px;
+        }
+
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #00ffff;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #ff00cc;
+        }
+
+        .container {
+            background-color: #1c1c1c;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px #ff00cc44;
+            color: #eee;
+        }
+
+        h2 {
+            color: #39ff14;
+            border-left: 4px solid #ff00cc;
+            padding-left: 10px;
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 1.25rem;
+            color: #39ff14;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            margin-top: 0.25rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #2a2a2a;
+            color: #fff;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #ff00cc;
+            color: #fff;
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            box-shadow: 0 0 12px #ff00cc88;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #cc0099;
+        }
+
+        .error-message {
+            display: none;
+            color: #ff4d4d;
+            font-size: 0.9em;
+            margin-top: 0.25rem;
+            font-weight: normal;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #330000;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #111;
+            color: #888;
+            border-top: 2px solid #ff00cc;
+            box-shadow: 0 -4px 15px #ff00cc33;
+            margin-top: 40px;
+        }
     </style>
 </head>
 
@@ -310,7 +440,7 @@
     <script>
         // Initialize Supabase client with URL and anon key
         const supabase = createClient(
-            'https://tpqsceyxdpgerjjiydmy.supabase.co',  // Replace with your Supabase URL
+            'https://tpqsceyxdpgerjjiydmy.supabase.co', // Replace with your Supabase URL
             'your-anon-key' // Replace with your Supabase anon key
         );
 
@@ -325,7 +455,6 @@
 
             // Get the current user id (assuming you're using Supabase Auth for authentication)
             const user = supabase.auth.user();  // This retrieves the logged-in user
-
             if (!user) {
                 document.getElementById('errorMessage').textContent = 'You must be logged in to submit a stream URL.';
                 document.getElementById('errorMessage').style.display = 'block';
@@ -335,37 +464,30 @@
             const user_id = user.id;  // Assuming `user.id` contains the user ID.
 
             // Insert stream data into Supabase
-            try {
-                const { data, error } = await supabase
-                    .from('streams')
-                    .insert([
-                        {
-                            url: url,
-                            platform: platform,
-                            title: title,
-                            user_id: user_id,  // Insert the user_id as well
-                            created_at: new Date().toISOString(),  // Optionally add the created_at timestamp manually
-                        }
-                    ]);
+            const { data, error } = await supabase
+                .from('streams')
+                .insert([
+                    {
+                        url: url,
+                        platform: platform,
+                        title: title,
+                        user_id: user_id,  // Insert the user_id as well
+                        created_at: new Date().toISOString(),  // Optionally add the created_at timestamp manually
+                    }
+                ]);
 
-                if (error) {
-                    console.error("Error inserting data:", error);
-                    document.getElementById('errorMessage').textContent = `Error: ${error.message}`;
-                    document.getElementById('errorMessage').style.display = 'block';
-                } else {
-                    console.log("Success! Stream data:", data); // Log to console for debugging
-                    alert('Stream URL has been successfully added!');
-                    document.getElementById('streamForm').reset();
-                    document.getElementById('errorMessage').style.display = 'none';
-                }
-            } catch (error) {
-                console.error("Error caught:", error);
-                document.getElementById('errorMessage').textContent = `Unexpected error: ${error.message}`;
+            if (error) {
+                console.error("Error inserting data:", error);
+                document.getElementById('errorMessage').textContent = `Error: ${error.message}`;
                 document.getElementById('errorMessage').style.display = 'block';
+            } else {
+                // Success - show alert and reset form
+                alert('Stream URL has been successfully added!');
+                document.getElementById('streamForm').reset();
+                document.getElementById('errorMessage').style.display = 'none';
             }
         });
     </script>
 
 </body>
 </html>
-

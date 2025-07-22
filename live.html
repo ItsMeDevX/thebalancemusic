@@ -485,67 +485,66 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
     );
 
-async function embedStream() {
-  const url = document.getElementById('stream-url').value.trim();
-  const embedContainer = document.getElementById('embed-container');
-  const errorMessage = document.getElementById('error-message');
+    async function embedStream() {
+      const url = document.getElementById('stream-url').value.trim();
+      const embedContainer = document.getElementById('embed-container');
+      const errorMessage = document.getElementById('error-message');
 
-  errorMessage.style.display = 'none';
+      errorMessage.style.display = 'none';
 
-  if (!url) {
-    errorMessage.textContent = "Please enter a URL or Video ID.";
-    errorMessage.style.display = 'block';
-    return;
-  }
+      if (!url) {
+        errorMessage.textContent = "Please enter a URL or Video ID.";
+        errorMessage.style.display = 'block';
+        return;
+      }
 
-  let iframeCode = '';
-  let platform = '';
-  let title = 'Untitled Stream';
+      let iframeCode = '';
+      let platform = '';
+      let title = 'Untitled Stream';
 
-  if (url.includes('youtube.com') || url.includes('youtu.be')) {
-    platform = 'YouTube';
-    const videoId = getYouTubeVideoId(url);
-    iframeCode = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-  } else if (url.includes('twitch.tv')) {
-    platform = 'Twitch';
-    const channelName = url.split('twitch.tv/')[1];
-    iframeCode = `<iframe src="https://player.twitch.tv/?channel=${channelName}&autoplay=true" frameborder="0" allowfullscreen></iframe>`;
-  } else if (url.includes('soundcloud.com')) {
-    platform = 'SoundCloud';
-    const trackId = url.split('soundcloud.com/')[1];
-    iframeCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}&auto_play=true"></iframe>`;
-  } else {
-    errorMessage.textContent = "Unsupported URL format. Please provide a valid YouTube, Twitch, or SoundCloud URL.";
-    errorMessage.style.display = 'block';
-    return;
-  }
+      // Check for supported platforms and generate embed code
+      if (url.includes('youtube.com') || url.includes('youtu.be')) {
+        platform = 'YouTube';
+        const videoId = getYouTubeVideoId(url);
+        iframeCode = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+      } else if (url.includes('twitch.tv')) {
+        platform = 'Twitch';
+        const channelName = url.split('twitch.tv/')[1];
+        iframeCode = `<iframe src="https://player.twitch.tv/?channel=${channelName}&autoplay=true" frameborder="0" allowfullscreen></iframe>`;
+      } else if (url.includes('soundcloud.com')) {
+        platform = 'SoundCloud';
+        const trackId = url.split('soundcloud.com/')[1];
+        iframeCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}&auto_play=true"></iframe>`;
+      } else {
+        errorMessage.textContent = "Unsupported URL format. Please provide a valid YouTube, Twitch, or SoundCloud URL.";
+        errorMessage.style.display = 'block';
+        return;
+      }
 
-  title = platform + ' Stream';
+      title = platform + ' Stream';
 
-  // Insert the stream data into the Supabase table
-  const { data, error } = await supabase
-    .from('streams')
-    .insert([{
-      url,
-      platform,
-      title,
-      user_id: 'anonymous', // Use a valid user ID here if available
-      created_at: new Date().toISOString() // Ensure this is an ISO 8601 timestamp
-    }]);
+      // Insert the stream data into the Supabase table
+      const { data, error } = await supabase
+        .from('streams')
+        .insert([{
+          url,
+          platform,
+          title,
+          user_id: 'anonymous',
+          created_at: new Date().toISOString()
+        }]);
 
-  if (error) {
-    console.error("Error inserting stream into database:", error);
-    errorMessage.textContent = "Failed to save the stream.";
-    errorMessage.style.display = 'block';
-    return;
-  }
+      if (error) {
+        console.error("Error inserting stream into database:", error);
+        errorMessage.textContent = "Failed to save the stream.";
+        errorMessage.style.display = 'block';
+        return;
+      }
 
-  console.log("Stream inserted:", data); // Debugging line to verify insertion
-
-  embedContainer.innerHTML += `<div style="margin-bottom: 20px;">${iframeCode}</div>`;
-  document.getElementById('stream-url').value = ''; // Clear input field
-  loadStreams(); // Refresh the stream list after adding a new one
-}
+      embedContainer.innerHTML += `<div style="margin-bottom: 20px;">${iframeCode}</div>`;
+      document.getElementById('stream-url').value = ''; // Clear input field
+      loadStreams(); // Refresh the stream list after adding a new one
+    }
 
     function getYouTubeVideoId(url) {
       let videoId = '';

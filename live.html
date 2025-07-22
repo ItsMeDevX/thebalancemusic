@@ -251,10 +251,12 @@
 </body>
 </html>
 
- <meta charset="UTF-8" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Balance - Music Sharing</title>
-    <img src="TheBalanceLogo.png" alt="The Balance Logo" class="logo" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     body {
@@ -416,24 +418,25 @@
       box-shadow: 0 -4px 15px #ff00cc33;
       margin-top: 40px;
     }
-  </style>
-<head>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Balance - Music Sharing</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
-  <style>
-    /* ... your existing CSS (unchanged) ... */
+
+    #embed-container iframe {
+      margin-top: 20px;
+      width: 100%;
+      height: 500px;
+    }
+
+    #error-message {
+      color: red;
+      font-size: 1rem;
+    }
   </style>
 </head>
 <body>
 
- <header>
+  <header>
     <h1>The Balance</h1>
-    <p>Instrumentals</p>
+    <p>Live</p>
+    <img src="TheBalanceLogo.png" alt="The Balance Logo" class="logo" />
   </header>
 
   <nav>
@@ -447,71 +450,32 @@
 
   <main>
     <section>
-      <h2>Latest Instrumentals</h2>
+      <h2>Latest Streans</h2>
       <ul id="trackList">
         <!-- Tracks will be inserted here -->
       </ul>
+    </section>
+
+    <section>
+      <h3>Embed Your Stream (YouTube, Twitch, SoundCloud)</h3>
+      <p style="color: #555; font-size: 1.1rem;">Enter the URL of a live stream or video from YouTube, Twitch, or SoundCloud to embed it below.</p>
+    
+      <div style="margin-top: 20px;">
+        <input type="text" id="stream-url" placeholder="Enter YouTube/Twitch/SoundCloud URL or Video ID" style="width: 70%; border-radius: 5px; border: 1px solid #ccc;">
+        <button onclick="embedStream()" style="background-color: #007BFF; color: white; border: none; border-radius: 5px;">Embed Stream</button>
+      </div>
+    
+      <p id="error-message" style="display: none;"></p>
+
+      <div id="embed-container">
+        <!-- Embedded iframes will appear here -->
+      </div>
     </section>
   </main>
 
   <footer>
     &copy; 2025 The Balance. All rights reserved.
   </footer>
-  
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Balance - Stream Sharing</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Orbitron', sans-serif;
-      background: #0f0f0f;
-      color: #f5f5f5;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-      box-sizing: border-box;
-      padding: 20px;
-    }
-    h2, h3 {
-      color: #39ff14;
-    }
-    input, button {
-      padding: 12px;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-    #embed-container iframe {
-      margin-top: 20px;
-      width: 100%;
-      height: 500px;
-    }
-    #error-message {
-      color: red;
-      font-size: 1rem;
-    }
-  </style>
-</head>
-
-<body>
-
-  <div style="text-align: center; padding: 20px; max-width: 800px; margin: auto;">
-    <h2>Embed Your Stream (YouTube, Twitch, SoundCloud)</h2>
-    <p style="color: #555; font-size: 1.1rem;">Enter the URL of a live stream or video from YouTube, Twitch, or SoundCloud to embed it below.</p>
-  
-    <div style="margin-top: 20px;">
-      <input type="text" id="stream-url" placeholder="Enter YouTube/Twitch/SoundCloud URL or Video ID" style="width: 70%; border-radius: 5px; border: 1px solid #ccc;">
-      <button onclick="embedStream()" style="background-color: #007BFF; color: white; border: none; border-radius: 5px;">Embed Stream</button>
-    </div>
-  
-    <p id="error-message" style="display: none;"></p>
-
-    <div id="embed-container">
-      <!-- Embedded iframes will appear here -->
-    </div>
-  </div>
 
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -521,20 +485,17 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
     );
 
-    // Function to escape HTML characters
     function escapeHTML(str) {
       return String(str).replace(/[&<>"']/g, match => (
         { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[match]
       ));
     }
 
-    // Function to embed and save stream to Supabase
     async function embedStream() {
       const url = document.getElementById('stream-url').value.trim();
       const embedContainer = document.getElementById('embed-container');
       const errorMessage = document.getElementById('error-message');
 
-      // Clear previous error
       errorMessage.style.display = 'none';
 
       if (!url) {
@@ -547,20 +508,15 @@
       let platform = '';
       let title = 'Untitled Stream';
 
-      // YouTube URL format (both regular and live streams)
       if (url.includes('youtube.com') || url.includes('youtu.be')) {
         platform = 'YouTube';
         const videoId = getYouTubeVideoId(url);
         iframeCode = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-      }
-      // Twitch URL format
-      else if (url.includes('twitch.tv')) {
+      } else if (url.includes('twitch.tv')) {
         platform = 'Twitch';
         const channelName = url.split('twitch.tv/')[1];
         iframeCode = `<iframe src="https://player.twitch.tv/?channel=${channelName}&autoplay=true" frameborder="0" allowfullscreen></iframe>`;
-      }
-      // SoundCloud URL format
-      else if (url.includes('soundcloud.com')) {
+      } else if (url.includes('soundcloud.com')) {
         platform = 'SoundCloud';
         const trackId = url.split('soundcloud.com/')[1];
         iframeCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}&auto_play=true"></iframe>`;
@@ -570,15 +526,11 @@
         return;
       }
 
-      // Get title from URL (custom logic can be added here)
       title = platform + ' Stream';
 
-      // Save the stream to Supabase
       const { data, error } = await supabase
         .from('streams')
-        .insert([
-          { url, platform, title, user_id: 'anonymous', created_at: new Date().toISOString() }
-        ]);
+        .insert([{ url, platform, title, user_id: 'anonymous', created_at: new Date().toISOString() }]);
 
       if (error) {
         console.error("Error inserting stream into database:", error);
@@ -587,14 +539,10 @@
         return;
       }
 
-      // Append the iframe to the embed container
       embedContainer.innerHTML += `<div style="margin-bottom: 20px;">${iframeCode}</div>`;
-
-      // Clear the input field
       document.getElementById('stream-url').value = '';
     }
 
-    // Function to get YouTube video ID (including live streams)
     function getYouTubeVideoId(url) {
       let videoId = '';
       if (url.includes('youtube.com')) {
@@ -606,7 +554,6 @@
       return videoId;
     }
 
-    // Fetch and display streams from Supabase on page load
     async function loadStreams() {
       const { data, error } = await supabase
         .from('streams')
@@ -630,22 +577,17 @@
       if (url.includes('youtube.com') || url.includes('youtu.be')) {
         const videoId = getYouTubeVideoId(url);
         iframeCode = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-      }
-      else if (url.includes('twitch.tv')) {
+      } else if (url.includes('twitch.tv')) {
         const channelName = url.split('twitch.tv/')[1];
         iframeCode = `<iframe src="https://player.twitch.tv/?channel=${channelName}&autoplay=true" frameborder="0" allowfullscreen></iframe>`;
-      }
-      else if (url.includes('soundcloud.com')) {
+      } else if (url.includes('soundcloud.com')) {
         const trackId = url.split('soundcloud.com/')[1];
         iframeCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}&auto_play=true"></iframe>`;
       }
-
       return iframeCode;
     }
 
-    // Load existing streams on page load
     window.onload = loadStreams;
-
   </script>
 
 </body>

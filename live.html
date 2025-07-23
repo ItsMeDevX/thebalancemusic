@@ -253,6 +253,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -340,7 +341,8 @@
             font-weight: bold;
         }
 
-        input, textarea {
+        input,
+        textarea {
             width: 100%;
             padding: 0.75rem;
             margin-top: 0.25rem;
@@ -392,24 +394,20 @@
             margin-top: 40px;
         }
 
-        #streams {
+        .streams-list {
             margin-top: 20px;
         }
 
         .stream-item {
-            background: #1c1c1c;
+            background: #2a2a2a;
             padding: 15px;
             margin-bottom: 10px;
             border-left: 5px solid #00ffff;
-            box-shadow: 0 0 10px #00ffff33;
+            box-shadow: 0 0 8px #00ffff33;
         }
 
         .stream-item h3 {
-            color: #39ff14;
-        }
-
-        .stream-item p {
-            color: #ccc;
+            color: #ff00cc;
         }
     </style>
 </head>
@@ -449,9 +447,9 @@
 
         <div class="error-message" id="errorMessage"></div>
 
-        <div id="streams">
-            <h2>Streams:</h2>
-            <div id="streamList">Loading streams...</div>
+        <h2>Current Streams</h2>
+        <div id="streamsList" class="streams-list">
+            <p>Loading streams...</p>
         </div>
     </main>
 
@@ -462,12 +460,42 @@
     <!-- Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.0/dist/umd/supabase.min.js"></script>
     <script>
+        // Initialize Supabase client with URL and anon key
         const supabase = createClient(
             'https://tpqsceyxdpgerjjiydmy.supabase.co',
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
         );
 
-        // Load all existing streams
+        // Handle form submission
+        document.getElementById('streamForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Get the form values
+            const url = document.getElementById('url').value;
+            const platform = document.getElementById('platform').value;
+            const title = document.getElementById('title').value;
+
+            // Insert stream data into Supabase
+            const { data, error } = await supabase
+                .from('streams')  // Make sure you have a 'streams' table in Supabase
+                .insert([{
+                    url: url,
+                    platform: platform,
+                    title: title,
+                    created_at: new Date().toISOString(),
+                }]);
+
+            if (error) {
+                document.getElementById('errorMessage').textContent = `Error: ${error.message}`;
+                document.getElementById('errorMessage').style.display = 'block';
+            } else {
+                alert('Stream URL has been successfully added!');
+                document.getElementById('streamForm').reset();
+                document.getElementById('errorMessage').style.display = 'none';
+            }
+        });
+
+        // Function to load streams
         async function loadStreams() {
             const { data, error } = await supabase
                 .from('streams')
@@ -475,68 +503,35 @@
                 .order('created_at', { ascending: false });
 
             if (error) {
-                document.getElementById('streamList').textContent = `Error: ${error.message}`;
+                document.getElementById('streamsList').innerHTML = `<p>Error: ${error.message}</p>`;
                 return;
             }
 
+            const streamsList = document.getElementById('streamsList');
             if (data.length === 0) {
-                document.getElementById('streamList').textContent = 'No streams available.';
-                return;
-            }
-
-            const streamList = data.map(stream => `
-                <div class="stream-item">
-                    <h3>${stream.title}</h3>
-                    <p><strong>Platform:</strong> ${stream.platform}</p>
-                    <p><strong>URL:</strong> <a href="${stream.url}" target="_blank">${stream.url}</a></p>
-                </div>
-            `).join('');
-
-            document.getElementById('streamList').innerHTML = streamList;
-        }
-
-        // Handle stream form submission
-        document.getElementById('streamForm').addEventListener('submit', async function (event) {
-            event.preventDefault();
-
-            const url = document.getElementById('url').value;
-            const platform = document.getElementById('platform').value;
-            const title = document.getElementById('title').value;
-
-            const { data, error } = await supabase
-                .from('streams')
-                .insert([{ url, platform, title, created_at: new Date().toISOString() }]);
-
-            if (error) {
-                document.getElementById('errorMessage').textContent = `Error: ${error.message}`;
-                document.getElementById('errorMessage').style.display = 'block';
+                streamsList.innerHTML = "<p>No streams available.</p>";
             } else {
-                alert('Stream URL has been successfully added!');
-                loadStreams();  // Refresh the stream list
-                document.getElementById('streamForm').reset();
-                document.getElementById('errorMessage').style.display = 'none';
-            }
-        });
-
-        // Real-time listener for new streams
-        supabase
-            .from('streams')
-            .on('INSERT', payload => {
-                const stream = payload.new;
-                const streamItem = `
+                streamsList.innerHTML = data.map(stream => `
                     <div class="stream-item">
                         <h3>${stream.title}</h3>
                         <p><strong>Platform:</strong> ${stream.platform}</p>
                         <p><strong>URL:</strong> <a href="${stream.url}" target="_blank">${stream.url}</a></p>
                     </div>
-                `;
-                document.getElementById('streamList').innerHTML = streamItem + document.getElementById('streamList').innerHTML;
+                `).join('');
+            }
+        }
+
+        // Set up real-time subscription for new streams
+        const streamChannel = supabase
+            .channel('streams_channel')
+            .on('INSERT', payload => {
+                loadStreams();  // Reload streams when a new stream is added
             })
             .subscribe();
 
-        // Load the streams when the page loads
+        // Initial load of streams
         loadStreams();
     </script>
-
 </body>
+
 </html>

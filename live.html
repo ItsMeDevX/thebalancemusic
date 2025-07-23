@@ -253,12 +253,14 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Submit Stream URL - The Balance</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
     <style>
+        /* Add styles here as needed */
         body {
             margin: 0;
             font-family: 'Orbitron', sans-serif;
@@ -460,36 +462,25 @@
     </footer>
 
     <!-- Supabase JS SDK -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/supabase-js/2.39.0/umd/supabase.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.0/dist/umd/supabase.min.js"></script>
     <script>
         // Initialize Supabase client with URL and anon key
-        let supabase;
-        
-        try {
-            supabase = supabase.createClient(
-                'https://tpqsceyxdpgerjjiydmy.supabase.co',
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
-            );
-            console.log('Supabase client initialized successfully');
-        } catch (error) {
-            console.error('Failed to initialize Supabase:', error);
-            document.getElementById('noStreamsMessage').textContent = 'Database connection failed';
-        }
+        const supabase = createClient(
+            'https://tpqsceyxdpgerjjiydmy.supabase.co',
+            'YOUR_SUPABASE_ANON_KEY'
+        );
 
         // Handle form submission
         document.getElementById('streamForm').addEventListener('submit', async function (event) {
             event.preventDefault(); // Prevent form from submitting normally
 
-            if (!supabase) {
-                document.getElementById('errorMessage').textContent = "Database connection not available";
-                document.getElementById('errorMessage').style.display = 'block';
-                return;
-            }
+            // Get form values
+            const url = document.getElementById('url').value;
+            const platform = document.getElementById('platform').value;
+            const title = document.getElementById('title').value;
 
-            // Get form values and trim whitespace
-            const url = document.getElementById('url').value.trim();
-            const platform = document.getElementById('platform').value.trim();
-            const title = document.getElementById('title').value.trim();
+            // Get GitHub username
+            const githubUsername = await getUserGitHubUsername();
 
             // Validate fields
             if (!url || !platform || !title) {
@@ -498,108 +489,67 @@
                 return;
             }
 
-            try {
-                // Test connection first
-                const testConnection = await supabase.from('streams').select('count', { count: 'exact', head: true });
-                console.log('Connection test:', testConnection);
+            // Insert the stream data into Supabase
+            const { data, error } = await supabase
+                .from('streams')
+                .insert([{
+                    url: url,
+                    platform: platform,
+                    title: title,
+                    github_username: githubUsername,  // Save the GitHub username
+                    created_at: new Date().toISOString(),
+                }]);
 
-                // Insert the stream data into Supabase
-                const { data, error } = await supabase
-                    .from('streams')
-                    .insert({
-                        url: url,
-                        platform: platform,
-                        title: title,
-                        created_at: new Date().toISOString(),
-                    })
-                    .select();
-
-                if (error) {
-                    console.error('Insert error details:', error);
-                    throw error;
-                }
-
-                console.log('Insert successful:', data);
+            if (error) {
+                document.getElementById('errorMessage').textContent = `Error: ${error.message}`;
+                document.getElementById('errorMessage').style.display = 'block';
+            } else {
                 alert('Stream URL has been successfully added!');
                 document.getElementById('streamForm').reset();
                 document.getElementById('errorMessage').style.display = 'none';
                 loadStreams(); // Reload streams after submission
-
-            } catch (error) {
-                console.error('Submission error:', error);
-                document.getElementById('errorMessage').textContent = `Error: ${error.message || 'Unknown error occurred'}`;
-                document.getElementById('errorMessage').style.display = 'block';
             }
         });
+
+        // Function to get GitHub username
+        async function getUserGitHubUsername() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session?.user) {
+                const { user_metadata } = session.user;
+                return user_metadata.full_name || 'GitHub User';
+            }
+            return 'Guest';
+        }
 
         // Function to load streams from Supabase
         async function loadStreams() {
-            if (!supabase) {
-                document.getElementById('streamsList').innerHTML = '<p>Database connection not available</p>';
+            const { data, error } = await supabase
+                .from('streams')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Error loading streams:', error.message);
                 return;
             }
 
-            try {
-                console.log('Loading streams...');
-                const { data, error } = await supabase
-                    .from('streams')
-                    .select('id, url, platform, title, created_at')
-                    .order('created_at', { ascending: false })
-                    .limit(50);
-
-                console.log('Load streams response:', { data, error });
-
-                const streamsList = document.getElementById('streamsList');
-
-                if (error) {
-                    console.error('Load error details:', error);
-                    throw error;
-                }
-
-                if (!data || data.length === 0) {
-                    // Show "no streams" message
-                    streamsList.innerHTML = '<p id="noStreamsMessage">No streams available yet.</p>';
-                } else {
-                    // Show streams
-                    const streamsHTML = data.map(stream => `
-                        <div class="stream-item">
-                            <a href="${stream.url}" target="_blank" rel="noopener noreferrer">${stream.title} - ${stream.platform}</a>
-                        </div>
-                    `).join('');
-                    
-                    streamsList.innerHTML = streamsHTML;
-                }
-
-            } catch (error) {
-                console.error('Load streams error:', error);
-                document.getElementById('streamsList').innerHTML = `<p>Error loading streams: ${error.message || 'Unknown error'}</p>`;
+            const streamsList = document.getElementById('streamsList');
+            if (data.length === 0) {
+                streamsList.innerHTML = '<p>No streams yet. Be the first to add one!</p>';
+                return;
             }
+
+            streamsList.innerHTML = data.map(stream => `
+                <div class="stream-item">
+                    <strong>${stream.github_username || 'Guest'}</strong>: <a href="${stream.url}" target="_blank">${stream.title}</a> on ${stream.platform}
+                </div>
+            `).join('');
         }
 
-        // Real-time updates for new stream submissions with error handling
-        if (supabase) {
-            try {
-                const streamChannel = supabase.channel('streams_channel')
-                    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'streams' }, payload => {
-                        console.log('New stream added:', payload);
-                        loadStreams(); // Reload streams on new insert
-                    })
-                    .subscribe((status) => {
-                        console.log('Subscription status:', status);
-                    });
-            } catch (error) {
-                console.error('Real-time subscription error:', error);
-            }
-        }
-
-        // Load streams when page loads
-        window.addEventListener('load', function() {
-            loadStreams();
-        });
-
-        // Also try loading after a short delay in case of slow connection
-        setTimeout(loadStreams, 1000);
+        // Load streams on page load
+        loadStreams();
     </script>
 
 </body>
+
 </html>

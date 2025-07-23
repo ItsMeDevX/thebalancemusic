@@ -253,303 +253,276 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Submit Stream URL - The Balance</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
-    <style>
-        /* Add styles here as needed */
-        body {
-            margin: 0;
-            font-family: 'Orbitron', sans-serif;
-            background: #0f0f0f;
-            color: #f5f5f5;
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
-            box-sizing: border-box;
-            padding: 20px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Balance - Live Streams</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: #0f0f0f;
+      color: #f5f5f5;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      box-sizing: border-box;
+      padding: 20px;
+    }
 
-        header {
-            background: linear-gradient(90deg, #ff00cc, #3333ff);
-            padding: 20px 40px;
-            color: #fff;
-            box-shadow: 0 0 20px #ff00cc;
-            position: relative;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    header {
+      background: linear-gradient(90deg, #ff00cc, #3333ff);
+      padding: 20px 40px;
+      color: #fff;
+      box-shadow: 0 0 20px #ff00cc;
+      position: relative;
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-        header h1 {
-            margin: 0;
-            font-size: 3em;
-            letter-spacing: 2px;
-        }
+    header h1 {
+      margin: 0;
+      font-size: 3em;
+      letter-spacing: 2px;
+    }
 
-        .logo {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            width: 80px;
-            height: auto;
-            box-shadow: 0 0 10px #ff00cc88;
-        }
+    .logo {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      width: 80px;
+      height: auto;
+      box-shadow: 0 0 10px #ff00cc88;
+    }
 
-        nav {
-            background: #1a1a1a;
-            text-align: center;
-            padding: 15px 0;
-            box-shadow: 0 0 10px #00ffff;
-            margin-bottom: 30px;
-        }
+    nav {
+      background: #1a1a1a;
+      text-align: center;
+      padding: 15px 0;
+      box-shadow: 0 0 10px #00ffff;
+      margin-bottom: 30px;
+    }
 
-        nav a {
-            margin: 0 15px;
-            text-decoration: none;
-            color: #00ffff;
-            font-weight: bold;
-            font-size: 1.1em;
-            transition: color 0.3s;
-        }
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: #00ffff;
+      font-weight: bold;
+      font-size: 1.1em;
+      transition: color 0.3s;
+    }
 
-        nav a:hover {
-            color: #ff00cc;
-        }
+    nav a:hover {
+      color: #ff00cc;
+    }
 
-        main {
-            background-color: #1c1c1c;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 15px #ff00cc44;
-            color: #eee;
-        }
+    main section {
+      margin-bottom: 3rem;
+    }
 
-        h2 {
-            color: #39ff14;
-            border-left: 4px solid #ff00cc;
-            padding-left: 10px;
-            margin-top: 0;
-        }
+    h2, h3 {
+      color: #39ff14;
+      border-left: 4px solid #ff00cc;
+      padding-left: 10px;
+      margin-top: 0;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 1.25rem;
-            color: #39ff14;
-            font-weight: bold;
-        }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
 
-        input {
-            width: 100%;
-            padding: 0.75rem;
-            margin-top: 0.25rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            background: #2a2a2a;
-            color: #fff;
-            font-family: inherit;
-            box-sizing: border-box;
-        }
+    li {
+      background: #1c1c1c;
+      margin: 10px 0;
+      padding: 15px;
+      border-left: 5px solid #00ffff;
+      box-shadow: 0 0 8px #00ffff33;
+    }
 
-        button {
-            background-color: #ff00cc;
-            color: #fff;
-            border: none;
-            padding: 1rem;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            width: 100%;
-            font-weight: bold;
-            box-shadow: 0 0 12px #ff00cc88;
-            transition: background-color 0.3s ease;
-        }
+    form {
+      background: #1c1c1c;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #ff00cc44;
+      color: #eee;
+    }
 
-        button:hover {
-            background-color: #cc0099;
-        }
+    label {
+      display: block;
+      margin-bottom: 1.25rem;
+      color: #39ff14;
+      font-weight: bold;
+    }
 
-        .error-message {
-            display: none;
-            color: #ff4d4d;
-            font-size: 0.9em;
-            margin-top: 0.25rem;
-            font-weight: normal;
-            padding: 10px;
-            border-radius: 8px;
-            background-color: #330000;
-            transition: opacity 0.3s ease-in-out;
-        }
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.25rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #2a2a2a;
+      color: #fff;
+      font-family: inherit;
+      box-sizing: border-box;
+    }
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: #111;
-            color: #888;
-            border-top: 2px solid #ff00cc;
-            box-shadow: 0 -4px 15px #ff00cc33;
-            margin-top: 40px;
-        }
+    input:invalid {
+      box-shadow: 0 0 5px red;
+    }
 
-        .streams-list {
-            margin-top: 20px;
-        }
+    button {
+      background-color: #ff00cc;
+      color: #fff;
+      border: none;
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      width: 100%;
+      font-weight: bold;
+      box-shadow: 0 0 12px #ff00cc88;
+      transition: background-color 0.3s ease;
+    }
 
-        .stream-item {
-            margin-bottom: 10px;
-            font-size: 1.2em;
-            color: #00ffff;
-        }
+    button:hover {
+      background-color: #cc0099;
+    }
 
-        .stream-item a {
-            color: #39ff14;
-            text-decoration: none;
-            font-weight: bold;
-        }
+    #streams {
+      margin-bottom: 20px;
+    }
 
-        .stream-item a:hover {
-            color: #ff00cc;
-        }
-    </style>
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #111;
+      color: #888;
+      border-top: 2px solid #ff00cc;
+      box-shadow: 0 -4px 15px #ff00cc33;
+      margin-top: 40px;
+    }
+  </style>
 </head>
 
 <body>
+  <header>
+    <h1>The Balance</h1>
+    <p>Live Streams</p>
+  </header>
 
-    <header>
-        <h1>The Balance</h1>
-        <p>Submit a Stream URL</p>
-        <img src="TheBalanceLogo.png" alt="The Balance Logo" class="logo" />
-    </header>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="instrumentals.html">Instrumentals</a>
+    <a href="samples.html">Samples</a>
+    <a href="soundfx.html">Sound FX</a>
+    <a href="music.html">Music</a>
+    <a href="live.html">Live</a>
+    <a href="Community.html">Community</a>
+  </nav>
 
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="instrumentals.html">Instrumentals</a>
-        <a href="samples.html">Samples</a>
-        <a href="soundfx.html">Sound FX</a>
-        <a href="music.html">Music</a>
-        <a href="live.html">Live</a>
-        <a href="Community.html">Community</a>
-    </nav>
+  <main>
+    <section>
+      <h2>Welcome to The Balance Live Stream Community</h2>
+      <p>Share your live stream links with other artists and music lovers! Stay connected with us.</p>
+    </section>
 
-    <main>
-        <h2>Submit a Stream URL</h2>
-        <form id="streamForm" method="POST">
-            <label for="url">Stream URL:</label>
-            <input type="url" id="url" name="url" required placeholder="Enter the URL of the stream">
+    <section>
+      <h3>Live Stream Guidelines</h3>
+      <ul>
+        <li>Respect all members.</li>
+        <li>No spamming or self-promotion.</li>
+        <li>Keep discussions stream-focused.</li>
+        <li>Report any inappropriate behavior to moderators.</li>
+      </ul>
+    </section>
+    
+    <h1>Live Streams</h1>
 
-            <label for="platform">Platform:</label>
-            <input type="text" id="platform" name="platform" required placeholder="Enter the platform name (e.g., YouTube, Twitch)">
+    <div id="streams">
+      <p>Loading streams...</p>
+    </div>
 
-            <label for="title">Stream Title:</label>
-            <input type="text" id="title" name="title" required placeholder="Enter the title of the stream">
+    <form id="stream-form">
+      <input type="url" id="stream-url" placeholder="Paste your stream URL..." required />
+      <button type="submit">Add Stream</button>
+    </form>
+  </main>
 
-            <button type="submit">Submit</button>
-        </form>
+  <footer>
+    &copy; 2025 The Balance. All rights reserved.
+  </footer>
 
-        <div class="error-message" id="errorMessage"></div>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-        <h2>Current Streams</h2>
-        <div id="streamsList" class="streams-list">
-            <p id="noStreamsMessage">Loading streams...</p>
-        </div>
-    </main>
+    const supabaseUrl = 'https://tpqsceyxdpgerjjiydmy.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY';
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
-    <footer>
-        &copy; 2025 The Balance. All rights reserved.
-    </footer>
+    const streamsDiv = document.getElementById('streams');
+    const form = document.getElementById('stream-form');
+    const streamUrlInput = document.getElementById('stream-url');
 
-    <!-- Supabase JS SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.0/dist/umd/supabase.min.js"></script>
-    <script>
-        // Initialize Supabase client with URL and anon key
- const supabase = createClient(
-    'https://tpqsceyxdpgerjjiydmy.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
-  );
+    async function getUserGitHubUsername() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const { user_metadata } = session.user;
+        return user_metadata.full_name || 'GitHub User';
+      }
+      return 'Guest';
+    }
 
-        // Handle form submission
-        document.getElementById('streamForm').addEventListener('submit', async function (event) {
-            event.preventDefault(); // Prevent form from submitting normally
+    async function loadStreams() {
+      const { data, error } = await supabase
+        .from('streams')
+        .select('*')
+        .order('created_at', { ascending: true });
 
-            // Get form values
-            const url = document.getElementById('url').value;
-            const platform = document.getElementById('platform').value;
-            const title = document.getElementById('title').value;
+      if (error) {
+        streamsDiv.innerHTML = `<p style="color:red;">Error loading streams: ${error.message}</p>`;
+        console.error(error);
+        return;
+      }
 
-            // Get GitHub username
-            const githubUsername = await getUserGitHubUsername();
+      if (!data.length) {
+        streamsDiv.innerHTML = '<p>No streams yet. Be the first to share your link!</p>';
+        return;
+      }
 
-            // Validate fields
-            if (!url || !platform || !title) {
-                document.getElementById('errorMessage').textContent = "All fields are required!";
-                document.getElementById('errorMessage').style.display = 'block';
-                return;
-            }
+      streamsDiv.innerHTML = data.map(s => `
+        <div><strong>${s.github_username || 'Guest'}:</strong> <a href="${s.url}" target="_blank">${s.url}</a></div>
+      `).join('');
+      streamsDiv.scrollTop = streamsDiv.scrollHeight;
+    }
 
-            // Insert the stream data into Supabase
-            const { data, error } = await supabase
-                .from('streams')
-                .insert([{
-                    url: url,
-                    platform: platform,
-                    title: title,
-                    github_username: githubUsername,  // Save the GitHub username
-                    created_at: new Date().toISOString(),
-                }]);
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const streamUrl = streamUrlInput.value.trim();
+      if (!streamUrl) return;
 
-            if (error) {
-                document.getElementById('errorMessage').textContent = `Error: ${error.message}`;
-                document.getElementById('errorMessage').style.display = 'block';
-            } else {
-                alert('Stream URL has been successfully added!');
-                document.getElementById('streamForm').reset();
-                document.getElementById('errorMessage').style.display = 'none';
-                loadStreams(); // Reload streams after submission
-            }
-        });
+      const githubUsername = await getUserGitHubUsername();
+      const { error } = await supabase
+        .from('streams')
+        .insert([{ url: streamUrl, github_username: githubUsername }]);
 
-        // Function to get GitHub username
-        async function getUserGitHubUsername() {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session?.user) {
-                const { user_metadata } = session.user;
-                return user_metadata.full_name || 'GitHub User';
-            }
-            return 'Guest';
-        }
+      if (error) {
+        alert('Failed to add stream: ' + error.message);
+        console.error(error);
+        return;
+      }
 
-        // Function to load streams from Supabase
-        async function loadStreams() {
-            const { data, error } = await supabase
-                .from('streams')
-                .select('*')
-                .order('created_at', { ascending: false });
+      streamUrlInput.value = '';
+      loadStreams();
+    });
 
-            if (error) {
-                console.error('Error loading streams:', error.message);
-                return;
-            }
+    supabase.channel('streams')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'streams' }, loadStreams)
+      .subscribe();
 
-            const streamsList = document.getElementById('streamsList');
-            if (data.length === 0) {
-                streamsList.innerHTML = '<p>No streams yet. Be the first to add one!</p>';
-                return;
-            }
-
-            streamsList.innerHTML = data.map(stream => `
-                <div class="stream-item">
-                    <strong>${stream.github_username || 'Guest'}</strong>: <a href="${stream.url}" target="_blank">${stream.title}</a> on ${stream.platform}
-                </div>
-            `).join('');
-        }
-
-        // Load streams on page load
-        loadStreams();
-    </script>
-
+    loadStreams();
+  </script>
 </body>
-
 </html>

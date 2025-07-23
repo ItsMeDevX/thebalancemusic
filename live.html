@@ -391,6 +391,26 @@
             box-shadow: 0 -4px 15px #ff00cc33;
             margin-top: 40px;
         }
+
+        #streams {
+            margin-top: 20px;
+        }
+
+        .stream-item {
+            background: #1c1c1c;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 5px solid #00ffff;
+            box-shadow: 0 0 10px #00ffff33;
+        }
+
+        .stream-item h3 {
+            color: #39ff14;
+        }
+
+        .stream-item p {
+            color: #ccc;
+        }
     </style>
 </head>
 
@@ -428,6 +448,11 @@
         </form>
 
         <div class="error-message" id="errorMessage"></div>
+
+        <div id="streams">
+            <h2>Streams:</h2>
+            <div id="streamList">Loading streams...</div>
+        </div>
     </main>
 
     <footer>
@@ -437,42 +462,80 @@
     <!-- Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.0/dist/umd/supabase.min.js"></script>
     <script>
-        // Initialize Supabase client with URL and anon key
-  const supabase = createClient(
-    'https://tpqsceyxdpgerjjiydmy.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
-  );
+        const supabase = createClient(
+            'https://tpqsceyxdpgerjjiydmy.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
+        );
 
-        // Handle form submission
+        // Load all existing streams
+        async function loadStreams() {
+            const { data, error } = await supabase
+                .from('streams')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                document.getElementById('streamList').textContent = `Error: ${error.message}`;
+                return;
+            }
+
+            if (data.length === 0) {
+                document.getElementById('streamList').textContent = 'No streams available.';
+                return;
+            }
+
+            const streamList = data.map(stream => `
+                <div class="stream-item">
+                    <h3>${stream.title}</h3>
+                    <p><strong>Platform:</strong> ${stream.platform}</p>
+                    <p><strong>URL:</strong> <a href="${stream.url}" target="_blank">${stream.url}</a></p>
+                </div>
+            `).join('');
+
+            document.getElementById('streamList').innerHTML = streamList;
+        }
+
+        // Handle stream form submission
         document.getElementById('streamForm').addEventListener('submit', async function (event) {
-            event.preventDefault(); // Prevent default form submission
+            event.preventDefault();
 
-            // Get the form values
             const url = document.getElementById('url').value;
             const platform = document.getElementById('platform').value;
             const title = document.getElementById('title').value;
 
-            // Insert stream data into Supabase
             const { data, error } = await supabase
-                .from('streams')  // Make sure you have a 'streams' table in Supabase
-                .insert([
-                    {
-                        url: url,
-                        platform: platform,
-                        title: title,
-                        created_at: new Date().toISOString(),
-                    }
-                ]);
+                .from('streams')
+                .insert([{ url, platform, title, created_at: new Date().toISOString() }]);
 
             if (error) {
                 document.getElementById('errorMessage').textContent = `Error: ${error.message}`;
                 document.getElementById('errorMessage').style.display = 'block';
             } else {
                 alert('Stream URL has been successfully added!');
+                loadStreams();  // Refresh the stream list
                 document.getElementById('streamForm').reset();
                 document.getElementById('errorMessage').style.display = 'none';
             }
         });
+
+        // Real-time listener for new streams
+        supabase
+            .from('streams')
+            .on('INSERT', payload => {
+                const stream = payload.new;
+                const streamItem = `
+                    <div class="stream-item">
+                        <h3>${stream.title}</h3>
+                        <p><strong>Platform:</strong> ${stream.platform}</p>
+                        <p><strong>URL:</strong> <a href="${stream.url}" target="_blank">${stream.url}</a></p>
+                    </div>
+                `;
+                document.getElementById('streamList').innerHTML = streamItem + document.getElementById('streamList').innerHTML;
+            })
+            .subscribe();
+
+        // Load the streams when the page loads
+        loadStreams();
     </script>
 
 </body>

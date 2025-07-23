@@ -260,7 +260,7 @@
     <title>Submit Stream URL - The Balance</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
     <style>
-        /* Add styles here as needed */
+        /* Add your styles here */
         body {
             margin: 0;
             font-family: 'Orbitron', sans-serif;
@@ -436,7 +436,7 @@
 
     <main>
         <h2>Submit a Stream URL</h2>
-        <form id="streamForm" method="POST">
+        <form id="streamForm">
             <label for="url">Stream URL:</label>
             <input type="url" id="url" name="url" required placeholder="Enter the URL of the stream">
 
@@ -464,29 +464,24 @@
     <!-- Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.0/dist/umd/supabase.min.js"></script>
     <script>
-        // Initialize Supabase client with URL and anon key
-  const supabase = createClient(
-    'https://tpqsceyxdpgerjjiydmy.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
-  );
+        const supabase = createClient(
+            'https://tpqsceyxdpgerjjiydmy.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
+        );
 
-        // Handle form submission
         document.getElementById('streamForm').addEventListener('submit', async function (event) {
-            event.preventDefault(); // Prevent form from submitting normally
+            event.preventDefault();
 
-            // Get form values
             const url = document.getElementById('url').value;
             const platform = document.getElementById('platform').value;
             const title = document.getElementById('title').value;
 
-            // Validate fields
             if (!url || !platform || !title) {
                 document.getElementById('errorMessage').textContent = "All fields are required!";
                 document.getElementById('errorMessage').style.display = 'block';
                 return;
             }
 
-            // Insert the stream data into Supabase
             const { data, error } = await supabase
                 .from('streams')
                 .insert([{
@@ -503,11 +498,10 @@
                 alert('Stream URL has been successfully added!');
                 document.getElementById('streamForm').reset();
                 document.getElementById('errorMessage').style.display = 'none';
-                loadStreams(); // Reload streams after submission
+                loadStreams();
             }
         });
 
-        // Function to load streams from Supabase
         async function loadStreams() {
             const { data, error } = await supabase
                 .from('streams')
@@ -521,9 +515,9 @@
                 streamsList.innerHTML = `<p>Error loading streams: ${error.message}</p>`;
             } else {
                 if (data.length === 0) {
-                    noStreamsMessage.style.display = 'block'; // No streams found
+                    noStreamsMessage.style.display = 'block';
                 } else {
-                    noStreamsMessage.style.display = 'none'; // Hide loading message
+                    noStreamsMessage.style.display = 'none';
                     streamsList.innerHTML = data.map(stream => `
                         <div class="stream-item">
                             <a href="${stream.url}" target="_blank">${stream.title} - ${stream.platform}</a>
@@ -533,14 +527,12 @@
             }
         }
 
-        // Real-time updates for new stream submissions
         const streamChannel = supabase.channel('streams_channel')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'streams' }, payload => {
-                loadStreams(); // Reload streams on new insert
+                loadStreams();
             })
             .subscribe();
 
-        // Load streams when page loads
         loadStreams();
     </script>
 

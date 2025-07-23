@@ -259,7 +259,6 @@
     <title>Submit Stream URL - The Balance</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
     <style>
-        /* Same style as your Instrumentals page for consistency */
         body {
             margin: 0;
             font-family: 'Orbitron', sans-serif;
@@ -340,8 +339,7 @@
             font-weight: bold;
         }
 
-        input,
-        textarea {
+        input {
             width: 100%;
             padding: 0.75rem;
             margin-top: 0.25rem;
@@ -398,14 +396,18 @@
         }
 
         .stream-item {
-            background: #2a2a2a;
-            padding: 15px;
             margin-bottom: 10px;
-            border-left: 5px solid #00ffff;
-            box-shadow: 0 0 8px #00ffff33;
+            font-size: 1.2em;
+            color: #00ffff;
         }
 
-        .stream-item h3 {
+        .stream-item a {
+            color: #39ff14;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .stream-item a:hover {
             color: #ff00cc;
         }
     </style>
@@ -513,9 +515,7 @@
             } else {
                 streamsList.innerHTML = data.map(stream => `
                     <div class="stream-item">
-                        <h3>${stream.title}</h3>
-                        <p><strong>Platform:</strong> ${stream.platform}</p>
-                        <p><strong>URL:</strong> <a href="${stream.url}" target="_blank">${stream.url}</a></p>
+                        <a href="${stream.url}" target="_blank">${stream.title} - ${stream.platform}</a>
                     </div>
                 `).join('');
             }
@@ -534,5 +534,4 @@
     </script>
 
 </body>
-
 </html>

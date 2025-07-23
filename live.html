@@ -458,16 +458,15 @@
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
+  // Your Supabase URL and the anon key
   const supabaseUrl = 'https://tpqsceyxdpgerjjiydmy.supabase.co';
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY';
-
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaml5ZG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDUwNTYsImV4cCI6MjA2Mzc4MTA1Nn0.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY';
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   const streamsDiv = document.getElementById('streams');
   const form = document.getElementById('stream-form');
   const streamUrlInput = document.getElementById('stream-url');
 
-  // Helper function to get the current user's GitHub username
   async function getUserGitHubUsername() {
     const { data: { session }, error } = await supabase.auth.getSession();
     if (error) {
@@ -477,7 +476,6 @@
     return session?.user?.user_metadata?.full_name || 'Guest'; 
   }
 
-  // Function to load the streams from the database
   async function loadStreams() {
     const { data, error } = await supabase
       .from('streams')
@@ -495,15 +493,13 @@
       return;
     }
 
-    // Display streams with GitHub username and URL
-    streamsDiv.innerHTML = data.map(s => `
+    streamsDiv.innerHTML = data.map(s => ` 
       <div><strong>${s.github_username || 'Guest'}:</strong> <a href="${s.url}" target="_blank">${s.url}</a></div>
     `).join('');
     streamsDiv.scrollTop = streamsDiv.scrollHeight;
   }
 
-  // Form submission handler to insert a new stream
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener('submit', async e => {
     e.preventDefault();
     const streamUrl = streamUrlInput.value.trim();
     if (!streamUrl) return;
@@ -519,28 +515,15 @@
       return;
     }
 
-    streamUrlInput.value = ''; // Clear input field
-    loadStreams(); // Reload streams after adding new one
+    streamUrlInput.value = '';
+    loadStreams();
   });
 
-  // Channel subscription for live updates
-  const channel = supabase.channel('streams')
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'streams' }, (payload) => {
-      console.log('Stream added:', payload);
-      loadStreams(); // Reload streams on new insertion
-    })
-    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'streams' }, (payload) => {
-      console.log('Stream updated:', payload);
-      loadStreams(); // Reload streams on updates
-    })
-    .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'streams' }, (payload) => {
-      console.log('Stream deleted:', payload);
-      loadStreams(); // Reload streams after deletion
-    })
+  supabase.channel('streams')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'streams' }, loadStreams)
     .subscribe();
 
-  loadStreams(); // Initial load of streams
-
+  loadStreams();
 </script>
 
 </body>

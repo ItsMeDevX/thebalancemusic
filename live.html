@@ -379,6 +379,7 @@
             padding: 10px;
             border-radius: 8px;
             background-color: #330000;
+            transition: opacity 0.3s ease-in-out;
         }
 
         footer {
@@ -450,7 +451,7 @@
 
         <h2>Current Streams</h2>
         <div id="streamsList" class="streams-list">
-            <p>Loading streams...</p>
+            <p id="noStreamsMessage">Loading streams...</p>
         </div>
     </main>
 
@@ -475,6 +476,13 @@
             const url = document.getElementById('url').value;
             const platform = document.getElementById('platform').value;
             const title = document.getElementById('title').value;
+
+            // Check if fields are empty
+            if (!url || !platform || !title) {
+                document.getElementById('errorMessage').textContent = "All fields are required!";
+                document.getElementById('errorMessage').style.display = 'block';
+                return;
+            }
 
             // Insert stream data into Supabase
             const { data, error } = await supabase
@@ -507,10 +515,12 @@
             const streamsList = document.getElementById('streamsList');
             if (error) {
                 streamsList.innerHTML = `<p>Error loading streams: ${error.message}</p>`;
+                console.log(error);
             } else {
                 if (data.length === 0) {
-                    streamsList.innerHTML = "<p>No streams available.</p>";
+                    document.getElementById('noStreamsMessage').style.display = 'block';
                 } else {
+                    document.getElementById('noStreamsMessage').style.display = 'none';
                     streamsList.innerHTML = data.map(stream => `
                         <div class="stream-item">
                             <a href="${stream.url}" target="_blank">${stream.title} - ${stream.platform}</a>
@@ -520,15 +530,15 @@
             }
         }
 
-        // Real-time subscription for new streams
-        const streamChannel = supabase
-            .channel('streams_channel')
-            .on('INSERT', payload => {
-                loadStreams();  // Reload streams when a new stream is added
+        // Listen for real-time changes (inserts) on the 'streams' table
+        const streamChannel = supabase.channel('streams_channel')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'streams' }, payload => {
+                console.log('New stream added:', payload.new);
+                loadStreams(); // Reload streams on new insert
             })
             .subscribe();
 
-        // Initial load of streams
+        // Initially load streams
         loadStreams();
     </script>
 

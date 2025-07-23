@@ -253,12 +253,14 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Submit Stream URL - The Balance</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
     <style>
+        /* Add styles here as needed */
         body {
             margin: 0;
             font-family: 'Orbitron', sans-serif;
@@ -463,10 +465,10 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.0/dist/umd/supabase.min.js"></script>
     <script>
         // Initialize Supabase client with URL and anon key
-        const supabase = createClient(
-            'https://tpqsceyxdpgerjjiydmy.supabase.co',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
-        );
+  const supabase = createClient(
+    'https://tpqsceyxdpgerjjiydmy.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
+  );
 
         // Handle form submission
         document.getElementById('streamForm').addEventListener('submit', async function (event) {
@@ -543,4 +545,5 @@
     </script>
 
 </body>
+
 </html>

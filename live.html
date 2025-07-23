@@ -460,16 +460,17 @@
     </footer>
 
     <!-- Supabase JS SDK -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/supabase-js/1.35.0/umd/supabase.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/supabase-js/2.39.0/umd/supabase.min.js"></script>
     <script>
         // Initialize Supabase client with URL and anon key
         let supabase;
         
         try {
-            supabase = createClient(
+            supabase = supabase.createClient(
                 'https://tpqsceyxdpgerjjiydmy.supabase.co',
                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY'
             );
+            console.log('Supabase client initialized successfully');
         } catch (error) {
             console.error('Failed to initialize Supabase:', error);
             document.getElementById('noStreamsMessage').textContent = 'Database connection failed';
@@ -498,20 +499,27 @@
             }
 
             try {
+                // Test connection first
+                const testConnection = await supabase.from('streams').select('count', { count: 'exact', head: true });
+                console.log('Connection test:', testConnection);
+
                 // Insert the stream data into Supabase
                 const { data, error } = await supabase
                     .from('streams')
-                    .insert([{
+                    .insert({
                         url: url,
                         platform: platform,
                         title: title,
                         created_at: new Date().toISOString(),
-                    }]);
+                    })
+                    .select();
 
                 if (error) {
+                    console.error('Insert error details:', error);
                     throw error;
                 }
 
+                console.log('Insert successful:', data);
                 alert('Stream URL has been successfully added!');
                 document.getElementById('streamForm').reset();
                 document.getElementById('errorMessage').style.display = 'none';
@@ -519,7 +527,7 @@
 
             } catch (error) {
                 console.error('Submission error:', error);
-                document.getElementById('errorMessage').textContent = `Error: ${error.message}`;
+                document.getElementById('errorMessage').textContent = `Error: ${error.message || 'Unknown error occurred'}`;
                 document.getElementById('errorMessage').style.display = 'block';
             }
         });
@@ -532,23 +540,27 @@
             }
 
             try {
+                console.log('Loading streams...');
                 const { data, error } = await supabase
                     .from('streams')
-                    .select('*')
-                    .order('created_at', { ascending: false });
+                    .select('id, url, platform, title, created_at')
+                    .order('created_at', { ascending: false })
+                    .limit(50);
+
+                console.log('Load streams response:', { data, error });
 
                 const streamsList = document.getElementById('streamsList');
-                const noStreamsMessage = document.getElementById('noStreamsMessage');
 
                 if (error) {
+                    console.error('Load error details:', error);
                     throw error;
                 }
 
-                if (data && data.length === 0) {
+                if (!data || data.length === 0) {
                     // Show "no streams" message
                     streamsList.innerHTML = '<p id="noStreamsMessage">No streams available yet.</p>';
-                } else if (data && data.length > 0) {
-                    // Hide loading message and show streams
+                } else {
+                    // Show streams
                     const streamsHTML = data.map(stream => `
                         <div class="stream-item">
                             <a href="${stream.url}" target="_blank" rel="noopener noreferrer">${stream.title} - ${stream.platform}</a>
@@ -560,7 +572,7 @@
 
             } catch (error) {
                 console.error('Load streams error:', error);
-                document.getElementById('streamsList').innerHTML = `<p>Error loading streams: ${error.message}</p>`;
+                document.getElementById('streamsList').innerHTML = `<p>Error loading streams: ${error.message || 'Unknown error'}</p>`;
             }
         }
 

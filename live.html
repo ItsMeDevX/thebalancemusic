@@ -492,7 +492,7 @@
         return;
       }
 
-      streamsDiv.innerHTML = data.map(s => `
+      streamsDiv.innerHTML = data.map(s => ` 
         <div><strong>${s.github_username || 'Guest'}:</strong> <a href="${s.url}" target="_blank">${s.url}</a></div>
       `).join('');
       streamsDiv.scrollTop = streamsDiv.scrollHeight;

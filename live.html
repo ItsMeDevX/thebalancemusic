@@ -253,7 +253,6 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -492,10 +491,11 @@
                 alert('Stream URL has been successfully added!');
                 document.getElementById('streamForm').reset();
                 document.getElementById('errorMessage').style.display = 'none';
+                loadStreams(); // Load streams after submission
             }
         });
 
-        // Function to load streams
+        // Function to load streams from Supabase
         async function loadStreams() {
             const { data, error } = await supabase
                 .from('streams')
@@ -521,7 +521,7 @@
             }
         }
 
-        // Set up real-time subscription for new streams
+        // Real-time subscription for new streams
         const streamChannel = supabase
             .channel('streams_channel')
             .on('INSERT', payload => {
@@ -532,6 +532,7 @@
         // Initial load of streams
         loadStreams();
     </script>
+
 </body>
 
 </html>

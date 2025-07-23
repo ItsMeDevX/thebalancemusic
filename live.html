@@ -502,22 +502,21 @@
             const { data, error } = await supabase
                 .from('streams')
                 .select('*')
-                .order('created_at', { ascending: false });
-
-            if (error) {
-                document.getElementById('streamsList').innerHTML = `<p>Error: ${error.message}</p>`;
-                return;
-            }
+                .order('created_at', { ascending: false }); // Order by created_at
 
             const streamsList = document.getElementById('streamsList');
-            if (data.length === 0) {
-                streamsList.innerHTML = "<p>No streams available.</p>";
+            if (error) {
+                streamsList.innerHTML = `<p>Error loading streams: ${error.message}</p>`;
             } else {
-                streamsList.innerHTML = data.map(stream => `
-                    <div class="stream-item">
-                        <a href="${stream.url}" target="_blank">${stream.title} - ${stream.platform}</a>
-                    </div>
-                `).join('');
+                if (data.length === 0) {
+                    streamsList.innerHTML = "<p>No streams available.</p>";
+                } else {
+                    streamsList.innerHTML = data.map(stream => `
+                        <div class="stream-item">
+                            <a href="${stream.url}" target="_blank">${stream.title} - ${stream.platform}</a>
+                        </div>
+                    `).join('');
+                }
             }
         }
 

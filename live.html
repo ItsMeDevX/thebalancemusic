@@ -470,14 +470,15 @@
 
         // Handle form submission
         document.getElementById('streamForm').addEventListener('submit', async function (event) {
-            event.preventDefault(); // Prevent default form submission
+            event.preventDefault(); // Prevent form from submitting normally
+            console.log("Form Submitted!");
 
             // Get the form values
             const url = document.getElementById('url').value;
             const platform = document.getElementById('platform').value;
             const title = document.getElementById('title').value;
 
-            // Check if fields are empty
+            // Validate the fields before submission
             if (!url || !platform || !title) {
                 document.getElementById('errorMessage').textContent = "All fields are required!";
                 document.getElementById('errorMessage').style.display = 'block';
@@ -486,7 +487,7 @@
 
             // Insert stream data into Supabase
             const { data, error } = await supabase
-                .from('streams')  // Make sure you have a 'streams' table in Supabase
+                .from('streams')
                 .insert([{
                     url: url,
                     platform: platform,
@@ -510,17 +511,19 @@
             const { data, error } = await supabase
                 .from('streams')
                 .select('*')
-                .order('created_at', { ascending: false }); // Order by created_at
+                .order('created_at', { ascending: false });
 
             const streamsList = document.getElementById('streamsList');
+            const noStreamsMessage = document.getElementById('noStreamsMessage');
+            
             if (error) {
+                console.error("Error loading streams: ", error); // Log the error
                 streamsList.innerHTML = `<p>Error loading streams: ${error.message}</p>`;
-                console.log(error);
             } else {
                 if (data.length === 0) {
-                    document.getElementById('noStreamsMessage').style.display = 'block';
+                    noStreamsMessage.style.display = 'block';
                 } else {
-                    document.getElementById('noStreamsMessage').style.display = 'none';
+                    noStreamsMessage.style.display = 'none';
                     streamsList.innerHTML = data.map(stream => `
                         <div class="stream-item">
                             <a href="${stream.url}" target="_blank">${stream.title} - ${stream.platform}</a>
@@ -530,7 +533,7 @@
             }
         }
 
-        // Listen for real-time changes (inserts) on the 'streams' table
+        // Real-time update for new stream submissions
         const streamChannel = supabase.channel('streams_channel')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'streams' }, payload => {
                 console.log('New stream added:', payload.new);
@@ -538,9 +541,8 @@
             })
             .subscribe();
 
-        // Initially load streams
+        // Load streams on page load
         loadStreams();
     </script>
-
 </body>
 </html>

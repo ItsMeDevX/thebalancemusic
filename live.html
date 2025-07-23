@@ -455,74 +455,77 @@
     &copy; 2025 The Balance. All rights reserved.
   </footer>
 
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-    const supabaseUrl = 'https://tpqsceyxdpgerjjiydmy.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY';
-    const supabase = createClient(supabaseUrl, supabaseKey);
+  const supabaseUrl = 'https://tpqsceyxdpgerjjiydmy.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcXNjZXl4ZHBnZXJqaXlkbXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0ODIwNTA1NiwiZXhwIjoyMDYzNzgxMDU2fQ.HCfap8UYNG2LpHnXMhXLCLm-EhnapUHLAoHOlTgTFQY';
 
-    const streamsDiv = document.getElementById('streams');
-    const form = document.getElementById('stream-form');
-    const streamUrlInput = document.getElementById('stream-url');
+  // Create a Supabase client
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
-    async function getUserGitHubUsername() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        const { user_metadata } = session.user;
-        return user_metadata.full_name || 'GitHub User';
-      }
-      return 'Guest'; // Return 'Guest' if user is not logged in
+  const streamsDiv = document.getElementById('streams');
+  const form = document.getElementById('stream-form');
+  const streamUrlInput = document.getElementById('stream-url');
+
+  async function getUserGitHubUsername() {
+    const { data: { session }, error } = await supabase.auth.getSession();
+    if (error) {
+      console.error('Error fetching session:', error);
+      return 'Guest'; // Return 'Guest' if session fetch fails
+    }
+    return session?.user?.user_metadata?.full_name || 'Guest'; 
+  }
+
+  async function loadStreams() {
+    const { data, error } = await supabase
+      .from('streams')
+      .select('*')
+      .order('created_at', { ascending: true });
+
+    if (error) {
+      streamsDiv.innerHTML = `<p style="color:red;">Error loading streams: ${error.message}</p>`;
+      console.error('Error loading streams:', error);
+      return;
     }
 
-    async function loadStreams() {
-      const { data, error } = await supabase
-        .from('streams')
-        .select('*')
-        .order('created_at', { ascending: true });
-
-      if (error) {
-        streamsDiv.innerHTML = `<p style="color:red;">Error loading streams: ${error.message}</p>`;
-        console.error(error);
-        return;
-      }
-
-      if (!data.length) {
-        streamsDiv.innerHTML = '<p>No streams yet. Be the first to share your link!</p>';
-        return;
-      }
-
-      streamsDiv.innerHTML = data.map(s => ` 
-        <div><strong>${s.github_username || 'Guest'}:</strong> <a href="${s.url}" target="_blank">${s.url}</a></div>
-      `).join('');
-      streamsDiv.scrollTop = streamsDiv.scrollHeight;
+    if (!data.length) {
+      streamsDiv.innerHTML = '<p>No streams yet. Be the first to share your link!</p>';
+      return;
     }
 
-    form.addEventListener('submit', async e => {
-      e.preventDefault();
-      const streamUrl = streamUrlInput.value.trim();
-      if (!streamUrl) return;
+    streamsDiv.innerHTML = data.map(s => ` 
+      <div><strong>${s.github_username || 'Guest'}:</strong> <a href="${s.url}" target="_blank">${s.url}</a></div>
+    `).join('');
+    streamsDiv.scrollTop = streamsDiv.scrollHeight;
+  }
 
-      const githubUsername = await getUserGitHubUsername();
-      const { error } = await supabase
-        .from('streams')
-        .insert([{ url: streamUrl, github_username: githubUsername }]);
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const streamUrl = streamUrlInput.value.trim();
+    if (!streamUrl) return;
 
-      if (error) {
-        alert('Failed to add stream: ' + error.message);
-        console.error(error);
-        return;
-      }
+    const githubUsername = await getUserGitHubUsername();
+    const { error } = await supabase
+      .from('streams')
+      .insert([{ url: streamUrl, github_username: githubUsername }]);
 
-      streamUrlInput.value = '';
-      loadStreams();
-    });
+    if (error) {
+      alert('Failed to add stream: ' + error.message);
+      console.error('Error inserting stream:', error);
+      return;
+    }
 
-    supabase.channel('streams')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'streams' }, loadStreams)
-      .subscribe();
-
+    streamUrlInput.value = '';
     loadStreams();
-  </script>
+  });
+
+  supabase.channel('streams')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'streams' }, loadStreams)
+    .subscribe();
+
+  loadStreams();
+</script>
+
 </body>
 </html>

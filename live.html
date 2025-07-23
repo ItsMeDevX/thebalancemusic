@@ -472,7 +472,7 @@
         const { user_metadata } = session.user;
         return user_metadata.full_name || 'GitHub User';
       }
-      return 'Guest';
+      return 'Guest'; // Return 'Guest' if user is not logged in
     }
 
     async function loadStreams() {
